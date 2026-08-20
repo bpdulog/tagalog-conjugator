@@ -45,20 +45,20 @@ const VERB_DATABASE = {
         focus: "Locative Focus",
         description: "Focuses on the place where the eating happens.",
         forms: {
-          infinitive:   { form: "kainan",     use: "To eat at (a place)",                          example: "Kainan natin sa labas. — Let's eat outside." },
+          infinitive:   { form: "kainan",       use: "To eat at / off (a place or dish)",                example: "Kainan natin ang bagong mesa. — Let's eat at the new table." },
           complete:     { form: "kinainan",   use: "Ate at (a place) — past",                      example: "Kinainan namin ng hapunan ang bahay nila. — We had dinner at their house." },
           progressive:  { form: "kinakainan", use: "Eating at (a place) — ongoing",                example: "Kinakainan namin ang mesa. — We eat at the table." },
           contemplated: { form: "kakainan",   use: "Will eat at (a place)",                        example: "Kakainan natin ang bagong restaurant. — We will eat at the new restaurant." }
         }
       },
-      "Benefactive (i-)": {
-        focus: "Benefactive Focus",
-        description: "Focuses on the beneficiary of the eating — feeding someone. Note: 'ikain' means 'to feed someone' (not 'to eat for them').",
+      "Causative (ipa-)": {
+        focus: "Causative / Benefactive Focus",
+        description: "Feeding someone — the food is the subject. Tagalog uses the causative ipa- prefix here ('ipakain'); a plain i- on 'kain' is not used.",
         forms: {
-          infinitive:   { form: "ikain",     use: "To feed (someone) [something]",                  example: "Ikain mo sa bata ang kanin. — Feed the child the rice." },
-          complete:     { form: "ikinain",   use: "Fed (someone) [something] — past",              example: "Ikinain niya sa bata ang kanin. — He fed the child the rice." },
-          progressive:  { form: "ikinakain", use: "Feeding (someone) [something] — ongoing",        example: "Ikinakain niya sa bata ang kanin. — He is feeding the child the rice." },
-          contemplated: { form: "ikakainin", use: "Will feed (someone) [something]",                example: "Ikakainin niya sa bata ang kanin. — He will feed the child the rice." }
+          infinitive:   { form: "ipakain",      use: "To feed (something) to someone",                   example: "Ipakain mo sa bata ang kanin. — Feed the rice to the child." },
+          complete:     { form: "ipinakain",    use: "Fed (something) to someone — past",                example: "Ipinakain niya sa bata ang kanin. — He fed the rice to the child." },
+          progressive:  { form: "ipinapakain",  use: "Feeding (something) to someone — ongoing",         example: "Ipinapakain niya sa bata ang kanin. — He is feeding the rice to the child." },
+          contemplated: { form: "ipakakain",    use: "Will feed (something) to someone",                 example: "Ipakakain niya sa bata ang kanin. — He will feed the rice to the child." }
         }
       },
       "Instrumental (ipang-)": {
@@ -71,14 +71,14 @@ const VERB_DATABASE = {
           contemplated: { form: "ipapangkain",  use: "Will use (something) for eating",              example: "Ipapangkain niya ang tinidor. — He will use the fork for eating." }
         }
       },
-      "Benefactive (ipag-)": {
-        focus: "Benefactive Focus",
-        description: "Feeding someone (e.g., the mother feeding the child). 'Ipagkain' is the most common benefactive form for eating.",
+      "Actor (magpa-)": {
+        focus: "Actor Focus (Causative — to feed)",
+        description: "The everyday way to say 'feed someone': the feeder is the subject.",
         forms: {
-          infinitive:   { form: "ipagkain",    use: "To feed (someone)",                            example: "Ipagkain mo sa bata ang kanin. — Feed the child the rice." },
-          complete:     { form: "ipinagkain",  use: "Fed (someone) — past",                          example: "Ipinagkain niya sa bata ang kanin. — She fed the child the rice." },
-          progressive:  { form: "ipinapagkain",use: "Feeding (someone) — ongoing",                  example: "Ipinapagkain niya sa bata ang kanin. — She is feeding the child the rice." },
-          contemplated: { form: "ipapagkain",  use: "Will feed (someone)",                          example: "Ipapagkain niya bukas sa bata ang kanin. — She will feed the child the rice tomorrow." }
+          infinitive:   { form: "magpakain",    use: "To feed (someone)",                                example: "Magpakain ka ng bata. — Feed a child." },
+          complete:     { form: "nagpakain",    use: "Fed (someone) — past",                             example: "Nagpakain siya ng mga bata. — She fed the children." },
+          progressive:  { form: "nagpapakain",  use: "Feeding (someone) — ongoing",                      example: "Nagpapakain siya ng aso ngayon. — He is feeding the dog now." },
+          contemplated: { form: "magpapakain",  use: "Will feed (someone)",                              example: "Magpapakain siya ng bisita bukas. — She will feed the guests tomorrow." }
         }
       }
     }
@@ -117,17 +117,17 @@ const VERB_DATABASE = {
           infinitive:   { form: "inuman",     use: "Drinking place (n.) / to drink at",            example: "Inuman tayo sa labas. — Let's drink (alcohol) outside." },
           complete:     { form: "ininuman",   use: "Drank at (a place) — past",                    example: "Ininuman niya ng tubig ang garahe. — He drank water at the garage." },
           progressive:  { form: "iniinuman",  use: "Drinking at (a place) — ongoing",              example: "Iniinuman niya ang kanto. — He/she drinks at the corner." },
-          contemplated: { form: "iinuman",    use: "Will drink at (a place)",                      example: "Iinuman niya ang baryo. — He will drink at the village." }
+          contemplated: { form: "iinuman",      use: "Will drink at (a place)",                          example: "Iinuman nila ang bagong tindahan. — They will drink at the new store." }
         }
       },
-      "Benefactive (i-)": {
-        focus: "Benefactive Focus",
-        description: "Focuses on the beneficiary of the drinking action.",
+      "Causative (ipa-)": {
+        focus: "Causative Focus",
+        description: "Giving someone something to drink — the drink is the subject. Formed with ipa-, not a plain i- on 'inom'.",
         forms: {
-          infinitive:   { form: "iinom",    use: "To drink (something) for someone",              example: "Iinom mo sa bata ang gatas. — Drink the milk for the child." },
-          complete:     { form: "ininom",   use: "Drank (something) for someone — past",          example: "Ininom niya para sa bata ang gamot. — He drank the medicine for the child." },
-          progressive:  { form: "iniinom",  use: "Drinking (something) for someone — ongoing",    example: "Iniinom niya ang gamot sa bata. — He is giving the medicine drink to the child." },
-          contemplated: { form: "iinumin",  use: "Will drink (something) for someone",            example: "Iinumin niya ang gatas sa bata. — He will give the milk to the child to drink." }
+          infinitive:   { form: "ipainom",      use: "To give (something) to someone to drink",          example: "Ipainom mo sa bata ang gamot. — Give the medicine to the child to drink." },
+          complete:     { form: "ipinainom",    use: "Gave (something) to drink — past",                 example: "Ipinainom niya sa bata ang gamot. — She gave the child the medicine to drink." },
+          progressive:  { form: "ipinaiinom",   use: "Giving (something) to drink — ongoing",            example: "Ipinaiinom niya sa bata ang gatas. — She is giving the child the milk to drink." },
+          contemplated: { form: "ipaiinom",     use: "Will give (something) to drink",                   example: "Ipaiinom niya sa bata ang gatas. — She will give the child the milk to drink." }
         }
       }
     }
@@ -215,16 +215,16 @@ const VERB_DATABASE = {
           infinitive:   { form: "tumapon",     use: "To be thrown away (passive / accidental)",      example: "Huwag mong hayaang tumapon ang pagkain. — Don't let the food go to waste." },
           complete:     { form: "tumapon",     use: "Was thrown away / fell off (past)",            example: "Tumapon ang mga papel sa sahig. — The papers fell on the floor." },
           progressive:  { form: "tumatapon",   use: "Falling / being thrown (ongoing)",             example: "Tumatapon ang mga dahon. — The leaves are falling." },
-          contemplated: { form: "tatapon",     use: "Will be thrown / will fall",                    example: "Baka tatapon ang tubig. — The water might spill." }
+          contemplated: { form: "tatapon",      use: "Will be thrown / will fall",                       example: "Tatapon ang tubig kapag napuno ang timba. — The water will spill when the bucket fills up." }
         }
       },
-      "Object (-in)": {
+      "Object (i-)": {
         focus: "Object Focus",
-        description: "Focuses on the thing being thrown away (becomes the subject). The most common form for commanding someone to throw something away.",
+        description: "Focuses on the thing being thrown away (becomes the subject). 'Tapon' takes i-, not -in. This is the most common way to tell someone to throw something out.",
         forms: {
           infinitive:   { form: "itapon",      use: "To throw (something specific) away",           example: "Itapon mo na ang basura. — Throw away the trash now." },
           complete:     { form: "itinapon",    use: "Thrown away (something) — past",               example: "Itinapon niya ang lumang kahon. — He threw away the old box." },
-          progressive:  { form: "itinapon",    use: "Throwing (something) — ongoing",               example: "Itinapon niya ngayon ang mga lumang libro. — She is throwing away the old books now." },
+          progressive:  { form: "itinatapon",   use: "Throwing (something) — ongoing",                   example: "Itinatapon niya ngayon ang mga lumang libro. — She is throwing away the old books now." },
           contemplated: { form: "itatapon",    use: "Will throw (something) away",                  example: "Itatapon niya bukas ang sirang radyo. — She will throw away the broken radio tomorrow." }
         }
       },
@@ -255,16 +255,16 @@ const VERB_DATABASE = {
   bili: {
     root: "bili",
     meaning: "to buy / to sell (depending on focus)",
-    notes: "Polymorphic: AF=bought, BF=sold. Root vowel 'i' is the marking for selling.",
+    notes: "Actor focus for buying is -um- (bumili). 'Magbili' is an archaic/dialectal form meaning 'to sell' — modern Tagalog uses magbenta or magtinda. The -an form (bilhan) marks the person or place involved; i- (ibili) marks the person bought for.",
     conjugations: {
-      "Actor (mag-)": {
+      "Actor (-um-)": {
         focus: "Actor Focus",
-        description: "Someone is buying (the buyer is the focus).",
+        description: "Someone is buying — the buyer is the subject. This is the ordinary way to say 'buy'.",
         forms: {
-          infinitive:   { form: "magbili",     use: "To buy (infinitive)",                         example: "Magbili tayo ng tinapay. — Let's buy bread." },
-          complete:     { form: "nagbili",     use: "Bought — past",                               example: "Nagbili siya ng bagong damit. — She bought new clothes." },
-          progressive:  { form: "nagbibili",   use: "Currently buying",                            example: "Nagbibili sila ng pagkain. — They are buying food." },
-          contemplated: { form: "magbibili",   use: "Will buy",                                    example: "Magbibili ako ng kotse. — I will buy a car." }
+          infinitive:   { form: "bumili",       use: "To buy (infinitive)",                              example: "Bumili tayo ng tinapay. — Let's buy bread." },
+          complete:     { form: "bumili",       use: "Bought — past",                                    example: "Bumili siya ng bagong damit. — She bought new clothes." },
+          progressive:  { form: "bumibili",     use: "Currently buying",                                 example: "Bumibili sila ng pagkain. — They are buying food." },
+          contemplated: { form: "bibili",       use: "Will buy",                                         example: "Bibili ako ng kotse. — I will buy a car." }
         }
       },
       "Actor (mang-)": {
@@ -289,7 +289,7 @@ const VERB_DATABASE = {
       },
       "Locative/Benefactive (-an)": {
         focus: "Locative / Benefactive Focus",
-        description: "Buying FOR someone (beneficiary) or AT a place. Root vowel shifts to 'i' to indicate selling.",
+        description: "Buying FROM a person or store, or buying FOR someone — that person or place becomes the subject.",
         forms: {
           infinitive:   { form: "bilhan",     use: "To buy for/at",                               example: "Bilhan mo siya ng regalo. — Buy a gift for her." },
           complete:     { form: "binilhan",   use: "Bought for/at — past",                        example: "Binilhan niya ang bata ng laruan. — She bought a toy for the child." },
@@ -298,13 +298,13 @@ const VERB_DATABASE = {
         }
       },
       "Benefactive (i-)": {
-        focus: "Benefactive Focus (Selling)",
-        description: "Selling something to someone — the seller is the focus, the buyer benefits from receiving it.",
+        focus: "Benefactive Focus",
+        description: "Buying something FOR someone — the purchase is made on the beneficiary's behalf.",
         forms: {
-          infinitive:   { form: "ibili",      use: "To sell to someone",                          example: "Iibili mo sa kanya ang kotse. — Sell the car to him/her." },
-          complete:     { form: "ibinili",    use: "Sold to someone — past",                      example: "Ibinili niya sa akin ang libro. — He sold the book to me." },
-          progressive:  { form: "ibinibili",  use: "Selling to someone — ongoing",                example: "Ibinibili niya ang bahay sa amin. — He is selling the house to us." },
-          contemplated: { form: "ibibili",    use: "Will sell to someone",                        example: "Ibibili niya sa iyo ang bisikleta. — He will sell the bike to you." }
+          infinitive:   { form: "ibili",        use: "To buy (something) for someone",                   example: "Ibili mo siya ng kotse. — Buy a car for him/her." },
+          complete:     { form: "ibinili",      use: "Bought for someone — past",                        example: "Ibinili niya ako ng libro. — He bought a book for me." },
+          progressive:  { form: "ibinibili",    use: "Buying for someone — ongoing",                     example: "Ibinibili niya kami ng bahay. — He is buying a house for us." },
+          contemplated: { form: "ibibili",      use: "Will buy for someone",                             example: "Ibibili ka niya ng bisikleta. — He will buy you a bike." }
         }
       },
       "Instrumental (ipang-)": {
@@ -424,14 +424,14 @@ const VERB_DATABASE = {
           contemplated: { form: "magpapatulog",   use: "Will put to sleep",                         example: "Magpapatulog siya sa kapatid. — She will put her sibling to sleep." }
         }
       },
-      "Object (i-)": {
-        focus: "Object Focus",
-        description: "Focus on the act of sleeping — sometimes used in fixed phrases.",
+      "Object (pa-...-in)": {
+        focus: "Object Focus (Causative)",
+        description: "The one being put to sleep is the subject — the object-focus counterpart of magpatulog.",
         forms: {
-          infinitive:   { form: "itulog",     use: "To put to sleep (something specific)",         example: "Itulog mo na ang bata. — Put the child to sleep." },
-          complete:     { form: "itinulog",   use: "Put to sleep — past",                         example: "Itinulog niya ang bata. — She put the child to sleep." },
-          progressive:  { form: "itinutulog", use: "Putting to sleep — ongoing",                  example: "Itinutulog niya ang bata ngayon. — She is putting the child to sleep." },
-          contemplated: { form: "itutulog",   use: "Will put to sleep",                           example: "Itutulog niya ang bata mamaya. — She will put the child to sleep later." }
+          infinitive:   { form: "patulugin",    use: "To put (someone) to sleep",                        example: "Patulugin mo na ang bata. — Put the child to sleep." },
+          complete:     { form: "pinatulog",    use: "Put (someone) to sleep — past",                    example: "Pinatulog niya ang bata. — She put the child to sleep." },
+          progressive:  { form: "pinapatulog",  use: "Putting (someone) to sleep — ongoing",             example: "Pinapatulog niya ang bata ngayon. — She is putting the child to sleep now." },
+          contemplated: { form: "papatulugin",  use: "Will put (someone) to sleep",                      example: "Papatulugin niya ang bata mamaya. — She will put the child to sleep later." }
         }
       }
     }
@@ -453,14 +453,14 @@ const VERB_DATABASE = {
           contemplated: { form: "magsasabi",   use: "Will say / tell",                             example: "Magsasabi siya ng importante. — She will say something important." }
         }
       },
-      "Object (i-)": {
+      "Object (-in)": {
         focus: "Object Focus",
-        description: "What is being said becomes the focus.",
+        description: "What is being said becomes the subject. This is the most common way to report or quote speech.",
         forms: {
-          infinitive:   { form: "isabi",     use: "To say (something) to someone",                 example: "Isabi mo sa kanya. — Say it to him/her." },
-          complete:     { form: "inasabi",   use: "Said (something) to someone — past",           example: "Inasabi niya ang lihim. — He said the secret." },
-          progressive:  { form: "inasasabi", use: "Saying (something) to someone — ongoing",      example: "Inasasabi niya ang balita. — He is saying the news." },
-          contemplated: { form: "isasabi",   use: "Will say (something) to someone",              example: "Isasabi niya ang totoo. — He will say the truth." }
+          infinitive:   { form: "sabihin",      use: "To say (something)",                               example: "Sabihin mo sa kanya. — Say it to him/her." },
+          complete:     { form: "sinabi",       use: "Said (something) — past",                          example: "Sinabi niya ang lihim. — He told the secret." },
+          progressive:  { form: "sinasabi",     use: "Saying (something) — ongoing",                     example: "Sinasabi niya ang balita. — He is telling the news." },
+          contemplated: { form: "sasabihin",    use: "Will say (something)",                             example: "Sasabihin niya ang totoo. — He will tell the truth." }
         }
       },
       "Locative/Benefactive (pag-...-an)": {
@@ -548,7 +548,7 @@ const VERB_DATABASE = {
           infinitive:   { form: "basahin",     use: "To read (something specific)",                example: "Basahin mo ang libro. — Read the book." },
           complete:     { form: "binasa",      use: "Read (something) — past",                    example: "Binasa niya ang artikulo. — He read the article." },
           progressive:  { form: "binabasa",    use: "Reading (something) — ongoing",               example: "Binabasa niya ang diyaryo. — He is reading the newspaper." },
-          contemplated: { form: "babasa?in",   use: "Will read (something)",                       example: "Babasa?in niya ang mga dokumento. — She will read the documents." }
+          contemplated: { form: "babasahin",   use: "Will read (something)",                       example: "Babasahin niya ang mga dokumento. — She will read the documents." }
         }
       },
       "Actor (ma-)": {
@@ -594,10 +594,10 @@ const VERB_DATABASE = {
         focus: "Locative Focus",
         description: "Cleaning a place — the place is the focus.",
         forms: {
-          infinitive:   { form: "linisan",     use: "To clean (a place)",                          example: "Linisan mo ang bahay. — Clean the house (place).'" },
+          infinitive:   { form: "linisan",      use: "To clean (a place)",                               example: "Linisan mo ang bahay. — Clean the house." },
           complete:     { form: "nilinisan",   use: "Cleaned (a place) — past",                    example: "Nilinisan niya ang opisina. — She cleaned the office." },
-          progressive:  { form: "nililisan",   use: "Cleaning (a place) — ongoing",                example: "Nililisan niya ang kalsada. — He is cleaning the street." },
-          contemplated: { form: "lilisan",     use: "Will clean (a place)",                        example: "Lilisan niya ang paaralan. — He will clean the school." }
+          progressive:  { form: "nililinisan",  use: "Cleaning (a place) — ongoing",                     example: "Nililinisan niya ang kalsada. — He is cleaning the street." },
+          contemplated: { form: "lilinisan",    use: "Will clean (a place)",                             example: "Lilinisan niya ang paaralan. — He will clean the school." }
         }
       }
     }
@@ -615,7 +615,7 @@ const VERB_DATABASE = {
         forms: {
           infinitive:   { form: "mag-aral",     use: "To study",                                  example: "Mag-aral ka nang mabuti. — Study well." },
           complete:     { form: "nag-aral",     use: "Studied — past",                             example: "Nag-aral siya ng matematika. — He studied math." },
-          progressive:  { form: "nagaaral",     use: "Currently studying",                         example: "Nagaaral siya ngayon. — He is studying now." },
+          progressive:  { form: "nag-aaral",     use: "Currently studying",                         example: "Nag-aaral siya ngayon. — He is studying now." },
           contemplated: { form: "mag-aaral",    use: "Will study",                                 example: "Mag-aaral ako sa kolehiyo. — I will study in college." }
         }
       },
@@ -648,9 +648,9 @@ const VERB_DATABASE = {
           contemplated: { form: "magbibigay",   use: "Will give",                                  example: "Magbibigay ako ng sorpresa. — I will give a surprise." }
         }
       },
-      "Object (-in)": {
-        focus: "Object Focus",
-        description: "Focus on what is being given.",
+      "Directional (-an)": {
+        focus: "Directional Focus (recipient)",
+        description: "Focus on the recipient — the person who receives what is given. 'Bigay' takes -an here, not -in.",
         forms: {
           infinitive:   { form: "bigyan",     use: "To give to someone (specific recipient)",     example: "Bigyan mo siya ng tubig. — Give him/her water." },
           complete:     { form: "binigyan",   use: "Gave to someone — past",                     example: "Binigyan niya ako ng libro. — She gave me a book." },
@@ -711,39 +711,51 @@ const VERB_DATABASE = {
   },
 
   // ============== SEE ==============
+
+  // ============== SEE / MEET ==============
   kita: {
     root: "kita",
-    meaning: "to see",
-    notes: "Takes um- and nakakita (potential) for actor focus",
+    meaning: "to see / to meet; (kumita) to earn",
+    notes: "'Seeing' is expressed with the ma-/maka- forms — nakita ko = I saw it. The -um- form 'kumita' is a different sense: 'to earn (money)'. 'Magkita' = to meet each other.",
     conjugations: {
-      "Actor (-um-)": {
-        focus: "Actor Focus",
-        description: "Seeing — the one who sees is the focus.",
+      "Object (ma-)": {
+        focus: "Object Focus (Sensory)",
+        description: "The everyday way to say 'see'. The thing seen is the subject: 'Nakita ko ang bahay.' — I saw the house.",
         forms: {
-          infinitive:   { form: "kumita",   use: "To see",                                       example: "Kumita ka ng doktor. — See a doctor." },
-          complete:     { form: "kumita",   use: "Saw — past",                                    example: "Kumita siya ng multo. — She saw a ghost." },
-          progressive:  { form: "kumikita", use: "Currently seeing",                              example: "Kumikita siya ng sine. — He is watching a movie." },
-          contemplated: { form: "kikita",   use: "Will see",                                      example: "Kikita siya ng dentista. — He will see a dentist." }
+          infinitive:   { form: "makita",    use: "To see / to be seen",                          example: "Gusto kong makita ang dagat. — I want to see the sea." },
+          complete:     { form: "nakita",    use: "Saw — past",                                   example: "Nakita niya ang aksidente. — He saw the accident." },
+          progressive:  { form: "nakikita",  use: "Seeing / can see — ongoing",                   example: "Nakikita ko ang bundok mula rito. — I can see the mountain from here." },
+          contemplated: { form: "makikita",  use: "Will see / will be visible",                   example: "Makikita mo ang bahay sa kanto. — You will see the house at the corner." }
         }
       },
       "Actor (maka-)": {
         focus: "Actor Focus (Potential)",
-        description: "Potential / ability to see; emphasizes capability.",
+        description: "Potential / ability to see; the seer is the subject and the ability is emphasized.",
         forms: {
-          infinitive:   { form: "makakita",   use: "To be able to see",                          example: "Makakita ka ng magandang tanawin. — You will see a beautiful view." },
-          complete:     { form: "nakakita",   use: "Was able to see / saw (potential)",           example: "Nakakita siya ng aksidente. — He saw an accident." },
-          progressive:  { form: "nakakakita", use: "Currently able to see",                       example: "Nakakakita siya ng malinaw. — He is seeing clearly." },
-          contemplated: { form: "makakakita", use: "Will be able to see",                         example: "Makakakita ka ng pagbabago. — You will see a change." }
+          infinitive:   { form: "makakita",   use: "To be able to see",                          example: "Gusto niyang makakita ng magandang tanawin. — He wants to see a beautiful view." },
+          complete:     { form: "nakakita",   use: "Was able to see / saw",                      example: "Nakakita siya ng aksidente. — He saw an accident." },
+          progressive:  { form: "nakakakita", use: "Currently able to see",                      example: "Nakakakita na siya nang malinaw. — He can see clearly now." },
+          contemplated: { form: "makakakita", use: "Will be able to see",                        example: "Makakakita ka ng pagbabago. — You will see a change." }
         }
       },
-      "Object (-in)": {
-        focus: "Object Focus",
-        description: "Focus on what is being seen.",
+      "Reciprocal (mag-)": {
+        focus: "Reciprocal / Mutual Focus",
+        description: "Meeting each other — appointments, dates, reunions.",
         forms: {
-          infinitive:   { form: "kitain",     use: "To see (something)",                         example: "Kitain mo ang ganda. — See the beauty." },
-          complete:     { form: "kinita",     use: "Saw (something) — past",                     example: "Kinita niya ang buwan. — He saw the moon." },
-          progressive:  { form: "kinikita",   use: "Seeing (something) — ongoing",               example: "Kinikita niya ang bahay. — He is seeing the house." },
-          contemplated: { form: "kikitain",   use: "Will see (something)",                       example: "Kikitain niya ang liwanag. — He will see the light." }
+          infinitive:   { form: "magkita",     use: "To meet each other (infinitive)",           example: "Magkita tayo mamaya. — Let's meet later." },
+          complete:     { form: "nagkita",     use: "Met each other — past",                     example: "Nagkita sila kagabi. — They met each other last night." },
+          progressive:  { form: "nagkikita",   use: "Currently meeting each other",              example: "Nagkikita sila ngayon. — They are meeting each other now." },
+          contemplated: { form: "magkikita",   use: "Will meet each other",                      example: "Magkikita sila bukas. — They will meet each other tomorrow." }
+        }
+      },
+      "Actor (-um-) — to earn": {
+        focus: "Actor Focus (separate sense: to earn)",
+        description: "'Kumita' does not mean 'to see' — it means 'to earn' or 'to make money'.",
+        forms: {
+          infinitive:   { form: "kumita",   use: "To earn (money)",                              example: "Gusto niyang kumita ng malaki. — He wants to earn a lot." },
+          complete:     { form: "kumita",   use: "Earned — past",                                example: "Kumita siya ng limang libo. — He earned five thousand." },
+          progressive:  { form: "kumikita", use: "Currently earning",                            example: "Kumikita siya sa negosyo. — He is earning from the business." },
+          contemplated: { form: "kikita",   use: "Will earn",                                    example: "Kikita siya nang malaki bukas. — He will earn a lot tomorrow." }
         }
       }
     }
@@ -759,20 +771,20 @@ const VERB_DATABASE = {
         focus: "Actor Focus (Sensory)",
         description: "Hearing — the listener is the focus; emphasizes the sensory experience.",
         forms: {
-          infinitive:   { form: "marinig",     use: "To hear (infinitive)",                      example: "Marinig mo ba? — Can you hear?" },
+          infinitive:   { form: "marinig",      use: "To hear (infinitive)",                             example: "Gusto kong marinig ang kanta. — I want to hear the song." },
           complete:     { form: "narinig",     use: "Heard — past",                              example: "Narinig ko ang kanta. — I heard the song." },
           progressive:  { form: "naririnig",   use: "Currently hearing",                         example: "Naririnig ko ang alon. — I can hear the waves." },
           contemplated: { form: "maririnig",   use: "Will hear",                                 example: "Maririnig mo ang balita. — You will hear the news." }
         }
       },
-      "Object (-in)": {
+      "Object (-in) — root 'dinig'": {
         focus: "Object Focus",
-        description: "Focus on what is being heard.",
+        description: "Focus on what is heard. The -in forms are built on the base form 'dinig': dinggin, dininig, dinirinig, didinggin.",
         forms: {
-          infinitive:   { form: "rinigin",     use: "To hear (something)",                       example: "Rinigin mo ang tawag. — Hear the call." },
-          complete:     { form: "rinig",       use: "Heard (something) — past",                  example: "Rinig niya ang sigaw. — She heard the shout." },
-          progressive:  { form: "rinig",       use: "Hearing (something) — ongoing",             example: "Rinig niya ang musika. — She is hearing the music." },
-          contemplated: { form: "ririgin",     use: "Will hear (something)",                     example: "Ririgin niya ang tawag. — He will hear the call." }
+          infinitive:   { form: "dinggin",      use: "To hear / to listen to (something)",               example: "Dinggin mo ang aking panalangin. — Hear my prayer." },
+          complete:     { form: "dininig",      use: "Heard (something) — past",                         example: "Dininig niya ang sigaw. — She heard the shout." },
+          progressive:  { form: "dinirinig",    use: "Hearing (something) — ongoing",                    example: "Dinirinig niya ang musika. — She is listening to the music." },
+          contemplated: { form: "didinggin",    use: "Will hear (something)",                            example: "Didinggin niya ang tawag. — He will hear the call." }
         }
       }
     }
@@ -782,16 +794,16 @@ const VERB_DATABASE = {
   alam: {
     root: "alam",
     meaning: "to know (a fact)",
-    notes: "Often used in stative / ma- focus",
+    notes: "The verb forms are built on 'malaman' (to find out). Plain 'alam' is used statively with a pronoun: 'Alam ko.' = 'I know.'",
     conjugations: {
       "Actor (ma-)": {
         focus: "Actor Focus (Stative)",
         description: "Knowing — the knower is the focus; emphasizes the state of knowing.",
         forms: {
-          infinitive:   { form: "maalam",     use: "To know (become aware of)",                  example: "Maalam mo ang sagot. — You will know the answer." },
-          complete:     { form: "naalam",     use: "Knew / found out — past",                    example: "Naalam niya ang balita. — She found out the news." },
-          progressive:  { form: "naaalam",    use: "Currently knowing",                          example: "Naaalam niya ang lahat. — She knows everything." },
-          contemplated: { form: "maaalam",    use: "Will know",                                  example: "Maaalam mo ang katotohanan. — You will know the truth." }
+          infinitive:   { form: "malaman",      use: "To find out / to come to know",                    example: "Gusto kong malaman ang sagot. — I want to know the answer." },
+          complete:     { form: "nalaman",      use: "Found out / learned — past",                       example: "Nalaman niya ang balita. — She found out the news." },
+          progressive:  { form: "nalalaman",    use: "Knowing / finding out — ongoing",                  example: "Nalalaman niya ang lahat. — She knows everything." },
+          contemplated: { form: "malalaman",    use: "Will find out / will know",                        example: "Malalaman mo ang katotohanan. — You will know the truth." }
         }
       }
     }
@@ -848,7 +860,7 @@ const VERB_DATABASE = {
         forms: {
           infinitive:   { form: "mag-awit",     use: "To sing",                                  example: "Mag-awit ka para sa akin. — Sing for me." },
           complete:     { form: "nag-awit",     use: "Sang — past",                              example: "Nag-awit siya sa baryo. — He sang in the village." },
-          progressive:  { form: "nagaawit",     use: "Currently singing",                        example: "Nagaawit siya sa palengke. — He is singing in the market." },
+          progressive:  { form: "nag-aawit",     use: "Currently singing",                        example: "Nag-aawit siya sa palengke. — He is singing in the market." },
           contemplated: { form: "mag-aawit",    use: "Will sing",                                example: "Mag-aawit ako sa kasal. — I will sing at the wedding." }
         }
       }
@@ -1059,10 +1071,10 @@ const VERB_DATABASE = {
         focus: "Benefactive Focus",
         description: "Helping someone — focusing on the beneficiary.",
         forms: {
-          infinitive:   { form: "itulong",     use: "To help (with something specific)",         example: "Itulong mo sa kanya. — Help him/her with it." },
-          complete:     { form: "itinulong",   use: "Helped (with something) — past",            example: "Itinulong niya ang mensahe. — He delivered the message." },
-          progressive:  { form: "itinutulong", use: "Helping (with something) — ongoing",       example: "Itinutulong niya ang liham. — He is delivering the letter." },
-          contemplated: { form: "itutulong",   use: "Will help (with something)",               example: "Itutulong niya ang mensahe. — He will deliver the message." }
+          infinitive:   { form: "itulong",      use: "To offer / contribute (something) as help",        example: "Itulong mo ang pera mo sa kanila. — Contribute your money to help them." },
+          complete:     { form: "itinulong",    use: "Contributed as help — past",                       example: "Itinulong niya ang kanyang ipon. — He gave his savings to help." },
+          progressive:  { form: "itinutulong",  use: "Contributing as help — ongoing",                   example: "Itinutulong niya ang kanyang oras. — He is giving his time to help." },
+          contemplated: { form: "itutulong",    use: "Will contribute as help",                          example: "Itutulong niya ang kanyang kotse. — He will lend his car to help." }
         }
       }
     }
@@ -1080,7 +1092,7 @@ const VERB_DATABASE = {
         forms: {
           infinitive:   { form: "mag-away",     use: "To fight / quarrel",                     example: "Mag-away ka ba sa kanya? — Will you fight with him?" },
           complete:     { form: "nag-away",     use: "Fought / quarreled — past",              example: "Nag-away sila kagabi. — They quarreled last night." },
-          progressive:  { form: "nagaaway",     use: "Currently fighting",                    example: "Nagaaway sila ngayon. — They are fighting now." },
+          progressive:  { form: "nag-aaway",     use: "Currently fighting",                    example: "Nag-aaway sila ngayon. — They are fighting now." },
           contemplated: { form: "mag-aaway",    use: "Will fight",                            example: "Mag-aaway sila bukas. — They will fight tomorrow." }
         }
       }
@@ -1215,8 +1227,8 @@ const VERB_DATABASE = {
         description: "Focus on what is being said (becomes the subject).",
         forms: {
           infinitive:   { form: "isalita",     use: "To say (something specific)",           example: "Isalita mo ang balita. — Tell the news." },
-          complete:     { form: "inasalita",   use: "Said (something) — past",               example: "Inasalita niya ang katotohanan. — He said the truth." },
-          progressive:  { form: "inasasalita", use: "Saying (something) — ongoing",           example: "Inasasalita niya ang kuwento. — He is telling the story." },
+          complete:     { form: "isinalita",    use: "Said (something) — past",                          example: "Isinalita niya ang katotohanan. — He said the truth." },
+          progressive:  { form: "isinasalita",  use: "Saying (something) — ongoing",                     example: "Isinasalita niya ang kuwento. — He is telling the story." },
           contemplated: { form: "isasalita",   use: "Will say (something)",                   example: "Isasalita niya ang plano. — He will tell the plan." }
         }
       }
@@ -1273,7 +1285,7 @@ const VERB_DATABASE = {
         description: "Focus on what is being wanted.",
         forms: {
           infinitive:   { form: "gustuhin",   use: "To want (something specific)",            example: "Gustuhin mo ang totoo. — Want the truth." },
-          complete:     { form: "gustuhin",   use: "Wanted (something) — past",                example: "Gustuhin mo ang tagumpay. — Want success." },
+          complete:     { form: "ginusto",      use: "Wanted (something) — past",                        example: "Ginusto niya ang tagumpay. — He wanted success." },
           progressive:  { form: "ginugusto",  use: "Wanting (something) — ongoing",             example: "Ginugusto niya ang pagkain. — She wants the food." },
           contemplated: { form: "gugustuhin", use: "Will want (something)",                     example: "Gugustuhin niya ang pera. — She will want the money." }
         }
@@ -1297,9 +1309,9 @@ const VERB_DATABASE = {
           contemplated: { form: "maghuhugas",   use: "Will wash",                             example: "Maghuhugas ako mamaya. — I will wash later." }
         }
       },
-      "Object (-in)": {
-        focus: "Object Focus",
-        description: "Focus on what is being washed (becomes the subject).",
+      "Object (-an)": {
+        focus: "Object / Locative Focus",
+        description: "Focus on what is being washed (becomes the subject). 'Hugas' takes -an, not -in.",
         forms: {
           infinitive:   { form: "hugasan",   use: "To wash (something specific)",             example: "Hugasan mo ang plato. — Wash the plate." },
           complete:     { form: "hinugasan", use: "Washed (something) — past",                example: "Hinugasan niya ang mukha. — She washed her face." },
@@ -1332,7 +1344,7 @@ const VERB_DATABASE = {
         forms: {
           infinitive:   { form: "maroon",    use: "To be (located somewhere)",                  example: "Maroon tayo sa bahay. — We will be at home." },
           complete:     { form: "naroon",    use: "Was (at a place) — past",                    example: "Naroon siya kagabi. — She was there last night." },
-          progressive:  { form: "narooroon", use: "Being (at a place) — ongoing",               example: "Narooroon siya ngayon. — She is there now." },
+          progressive:  { form: "naroroon", use: "Being (at a place) — ongoing",               example: "Naroroon siya ngayon. — She is there now." },
           contemplated: { form: "maroroon",  use: "Will be (at a place)",                       example: "Maroroon siya bukas. — She will be there tomorrow." }
         }
       }
@@ -1361,7 +1373,7 @@ const VERB_DATABASE = {
         forms: {
           infinitive:   { form: "tanungin",   use: "To ask (a question / something)",              example: "Tanungin mo siya. — Ask him/her." },
           complete:     { form: "tinanong",   use: "Asked (a question) — past",                   example: "Tinanong niya ang presyo. — She asked the price." },
-          progressive:  { form: "tinatatanong", use: "Asking (a question) — ongoing",             example: "Tinatatanong niya ang direksyon. — He is asking for directions." },
+          progressive:  { form: "tinatanong", use: "Asking (a question) — ongoing",             example: "Tinatanong niya ang direksyon. — He is asking for directions." },
           contemplated: { form: "tatanungin", use: "Will ask (a question)",                       example: "Tatanungin niya ang guro bukas. — He will ask the teacher tomorrow." }
         }
       },
@@ -1371,7 +1383,7 @@ const VERB_DATABASE = {
         forms: {
           infinitive:   { form: "tanungan",   use: "To ask (someone)",                            example: "Tanungan mo siya. — Ask him/her." },
           complete:     { form: "tinanungan", use: "Asked (someone) — past",                      example: "Tinanungan niya ang guro. — He asked the teacher." },
-          progressive:  { form: "tinatanguan", use: "Asking (someone) — ongoing",                  example: "Tinatanguan niya ang mga bata. — He is asking the children." },
+          progressive:  { form: "tinatanungan", use: "Asking (someone) — ongoing",                  example: "Tinatanungan niya ang mga bata. — He is asking the children." },
           contemplated: { form: "tatanungan", use: "Will ask (someone)",                          example: "Tatanungan niya ang nanay. — He will ask the mother." }
         }
       }
@@ -1427,7 +1439,7 @@ const VERB_DATABASE = {
         forms: {
           infinitive:   { form: "mag-isip",     use: "To think",                                  example: "Mag-isip ka muna. — Think first." },
           complete:     { form: "nag-isip",     use: "Thought — past",                             example: "Nag-isip siya nang malalim. — He thought deeply." },
-          progressive:  { form: "nagiisip",     use: "Currently thinking",                        example: "Nagiisip siya ngayon. — He is thinking now." },
+          progressive:  { form: "nag-iisip",     use: "Currently thinking",                        example: "Nag-iisip siya ngayon. — He is thinking now." },
           contemplated: { form: "mag-iisip",    use: "Will think",                                example: "Mag-iisip ako bukas. — I will think tomorrow." }
         }
       }
@@ -1454,20 +1466,20 @@ const VERB_DATABASE = {
         focus: "Object Focus",
         description: "The person being fetched is the focus.",
         forms: {
-          infinitive:   { form: "sundin",     use: "To fetch (someone)",                          example: "Sundin mo siya. — Fetch him/her." },
+          infinitive:   { form: "sunduin",      use: "To fetch (someone)",                               example: "Sunduin mo siya sa paaralan. — Fetch him/her at school." },
           complete:     { form: "sinundo",    use: "Fetched (someone) — past",                   example: "Sinundo niya ang bata. — He fetched the child." },
           progressive:  { form: "sinusundo",  use: "Fetching (someone) — ongoing",               example: "Sinusundo niya ang nanay. — He is fetching his mom." },
-          contemplated: { form: "susundin",   use: "Will fetch (someone)",                        example: "Susundin niya ang kaibigan. — He will fetch the friend." }
+          contemplated: { form: "susunduin",    use: "Will fetch (someone)",                             example: "Susunduin niya ang kaibigan. — He will fetch the friend." }
         }
       },
-      "Locative/Benefactive (-an)": {
-        focus: "Locative / Benefactive Focus",
-        description: "Fetching AT a place or FOR someone.",
+      "Related root: sunod (-an)": {
+        focus: "Directional Focus (to follow)",
+        description: "Careful: 'sundan' is not from 'sundo' — it comes from the root 'sunod' and means 'to follow (someone)'.",
         forms: {
-          infinitive:   { form: "sundan",     use: "To fetch at / for",                          example: "Sundan mo siya sa school. — Fetch her at school." },
-          complete:     { form: "sinundan",   use: "Fetched at/for — past",                      example: "Sinundan niya ang bata sa school. — He fetched the child at school." },
-          progressive:  { form: "sinusundan", use: "Fetching at/for — ongoing",                   example: "Sinusundan niya ang bata. — He is fetching for the child." },
-          contemplated: { form: "susundan",   use: "Will fetch at/for",                          example: "Susundan niya ang nanay. — He will fetch for the mom." }
+          infinitive:   { form: "sundan",       use: "To follow (someone)",                              example: "Sundan mo siya sa palengke. — Follow her to the market." },
+          complete:     { form: "sinundan",     use: "Followed — past",                                  example: "Sinundan niya ang bata pauwi. — He followed the child home." },
+          progressive:  { form: "sinusundan",   use: "Following — ongoing",                              example: "Sinusundan niya ang aso. — He is following the dog." },
+          contemplated: { form: "susundan",     use: "Will follow",                                      example: "Susundan niya ang nanay niya. — He will follow his mother." }
         }
       }
     }
@@ -1484,7 +1496,7 @@ const VERB_DATABASE = {
         forms: {
           infinitive:   { form: "magdala",     use: "To bring / carry",                          example: "Magdala ka ng payong. — Bring an umbrella." },
           complete:     { form: "nagdala",     use: "Brought — past",                            example: "Nagdala siya ng regalo. — She brought a gift." },
-          progressive:  { form: "nagdala",     use: "Currently bringing",                       example: "Nagdala siya ngayon. — She is bringing now." },
+          progressive:  { form: "nagdadala",    use: "Currently bringing",                               example: "Nagdadala siya ng pagkain ngayon. — She is bringing food now." },
           contemplated: { form: "magdadala",   use: "Will bring",                                example: "Magdadala siya ng pagkain. — She will bring food." }
         }
       },
@@ -1510,10 +1522,10 @@ const VERB_DATABASE = {
         focus: "Actor Focus",
         description: "The person leaving is the focus.",
         forms: {
-          infinitive:   { form: "magiwan",     use: "To leave (someone/something behind)",        example: "Magiwan ka ng mensahe. — Leave a message." },
-          complete:     { form: "nagiwan",     use: "Left — past",                                example: "Nagiwan siya ng sulat. — He left a letter." },
-          progressive:  { form: "nagiwiwan",   use: "Currently leaving (something) behind",       example: "Nagiwiwan siya ng mensahe. — He is leaving messages." },
-          contemplated: { form: "magiwiwan",   use: "Will leave behind",                          example: "Magiwiwan siya ng pagkain. — He will leave food." }
+          infinitive:   { form: "mag-iwan",     use: "To leave (someone/something) behind",              example: "Mag-iwan ka ng mensahe. — Leave a message." },
+          complete:     { form: "nag-iwan",     use: "Left — past",                                      example: "Nag-iwan siya ng sulat. — He left a letter." },
+          progressive:  { form: "nag-iiwan",    use: "Currently leaving (something) behind",             example: "Nag-iiwan siya ng mensahe. — He is leaving messages." },
+          contemplated: { form: "mag-iiwan",    use: "Will leave behind",                                example: "Mag-iiwan siya ng pagkain. — He will leave food." }
         }
       },
       "Object (i-)": {
@@ -1607,7 +1619,7 @@ const VERB_DATABASE = {
         forms: {
           infinitive:   { form: "mag-iyak",     use: "To cry",                                   example: "Mag-iyak ka kung gusto mo. — Cry if you want." },
           complete:     { form: "nag-iyak",     use: "Cried — past",                             example: "Nag-iyak siya kagabi. — He cried last night." },
-          progressive:  { form: "nagiyak",      use: "Currently crying",                        example: "Nagiyak siya ngayon. — He is crying now." },
+          progressive:  { form: "nag-iiyak",    use: "Currently crying",                                 example: "Nag-iiyak siya ngayon. — He is crying now." },
           contemplated: { form: "mag-iiyak",    use: "Will cry",                                example: "Mag-iiyak siya bukas. — He will cry tomorrow." }
         }
       }
@@ -1651,33 +1663,6 @@ const VERB_DATABASE = {
   },
 
   // ============== COMMON DAILY VERBS ==============
-  gawa: {
-    root: "gawa",
-    meaning: "to make / to do",
-    notes: "Takes both um- and mag-",
-    conjugations: {
-      "Actor (mag-)": {
-        focus: "Actor Focus",
-        description: "The maker / doer is the focus.",
-        forms: {
-          infinitive:   { form: "magawa",     use: "To make / do",                              example: "Magawa ka ng assignment. — Do your assignment." },
-          complete:     { form: "nagawa",     use: "Made / did — past",                          example: "Nagawa niya ang cake. — She made the cake." },
-          progressive:  { form: "naggawa",    use: "Currently making / doing",                   example: "Naggawa siya ng bahay. — He is building a house." },
-          contemplated: { form: "magagawa",   use: "Will make / do",                             example: "Magagawa niya bukas. — He will do it tomorrow." }
-        }
-      },
-      "Object (-in)": {
-        focus: "Object Focus",
-        description: "The thing being made is the focus.",
-        forms: {
-          infinitive:   { form: "gawin",     use: "To make / do (something)",                    example: "Gawin mo ng maayos. — Do it properly." },
-          complete:     { form: "ginawa",    use: "Made / did (something) — past",               example: "Ginawa niya ang cake. — He made the cake." },
-          progressive:  { form: "ginagawa",  use: "Making / doing (something) — ongoing",       example: "Ginagawa niya ang bahay. — He is making the house." },
-          contemplated: { form: "gagawin",   use: "Will make / do (something)",                  example: "Gagawin niya bukas. — He will do it tomorrow." }
-        }
-      }
-    }
-  },
 
   hanap: {
     root: "hanap",
@@ -1722,9 +1707,9 @@ const VERB_DATABASE = {
           contemplated: { form: "magbabayad",   use: "Will pay",                                 example: "Magbabayad siya bukas. — He will pay tomorrow." }
         }
       },
-      "Object (-in)": {
-        focus: "Object Focus",
-        description: "The bill / amount being paid is the focus.",
+      "Directional (-an)": {
+        focus: "Directional Focus",
+        description: "The bill, debt, or person being paid is the subject. 'Bayad' takes -an, not -in.",
         forms: {
           infinitive:   { form: "bayaran",     use: "To pay (a bill / someone)",                 example: "Bayaran mo ang utang. — Pay the debt." },
           complete:     { form: "binayaran",   use: "Paid (something) — past",                   example: "Binayaran niya ang bayad. — He paid the bill." },
@@ -1783,7 +1768,7 @@ const VERB_DATABASE = {
         forms: {
           infinitive:   { form: "tumayo",    use: "To stand",                                   example: "Tumayo ka. — Stand up." },
           complete:     { form: "tumayo",    use: "Stood — past",                                example: "Tumayo siya sa may Pinto. — He stood by the door." },
-          progressive:  { form: "tumitayo",  use: "Currently standing",                          example: "Tumitayo siya ngayon. — He is standing now." },
+          progressive:  { form: "tumatayo",  use: "Currently standing",                          example: "Tumatayo siya ngayon. — He is standing now." },
           contemplated: { form: "tatayo",    use: "Will stand",                                  example: "Tatayo siya bukas. — He will stand tomorrow." }
         }
       }
@@ -1795,14 +1780,14 @@ const VERB_DATABASE = {
     meaning: "to lie down",
     notes: "Takes -um- and mag-",
     conjugations: {
-      "Actor (mag-)": {
+      "Actor (-um-)": {
         focus: "Actor Focus",
-        description: "The person lying down is the focus.",
+        description: "The person lying down is the subject. Note: 'maghinga' is a different verb — it means 'to breathe'.",
         forms: {
-          infinitive:   { form: "maghinga",   use: "To lie down (informal) / to rest",          example: "Maghinga ka muna. — Rest a bit first." },
-          complete:     { form: "naghinga",   use: "Lay down / rested — past",                   example: "Naghinga siya kagabi. — She lay down last night." },
-          progressive:  { form: "naghihinga", use: "Currently lying down / resting",             example: "Naghihinga siya ngayon. — She is resting now." },
-          contemplated: { form: "maghihinga", use: "Will lie down / rest",                       example: "Maghihinga siya bukas. — She will rest tomorrow." }
+          infinitive:   { form: "humiga",       use: "To lie down",                                      example: "Humiga ka muna. — Lie down for a while." },
+          complete:     { form: "humiga",       use: "Lay down — past",                                  example: "Humiga siya kagabi sa sofa. — She lay down on the sofa last night." },
+          progressive:  { form: "humihiga",     use: "Currently lying down",                             example: "Humihiga siya ngayon. — She is lying down now." },
+          contemplated: { form: "hihiga",       use: "Will lie down",                                    example: "Hihiga siya mamaya. — She will lie down later." }
         }
       }
     }
@@ -1814,14 +1799,14 @@ const VERB_DATABASE = {
     meaning: "to wake up",
     notes: "Takes -um- and mag-",
     conjugations: {
-      "Actor (mag-)": {
+      "Actor (-um-)": {
         focus: "Actor Focus",
-        description: "The waker is the focus.",
+        description: "The person waking up is the subject. Use 'gisingin' to wake someone else up.",
         forms: {
-          infinitive:   { form: "maggising",     use: "To wake up (intentional)",                example: "Maggising ka ng maaga. — Wake up early." },
-          complete:     { form: "naggising",     use: "Woke up — past",                          example: "Naggising siya ng 6. — He woke up at 6." },
-          progressive:  { form: "naggigising",   use: "Currently waking up",                     example: "Naggigising siya ngayon. — He is waking up now." },
-          contemplated: { form: "maggigising",   use: "Will wake up",                            example: "Maggigising siya bukas. — He will wake up tomorrow." }
+          infinitive:   { form: "gumising",     use: "To wake up (intentional)",                         example: "Gumising ka nang maaga. — Wake up early." },
+          complete:     { form: "gumising",     use: "Woke up — past",                                   example: "Gumising siya ng alas-sais. — He woke up at six." },
+          progressive:  { form: "gumigising",   use: "Currently waking up",                              example: "Gumigising siya ngayon. — He is waking up now." },
+          contemplated: { form: "gigising",     use: "Will wake up",                                     example: "Gigising siya nang maaga bukas. — He will wake up early tomorrow." }
         }
       },
       "Actor (ma-)": {
@@ -1850,7 +1835,7 @@ const VERB_DATABASE = {
           infinitive:   { form: "pumasok",   use: "To enter",                                   example: "Pumasok ka sa bahay. — Enter the house." },
           complete:     { form: "pumasok",   use: "Entered — past",                              example: "Pumasok siya sa kwarto. — He entered the room." },
           progressive:  { form: "pumapasok", use: "Currently entering",                          example: "Pumapasok siya ngayon. — He is entering now." },
-          contemplated: { form: "pasok",     use: "Will enter",                                  example: "Pasok siya bukas. — He will enter tomorrow." }
+          contemplated: { form: "papasok",      use: "Will enter",                                       example: "Papasok siya bukas. — He will go in / report for work tomorrow." }
         }
       }
     }
@@ -1867,7 +1852,7 @@ const VERB_DATABASE = {
         forms: {
           infinitive:   { form: "lumabas",   use: "To go out / exit",                            example: "Lumabas ka ng bahay. — Go out of the house." },
           complete:     { form: "lumabas",   use: "Went out — past",                              example: "Lumabas siya kagabi. — She went out last night." },
-          progressive:  { form: "lumabas",   use: "Currently going out",                          example: "Lumabas siya ngayon. — She is going out now." },
+          progressive:  { form: "lumalabas",    use: "Currently going out",                              example: "Lumalabas siya ngayon. — She is going out now." },
           contemplated: { form: "lalabas",   use: "Will go out",                                  example: "Lalabas siya bukas. — She will go out tomorrow." }
         }
       }
@@ -1894,8 +1879,8 @@ const VERB_DATABASE = {
 
   baba: {
     root: "baba",
-    meaning: "to go down / to descend",
-    notes: "Takes -um- and mag-",
+    meaning: "to go down / to descend; (mababa) to be low",
+    notes: "Takes -um-. The same root gives the adjective 'mababa' (low); 'bumaba' also covers prices going down.",
     conjugations: {
       "Actor (um-)": {
         focus: "Actor Focus",
@@ -1963,14 +1948,14 @@ const VERB_DATABASE = {
     meaning: "to talk / to discuss / to chat",
     notes: "Takes -um- and mag-. Reciprocal: mag-usapan (talk to each other)",
     conjugations: {
-      "Actor (um-)": {
-        focus: "Actor Focus",
-        description: "The talker is the focus.",
+      "Object (pag-...-an)": {
+        focus: "Object Focus",
+        description: "The topic being discussed becomes the subject. There is no -um- form for 'usap'; use mag-usap or pag-usapan.",
         forms: {
-          infinitive:   { form: "usap",     use: "To talk / discuss (colloquial)",              example: "Usap tayo mamaya. — Let's talk later." },
-          complete:     { form: "usap",     use: "Talked / discussed — past",                   example: "Usap nila kagabi. — They talked last night." },
-          progressive:  { form: "uusap",    use: "Currently talking",                           example: "Uusap sila ngayon. — They are talking now." },
-          contemplated: { form: "uusap",    use: "Will talk",                                   example: "Uusap sila bukas. — They will talk tomorrow." }
+          infinitive:   { form: "pag-usapan",  use: "To discuss (something)",                         example: "Pag-usapan natin ang plano. — Let's discuss the plan." },
+          complete:     { form: "pinag-usapan",use: "Discussed — past",                               example: "Pinag-usapan nila ang plano kagabi. — They discussed the plan last night." },
+          progressive:  { form: "pinag-uusapan",use: "Being discussed — ongoing",                      example: "Pinag-uusapan nila ang balita. — They are discussing the news." },
+          contemplated: { form: "pag-uusapan", use: "Will discuss",                                   example: "Pag-uusapan namin ito bukas. — We will discuss this tomorrow." }
         }
       },
       "Actor (mag-)": {
@@ -1979,8 +1964,8 @@ const VERB_DATABASE = {
         forms: {
           infinitive:   { form: "mag-usap",     use: "To talk / discuss",                        example: "Mag-usap tayo. — Let's talk." },
           complete:     { form: "nag-usap",     use: "Talked / discussed — past",                example: "Nag-usap sila kagabi. — They talked last night." },
-          progressive:  { form: "naguusap",     use: "Currently talking",                       example: "Naguusap sila ngayon. — They are talking now." },
-          contemplated: { form: "maguusap",     use: "Will talk",                               example: "Maguusap sila bukas. — They will talk tomorrow." }
+          progressive:  { form: "nag-uusap",     use: "Currently talking",                       example: "Nag-uusap sila ngayon. — They are talking now." },
+          contemplated: { form: "mag-uusap",     use: "Will talk",                               example: "Mag-uusap sila bukas. — They will talk tomorrow." }
         }
       },
       "Reciprocal (mag-...-an)": {
@@ -1989,8 +1974,8 @@ const VERB_DATABASE = {
         forms: {
           infinitive:   { form: "mag-usapan",     use: "To talk to each other (infinitive)",    example: "Mag-usapan tayo mamaya. — Let's talk to each other later." },
           complete:     { form: "nag-usapan",     use: "Talked to each other — past",            example: "Nag-usapan sila. — They talked to each other." },
-          progressive:  { form: "naguusapan",     use: "Talking to each other (ongoing)",        example: "Naguusapan sila ngayon. — They are talking to each other now." },
-          contemplated: { form: "maguusapan",     use: "Will talk to each other",                example: "Maguusapan sila bukas. — They will talk to each other tomorrow." }
+          progressive:  { form: "nag-uusapan",     use: "Talking to each other (ongoing)",        example: "Nag-uusapan sila ngayon. — They are talking to each other now." },
+          contemplated: { form: "mag-uusapan",     use: "Will talk to each other",                example: "Mag-uusapan sila bukas. — They will talk to each other tomorrow." }
         }
       }
     }
@@ -2017,27 +2002,27 @@ const VERB_DATABASE = {
 
   tawad: {
     root: "tawad",
-    meaning: "to forgive / to reduce (price)",
-    notes: "Polymorphic: AF=forgive, OF=reduce price",
+    meaning: "to haggle / to ask for a discount",
+    notes: "'Magtawad' is to bargain for a lower price. The related sense 'to forgive' uses a different affix set: magpatawad / patawarin ('Patawarin mo ako.' = 'Forgive me.').",
     conjugations: {
       "Actor (mag-)": {
         focus: "Actor Focus",
-        description: "The forgiver is the focus.",
+        description: "The one haggling is the subject.",
         forms: {
-          infinitive:   { form: "magtawad",     use: "To forgive / to reduce",                  example: "Magtawad ka sa kanya. — Forgive him/her." },
-          complete:     { form: "nagtawad",     use: "Forgave — past",                          example: "Nagtawad siya sa kanya. — He forgave him." },
-          progressive:  { form: "nagtatawad",   use: "Currently forgiving",                     example: "Nagtatawad siya ngayon. — He is forgiving now." },
-          contemplated: { form: "magtatawad",   use: "Will forgive",                            example: "Magtatawad siya bukas. — He will forgive tomorrow." }
+          infinitive:   { form: "magtawad",    use: "To haggle / ask for a discount",                 example: "Magtawad ka sa tindera. — Haggle with the vendor." },
+          complete:     { form: "nagtawad",    use: "Haggled — past",                                 example: "Nagtawad siya sa palengke. — She haggled at the market." },
+          progressive:  { form: "nagtatawad",  use: "Currently haggling",                             example: "Nagtatawad siya ngayon. — She is haggling now." },
+          contemplated: { form: "magtatawad",  use: "Will haggle",                                    example: "Magtatawad siya bukas. — She will haggle tomorrow." }
         }
       },
       "Object (-in)": {
         focus: "Object Focus",
-        description: "The person/sin being forgiven is the focus.",
+        description: "The item or price being haggled over is the subject.",
         forms: {
-          infinitive:   { form: "tawirin",     use: "To forgive (someone/something)",           example: "Tawirin mo siya. — Forgive him/her." },
-          complete:     { form: "tinawad",     use: "Forgave (someone) — past",                example: "Tinawad niya ang kasalanan. — He forgave the sin." },
-          progressive:  { form: "tinatawad",   use: "Forgiving (someone) — ongoing",           example: "Tinatawad niya ang mga kasalanan. — He is forgiving the sins." },
-          contemplated: { form: "tatatawad",   use: "Will forgive (someone)",                  example: "Tatatawad niya ang lahat. — He will forgive all." }
+          infinitive:   { form: "tawaran",     use: "To haggle over (something)",                     example: "Tawaran mo ang presyo. — Haggle over the price." },
+          complete:     { form: "tinawaran",   use: "Haggled over — past",                            example: "Tinawaran niya ang bag. — She haggled over the bag." },
+          progressive:  { form: "tinatawaran", use: "Haggling over — ongoing",                        example: "Tinatawaran niya ang sapatos. — She is haggling over the shoes." },
+          contemplated: { form: "tatawaran",   use: "Will haggle over",                               example: "Tatawaran niya ang presyo. — She will haggle over the price." }
         }
       }
     }
@@ -2163,58 +2148,14 @@ const VERB_DATABASE = {
     }
   },
 
-  tanggap: {
-    root: "tanggap",
-    meaning: "to receive / to accept",
-    notes: "Takes -um- and mag-",
-    conjugations: {
-      "Actor (um-)": {
-        focus: "Actor Focus",
-        description: "The receiver is the focus.",
-        forms: {
-          infinitive:   { form: "tumanggap",   use: "To receive / accept",                         example: "Tumanggap ka ng regalo. — Accept the gift." },
-          complete:     { form: "tumanggap",   use: "Received / accepted — past",                  example: "Tumanggap siya ng award. — He received an award." },
-          progressive:  { form: "tumantanggap", use: "Currently receiving",                         example: "Tumantanggap siya ngayon. — He is receiving now." },
-          contemplated: { form: "tatanggap",   use: "Will receive",                                example: "Tatanggap siya bukas. — He will receive tomorrow." }
-        }
-      },
-      "Object (i-)": {
-        focus: "Object Focus",
-        description: "The thing being received is the focus.",
-        forms: {
-          infinitive:   { form: "itanggap",   use: "To accept (something)",                        example: "Itanggap mo ang regalo. — Accept the gift." },
-          complete:     { form: "itinanggap", use: "Accepted (something) — past",                  example: "Itinanggap niya ang offer. — He accepted the offer." },
-          progressive:  { form: "itinantanggap", use: "Accepting (something) — ongoing",            example: "Itinantanggap niya ang tulong. — He is accepting the help." },
-          contemplated: { form: "itatanggap", use: "Will accept (something)",                       example: "Itatanggap niya ang alok. — He will accept the offer." }
-        }
-      }
-    }
-  },
 
   // ============== TRANSFER / MOVE ==============
-  lipat: {
-    root: "lipat",
-    meaning: "to transfer / to move",
-    notes: "Takes -um- and mag-",
-    conjugations: {
-      "Actor (mag-)": {
-        focus: "Actor Focus",
-        description: "The mover is the focus.",
-        forms: {
-          infinitive:   { form: "maglipat",     use: "To transfer / move",                         example: "Maglipat ka ng bahay. — Move house." },
-          complete:     { form: "naglipat",     use: "Transferred / moved — past",                  example: "Naglipat siya ng bahay. — He moved house." },
-          progressive:  { form: "naglilipat",   use: "Currently moving",                            example: "Naglilipat siya ngayon. — He is moving now." },
-          contemplated: { form: "maglilipat",   use: "Will move",                                   example: "Maglilipat siya bukas. — He will move tomorrow." }
-        }
-      }
-    }
-  },
 
   // ============== STATES (adjectival verbs) ==============
   dumi: {
     root: "dumi",
-    meaning: "to be dirty",
-    notes: "Stative (ma-) focus; related to cleaning",
+    meaning: "to be dirty; (dumumi) to defecate",
+    notes: "Stative ma- for 'get dirty'. The -um- form 'dumumi' is the polite way to say 'to defecate'.",
     conjugations: {
       "Actor (ma-)": {
         focus: "Actor Focus (Stative)",
@@ -2223,7 +2164,17 @@ const VERB_DATABASE = {
           infinitive:   { form: "madumi",    use: "To become dirty",                              example: "Madumi ang damit. — The clothes will get dirty." },
           complete:     { form: "nadumi",    use: "Got dirty — past",                              example: "Nadumi ang damit. — The clothes got dirty." },
           progressive:  { form: "nadudumi",  use: "Getting dirty (ongoing)",                       example: "Nadudumi ang sahig. — The floor is getting dirty." },
-          contemplated: { form: "madudumi",  use: "Will get dirty",                                example: "Madudumi ang damit. — The clothes will get dirty." }
+          contemplated: { form: "madudumi",    use: "Will get dirty",                                 example: "Madudumi ang damit. — The clothes will get dirty." }
+        }
+      },
+      "Actor (-um-)": {
+        focus: "Actor Focus",
+        description: "The -um- forms carry the separate sense 'to defecate'.",
+        forms: {
+          infinitive:   { form: "dumumi",      use: "To defecate",                                    example: "Kailangan niyang dumumi. — He needs to go to the toilet." },
+          complete:     { form: "dumumi",      use: "Defecated — past",                               example: "Dumumi siya kanina. — He had a bowel movement earlier." },
+          progressive:  { form: "dumudumi",    use: "Defecating — ongoing",                           example: "Dumudumi ang bata. — The child is having a bowel movement." },
+          contemplated: { form: "dudumi",      use: "Will defecate",                                  example: "Dudumi siya mamaya. — He will go later." }
         }
       }
     }
@@ -2248,8 +2199,8 @@ const VERB_DATABASE = {
   },
 
   // ============== MORE ACTIONS ==============
-  ayus: {
-    root: "ayus",
+  ayos: {
+    root: "ayos",
     meaning: "to fix / to arrange / to be in order",
     notes: "Takes -um- and mag-",
     conjugations: {
@@ -2259,7 +2210,7 @@ const VERB_DATABASE = {
         forms: {
           infinitive:   { form: "mag-ayos",     use: "To fix / arrange",                            example: "Mag-ayos ka ng kwarto. — Fix the room." },
           complete:     { form: "nag-ayos",     use: "Fixed / arranged — past",                     example: "Nag-ayos siya ng kwarto. — He fixed the room." },
-          progressive:  { form: "nagaayos",     use: "Currently fixing",                            example: "Nagaayos siya ngayon. — He is fixing now." },
+          progressive:  { form: "nag-aayos",     use: "Currently fixing",                            example: "Nag-aayos siya ngayon. — He is fixing now." },
           contemplated: { form: "mag-aayos",    use: "Will fix",                                    example: "Mag-aayos siya bukas. — He will fix tomorrow." }
         }
       }
@@ -2276,10 +2227,10 @@ const VERB_DATABASE = {
         focus: "Actor Focus",
         description: "The borrower is the focus.",
         forms: {
-          infinitive:   { form: "umhiram",    use: "To borrow",                                    example: "Umhiram ka ng libro. — Borrow a book." },
-          complete:     { form: "umhiram",    use: "Borrowed — past",                               example: "Umhiram siya ng libro. — He borrowed a book." },
-          progressive:  { form: "umhihiram",  use: "Currently borrowing",                           example: "Umhihiram siya ngayon. — He is borrowing now." },
-          contemplated: { form: "ihihiram",   use: "Will borrow",                                   example: "Ihihiram niya ang libro. — He will borrow the book." }
+          infinitive:   { form: "humiram",     use: "To borrow",                                      example: "Humiram ka ng libro. — Borrow a book." },
+          complete:     { form: "humiram",     use: "Borrowed — past",                                example: "Humiram siya ng libro. — He borrowed a book." },
+          progressive:  { form: "humihiram",   use: "Currently borrowing",                            example: "Humihiram siya ng pera. — He is borrowing money." },
+          contemplated: { form: "hihiram",     use: "Will borrow",                                    example: "Hihiram siya ng libro bukas. — He will borrow a book tomorrow." }
         }
       }
     }
@@ -2296,7 +2247,7 @@ const VERB_DATABASE = {
         forms: {
           infinitive:   { form: "mag-upa",     use: "To rent",                                      example: "Mag-upa ka ng bahay. — Rent a house." },
           complete:     { form: "nag-upa",     use: "Rented — past",                                example: "Nag-upa siya ng bahay. — He rented a house." },
-          progressive:  { form: "naguupa",     use: "Currently renting",                            example: "Naguupa siya ngayon. — He is renting now." },
+          progressive:  { form: "nag-uupa",     use: "Currently renting",                            example: "Nag-uupa siya ngayon. — He is renting now." },
           contemplated: { form: "mag-uupa",    use: "Will rent",                                    example: "Mag-uupa siya bukas. — He will rent tomorrow." }
         }
       }
@@ -2345,14 +2296,14 @@ const VERB_DATABASE = {
     meaning: "to hurt / to be sick / to feel pain",
     notes: "Stative (ma-) focus. Also: 'masakit' = painful, 'may sakit' = sick person",
     conjugations: {
-      "Actor (ma-)": {
-        focus: "Actor Focus (Stative — pain/illness)",
-        description: "The person/thing experiencing pain or illness.",
+      "Actor (-um-)": {
+        focus: "Actor Focus (onset of pain)",
+        description: "The body part that hurts is the subject. 'Masakit' is the adjective ('painful'); the verb forms use -um-.",
         forms: {
-          infinitive:   { form: "masakit",    use: "To feel pain / to become sick",                  example: "Masakit ang ulo ko. — My head hurts. / I'll get sick." },
-          complete:     { form: "nasakit",    use: "Felt pain / got sick — past",                    example: "Nasakit ang likod niya. — His back hurt." },
-          progressive:  { form: "nasasakit",  use: "Hurting (ongoing)",                              example: "Nasasakit ang tiyan ko. — My stomach is hurting." },
-          contemplated: { form: "masasakit",  use: "Will hurt / will get sick",                      example: "Masasakit ang ulo mo. — Your head will hurt." }
+          infinitive:   { form: "sumakit",     use: "To hurt / to start hurting",                     example: "Baka sumakit ang ulo mo. — Your head might start hurting." },
+          complete:     { form: "sumakit",     use: "Hurt — past",                                    example: "Sumakit ang likod niya. — His back hurt." },
+          progressive:  { form: "sumasakit",   use: "Hurting (ongoing)",                              example: "Sumasakit ang tiyan ko. — My stomach is hurting." },
+          contemplated: { form: "sasakit",     use: "Will hurt",                                      example: "Sasakit ang ulo mo kapag hindi ka natulog. — Your head will hurt if you don't sleep." }
         }
       }
     }
@@ -2385,10 +2336,10 @@ const VERB_DATABASE = {
         focus: "Actor Focus",
         description: "The smiler is the focus.",
         forms: {
-          infinitive:   { form: "umngiti",    use: "To smile",                                       example: "Umngiti ka naman. — Smile a little." },
-          complete:     { form: "umngiti",    use: "Smiled — past",                                  example: "Umngiti siya sa akin. — He smiled at me." },
-          progressive:  { form: "umangiti",  use: "Currently smiling",                              example: "Umangiti siya ngayon. — He is smiling now." },
-          contemplated: { form: "angiti",    use: "Will smile",                                     example: "Angiti siya pag nalaman. — He will smile when he finds out." }
+          infinitive:   { form: "ngumiti",     use: "To smile",                                       example: "Ngumiti ka naman. — Smile a little." },
+          complete:     { form: "ngumiti",     use: "Smiled — past",                                  example: "Ngumiti siya sa akin. — He smiled at me." },
+          progressive:  { form: "ngumingiti",  use: "Currently smiling",                              example: "Ngumingiti siya ngayon. — He is smiling now." },
+          contemplated: { form: "ngingiti",    use: "Will smile",                                     example: "Ngingiti siya pag nalaman niya. — He will smile when he finds out." }
         }
       }
     }
@@ -2422,7 +2373,7 @@ const VERB_DATABASE = {
         focus: "Reciprocal / Mutual Focus",
         description: "Marrying each other. Common for engagement and wedding announcements.",
         forms: {
-          infinitive:   { form: "mag-asawa",     use: "To get married (to each other)",             example: "Mag-aasawa na sila. — They will get married (to each other)." },
+          infinitive:   { form: "mag-asawa",   use: "To get married (to each other)",                 example: "Gusto na nilang mag-asawa. — They want to get married now." },
           complete:     { form: "nag-asawa",     use: "Got married — past",                        example: "Nag-asawa sila noong 2020. — They got married in 2020." },
           progressive:  { form: "nag-aasawa",   use: "In the process of getting married",          example: "Nag-aasawa sila ngayon. — They are getting married now." },
           contemplated: { form: "mag-aasawa",   use: "Will get married",                          example: "Mag-aasawa sila sa Hunyo. — They will get married in June." }
@@ -2443,7 +2394,7 @@ const VERB_DATABASE = {
         forms: {
           infinitive:   { form: "mag-ipon",     use: "To save (money)",                            example: "Mag-ipon ka ng pera. — Save money." },
           complete:     { form: "nag-ipon",     use: "Saved — past",                                example: "Nag-ipon siya ng pera. — He saved money." },
-          progressive:  { form: "nagiipon",     use: "Currently saving",                            example: "Nagiipon siya ngayon. — He is saving now." },
+          progressive:  { form: "nag-iipon",     use: "Currently saving",                            example: "Nag-iipon siya ngayon. — He is saving now." },
           contemplated: { form: "mag-iipon",    use: "Will save",                                   example: "Mag-iipon siya bukas. — He will save tomorrow." }
         }
       }
@@ -2461,8 +2412,8 @@ const VERB_DATABASE = {
         forms: {
           infinitive:   { form: "umutang",    use: "To borrow money / to owe",                     example: "Umutang ka sa kaibigan. — Borrow from a friend." },
           complete:     { form: "umutang",    use: "Borrowed / owed — past",                       example: "Umutang siya ng pera. — He borrowed money." },
-          progressive:  { form: "umutang",    use: "Currently borrowing",                         example: "Umutang siya ngayon. — He is borrowing now." },
-          contemplated: { form: "utang",      use: "Will borrow",                                  example: "Utang siya bukas. — He will borrow tomorrow." }
+          progressive:  { form: "umuutang",    use: "Currently borrowing",                            example: "Umuutang siya sa tindahan. — He is borrowing (on credit) at the store." },
+          contemplated: { form: "uutang",      use: "Will borrow",                                    example: "Uutang siya bukas. — He will borrow tomorrow." }
         }
       }
     }
@@ -2473,14 +2424,14 @@ const VERB_DATABASE = {
     meaning: "to rise / to go up (price, level)",
     notes: "Takes -um- (inchoative — becoming high)",
     conjugations: {
-      "Actor (ma-)": {
-        focus: "Actor Focus (Stative — becoming high)",
-        description: "The thing that is rising in level/price.",
+      "Actor (-um-)": {
+        focus: "Actor Focus (inchoative — becoming high)",
+        description: "The thing rising in level or price is the subject. 'Mataas' is the adjective ('high'); the verb forms use -um-.",
         forms: {
-          infinitive:   { form: "mataas",     use: "To become high (price/level rising)",          example: "Mataas ang presyo. — The price is/will be high." },
-          complete:     { form: "nataas",     use: "Became high / rose — past",                    example: "Nataas ang presyo. — The price rose." },
-          progressive:  { form: "nataas",     use: "Rising (ongoing)",                              example: "Nataas ang presyo ngayon. — The price is rising now." },
-          contemplated: { form: "mataas",     use: "Will rise / will be high",                      example: "Mataas ang presyo bukas. — The price will be high tomorrow." }
+          infinitive:   { form: "tumaas",      use: "To rise / to go up",                             example: "Baka tumaas ang presyo. — The price might go up." },
+          complete:     { form: "tumaas",      use: "Rose — past",                                    example: "Tumaas ang presyo. — The price rose." },
+          progressive:  { form: "tumataas",    use: "Rising (ongoing)",                               example: "Tumataas ang presyo ngayon. — The price is rising now." },
+          contemplated: { form: "tataas",      use: "Will rise",                                      example: "Tataas ang presyo bukas. — The price will go up tomorrow." }
         }
       }
     }
@@ -2644,7 +2595,7 @@ const VERB_DATABASE = {
         forms: {
           infinitive:   { form: "mag-almusal",     use: "To have breakfast",                       example: "Mag-almusal ka na ba? — Have you had breakfast yet?" },
           complete:     { form: "nag-almusal",     use: "Had breakfast — past",                    example: "Nag-almusal siya kagabi. — He had breakfast last night." },
-          progressive:  { form: "nagaalmusal",     use: "Currently having breakfast",              example: "Nagaalmusal siya ngayon. — He is having breakfast now." },
+          progressive:  { form: "nag-aalmusal",     use: "Currently having breakfast",              example: "Nag-aalmusal siya ngayon. — He is having breakfast now." },
           contemplated: { form: "mag-aalmusal",    use: "Will have breakfast",                     example: "Mag-aalmusal siya bukas. — He will have breakfast tomorrow." }
         }
       }
@@ -2754,27 +2705,27 @@ const VERB_DATABASE = {
         forms: {
           infinitive:   { form: "magsimba",     use: "To go to church",                            example: "Magsimba tayo sa Linggo. — Let's go to church on Sunday." },
           complete:     { form: "nagsimba",     use: "Went to church — past",                     example: "Nagsimba siya kagabi. — He went to church last night." },
-          progressive:  { form: "nagsisisimba", use: "Currently at church",                       example: "Nagsisisimba siya ngayon. — He is at church now." },
-          contemplated: { form: "magsisisimba", use: "Will go to church",                         example: "Magsisisimba siya bukas. — He will go to church tomorrow." }
+          progressive:  { form: "nagsisimba", use: "Currently at church",                       example: "Nagsisimba siya ngayon. — He is at church now." },
+          contemplated: { form: "magsisimba", use: "Will go to church",                         example: "Magsisimba siya bukas. — He will go to church tomorrow." }
         }
       }
     }
   },
 
   // ============== STATES (adjectival verbs) ==============
-  masaya: {
-    root: "masaya",
-    meaning: "to be happy",
+  saya: {
+    root: "saya",
+    meaning: "to be happy / to enjoy oneself",
     notes: "Stative (ma-) focus",
     conjugations: {
-      "Actor (ma-)": {
-        focus: "Actor Focus (Stative)",
-        description: "The person/thing in the state of being happy.",
+      "Actor (mag-)": {
+        focus: "Actor Focus",
+        description: "'Masaya' is the adjective 'happy' and does not conjugate. The verb from this root is 'magsaya' — to enjoy oneself, to be merry.",
         forms: {
-          infinitive:   { form: "masaya",    use: "To be happy / to become happy",                 example: "Masaya siya ngayon. — He is happy now." },
-          complete:     { form: "nasaya",    use: "Became happy — past",                          example: "Nasaya siya kagabi. — He became happy last night." },
-          progressive:  { form: "nasasaya",  use: "Being happy (ongoing)",                        example: "Nasasaya siya ngayon. — He is being happy now." },
-          contemplated: { form: "masasaya",  use: "Will be happy",                                example: "Masasaya siya bukas. — He will be happy tomorrow." }
+          infinitive:   { form: "magsaya",     use: "To enjoy oneself / to be merry",                 example: "Magsaya tayo ngayong gabi. — Let's enjoy ourselves tonight." },
+          complete:     { form: "nagsaya",     use: "Enjoyed oneself — past",                         example: "Nagsaya sila sa pista. — They had a good time at the fiesta." },
+          progressive:  { form: "nagsasaya",   use: "Currently enjoying oneself",                     example: "Nagsasaya sila ngayon. — They are having fun now." },
+          contemplated: { form: "magsasaya",   use: "Will enjoy oneself",                             example: "Magsasaya sila bukas. — They will have fun tomorrow." }
         }
       }
     }
@@ -2809,8 +2760,8 @@ const VERB_DATABASE = {
         forms: {
           infinitive:   { form: "malamig",     use: "To be cold / to become cold",                  example: "Malamig ngayon. — It's cold now." },
           complete:     { form: "nalamig",     use: "Became cold — past",                            example: "Nalamig kagabi. — It got cold last night." },
-          progressive:  { form: "nalamlamig",  use: "Getting cold (ongoing)",                       example: "Nalamlamig na. — It's getting cold." },
-          contemplated: { form: "malamlamig",  use: "Will be cold / will get cold",                  example: "Malamlamig bukas. — It will be cold tomorrow." }
+          progressive:  { form: "nalalamig",  use: "Getting cold (ongoing)",                       example: "Nalalamig na. — It's getting cold." },
+          contemplated: { form: "malalamig",  use: "Will be cold / will get cold",                  example: "Malalamig bukas. — It will be cold tomorrow." }
         }
       }
     }
@@ -2827,8 +2778,8 @@ const VERB_DATABASE = {
         forms: {
           infinitive:   { form: "mainit",      use: "To be hot / to become hot",                   example: "Mainit ngayon. — It's hot now." },
           complete:     { form: "nainit",      use: "Became hot — past",                            example: "Nainit kagabi. — It got hot last night." },
-          progressive:  { form: "naininit",    use: "Getting hot (ongoing)",                        example: "Naininit na. — It's getting hot." },
-          contemplated: { form: "maininit",    use: "Will be hot / will get hot",                   example: "Maininit bukas. — It will be hot tomorrow." }
+          progressive:  { form: "naiinit",    use: "Getting hot (ongoing)",                        example: "Naiinit na. — It's getting hot." },
+          contemplated: { form: "maiinit",    use: "Will be hot / will get hot",                   example: "Maiinit bukas. — It will be hot tomorrow." }
         }
       }
     }
@@ -2856,17 +2807,17 @@ const VERB_DATABASE = {
   // ============== TRAVEL ==============
   umaga: {
     root: "umaga",
-    meaning: "morning (as a verb: 'to become morning')",
-    notes: "Stative; often used as 'umaga na' (it's morning now)",
+    meaning: "morning (noun) — not a conjugating verb",
+    notes: "'Umaga' is a noun and does not take aspect affixes. Say 'Umaga na.' (It's morning now); 'kinaumagahan' = 'the following morning'.",
     conjugations: {
-      "Actor (ma-)": {
-        focus: "Actor Focus (Stative — time of day)",
-        description: "The morning state — used to say 'it's morning'.",
+      "Time expression (no aspect affixes)": {
+        focus: "Time Expression",
+        description: "'Umaga' is not conjugated. These are the fixed expressions used instead.",
         forms: {
-          infinitive:   { form: "umaga",     use: "To be morning / to become morning",            example: "Umaga na. — It's morning now." },
-          complete:     { form: "umaga",     use: "Was morning — past",                          example: "Umaga na noon. — It was already morning then." },
-          progressive:  { form: "umaga",     use: "Currently morning",                            example: "Umaga pa. — It's still morning." },
-          contemplated: { form: "umaga",     use: "Will be morning",                              example: "Umaga na bukas. — It will be morning tomorrow." }
+          infinitive:   { form: "umaga",       use: "Morning (noun) / 'it is morning'",               example: "Umaga na. — It's morning now." },
+          complete:     { form: "kinaumagahan",use: "The following morning",                          example: "Kinaumagahan, umalis siya. — The next morning, he left." },
+          progressive:  { form: "tuwing umaga",use: "Every morning / habitual",                       example: "Tuwing umaga siyang naglalakad. — He walks every morning." },
+          contemplated: { form: "bukas ng umaga",use: "Tomorrow morning",                               example: "Bukas ng umaga tayo aalis. — We'll leave tomorrow morning." }
         }
       }
     }
@@ -2947,30 +2898,13 @@ const VERB_DATABASE = {
         forms: {
           infinitive:   { form: "umihi",    use: "To urinate",                                    example: "Umihi ka muna. — Urinate first." },
           complete:     { form: "umihi",    use: "Urinated — past",                                example: "Umihi siya kagabi. — He urinated last night." },
-          progressive:  { form: "umiiihi",  use: "Currently urinating",                            example: "Umiiihi siya ngayon. — He is urinating now." },
+          progressive:  { form: "umiihi",  use: "Currently urinating",                            example: "Umiihi siya ngayon. — He is urinating now." },
           contemplated: { form: "iihi",     use: "Will urinate",                                   example: "Iihi siya bukas. — He will urinate tomorrow." }
         }
       }
     }
   },
 
-  dumi: {
-    root: "dumi",
-    meaning: "to defecate",
-    notes: "Takes -um-. (Note: 'dumi' also means 'dirt' as a noun, but this entry is for the verb.)",
-    conjugations: {
-      "Actor (-um-)": {
-        focus: "Actor Focus",
-        description: "The person defecating is the focus.",
-        forms: {
-          infinitive:   { form: "dumumi",   use: "To defecate",                                    example: "Dumumi muna siya. — He defecated first." },
-          complete:     { form: "dumumi",   use: "Defecated — past",                                example: "Dumumi siya kagabi. — He defecated last night." },
-          progressive:  { form: "dumudumi", use: "Currently defecating",                            example: "Dumudumi siya ngayon. — He is defecating now." },
-          contemplated: { form: "dudumi",   use: "Will defecate",                                   example: "Dudumi siya bukas. — He will defecate tomorrow." }
-        }
-      }
-    }
-  },
 
   ubo: {
     root: "ubo",
@@ -2983,7 +2917,7 @@ const VERB_DATABASE = {
         forms: {
           infinitive:   { form: "mag-ubo",     use: "To cough",                                     example: "Mag-ubo ka nang marahan. — Cough gently." },
           complete:     { form: "nag-ubo",     use: "Coughed — past",                                example: "Nag-ubo siya kagabi. — He coughed last night." },
-          progressive:  { form: "naguubo",     use: "Currently coughing",                            example: "Naguubo siya ngayon. — He is coughing now." },
+          progressive:  { form: "nag-uubo",     use: "Currently coughing",                            example: "Nag-uubo siya ngayon. — He is coughing now." },
           contemplated: { form: "mag-uubo",    use: "Will cough",                                    example: "Mag-uubo siya bukas. — He will cough tomorrow." }
         }
       }
@@ -3008,19 +2942,20 @@ const VERB_DATABASE = {
     }
   },
 
-  hilam: {
-    root: "hilam",
+
+  hikab: {
+    root: "hikab",
     meaning: "to yawn",
-    notes: "Takes -um- and mag-",
+    notes: "Takes -um- (humikab). Note: 'hilam' is a different root — it means to rinse the eyes.",
     conjugations: {
-      "Actor (mag-)": {
+      "Actor (-um-)": {
         focus: "Actor Focus",
         description: "The person yawning is the focus.",
         forms: {
-          infinitive:   { form: "maghilam",     use: "To yawn",                                      example: "Maghilam ka nang marahan. — Yawn gently." },
-          complete:     { form: "naghilam",     use: "Yawned — past",                                example: "Naghilam siya kagabi. — He yawned last night." },
-          progressive:  { form: "naghihilam",   use: "Currently yawning",                            example: "Naghihilam siya ngayon. — He is yawning now." },
-          contemplated: { form: "maghihilam",   use: "Will yawn",                                    example: "Maghihilam siya bukas. — He will yawn tomorrow." }
+          infinitive:   { form: "humikab",   use: "To yawn",                                      example: "Huwag kang humikab sa harap ng bisita. — Don't yawn in front of the guest." },
+          complete:     { form: "humikab",   use: "Yawned — past",                                example: "Humikab siya kagabi. — He yawned last night." },
+          progressive:  { form: "humihikab", use: "Currently yawning",                            example: "Humihikab siya ngayon. — He is yawning now." },
+          contemplated: { form: "hihikab",   use: "Will yawn",                                    example: "Hihikab siya kapag inaantok. — He will yawn when he gets sleepy." }
         }
       }
     }
@@ -3038,7 +2973,7 @@ const VERB_DATABASE = {
         forms: {
           infinitive:   { form: "mag-umpisa",     use: "To start / to begin",                        example: "Mag-umpisa na tayo. — Let's start." },
           complete:     { form: "nag-umpisa",     use: "Started — past",                              example: "Nag-umpisa siya kagabi. — He started last night." },
-          progressive:  { form: "naguumpisa",     use: "Currently starting",                          example: "Naguumpisa siya ngayon. — He is starting now." },
+          progressive:  { form: "nag-uumpisa",     use: "Currently starting",                          example: "Nag-uumpisa siya ngayon. — He is starting now." },
           contemplated: { form: "mag-uumpisa",    use: "Will start",                                  example: "Mag-uumpisa siya bukas. — He will start tomorrow." }
         }
       }
@@ -3086,14 +3021,14 @@ const VERB_DATABASE = {
     meaning: "to go home / to return home",
     notes: "Takes -um- and mag-",
     conjugations: {
-      "Actor (mag-)": {
+      "Actor (-um-)": {
         focus: "Actor Focus",
-        description: "The person going home is the focus.",
+        description: "The person going home is the subject: umuwi. ('Mag-uwi' means to bring something home.)",
         forms: {
-          infinitive:   { form: "maguwi",     use: "To go home",                                   example: "Maguwi ka na. — Go home now." },
-          complete:     { form: "naguwi",     use: "Went home — past",                              example: "Naguwi siya kagabi. — He went home last night." },
-          progressive:  { form: "naguuwi",    use: "Currently going home",                          example: "Naguuwi siya ngayon. — He is going home now." },
-          contemplated: { form: "mag-uuwi",   use: "Will go home",                                  example: "Mag-uuwi siya bukas. — He will go home tomorrow." }
+          infinitive:   { form: "umuwi",       use: "To go home",                                     example: "Umuwi ka na. — Go home now." },
+          complete:     { form: "umuwi",       use: "Went home — past",                               example: "Umuwi siya kagabi. — He went home last night." },
+          progressive:  { form: "umuuwi",      use: "Currently going home",                           example: "Umuuwi siya ngayon. — He is going home now." },
+          contemplated: { form: "uuwi",        use: "Will go home",                                   example: "Uuwi siya bukas. — He will go home tomorrow." }
         }
       }
     }
@@ -3220,7 +3155,7 @@ const VERB_DATABASE = {
         focus: "Actor Focus",
         description: "The businessperson is the focus.",
         forms: {
-          infinitive:   { form: "magnegosyo",     use: "To do business",                            example: "Magnegosyo siya ngayon. — He does business now." },
+          infinitive:   { form: "magnegosyo",  use: "To do business",                                 example: "Magnegosyo tayo. — Let's go into business." },
           complete:     { form: "nagnegosyo",     use: "Did business — past",                        example: "Nagnegosyo siya kagabi. — He did business last night." },
           progressive:  { form: "nagnenegosyo",   use: "Currently doing business",                  example: "Nagnenegosyo siya ngayon. — He is doing business now." },
           contemplated: { form: "magnenegosyo",   use: "Will do business",                          example: "Magnenegosyo siya bukas. — He will do business tomorrow." }
@@ -3241,7 +3176,7 @@ const VERB_DATABASE = {
         forms: {
           infinitive:   { form: "mag-ani",     use: "To harvest",                                 example: "Mag-ani tayo ng palay. — Let's harvest rice." },
           complete:     { form: "nag-ani",     use: "Harvested — past",                            example: "Nag-ani sila kagabi. — They harvested last night." },
-          progressive:  { form: "nagaani",     use: "Currently harvesting",                        example: "Nagaani sila ngayon. — They are harvesting now." },
+          progressive:  { form: "nag-aani",     use: "Currently harvesting",                        example: "Nag-aani sila ngayon. — They are harvesting now." },
           contemplated: { form: "mag-aani",    use: "Will harvest",                                example: "Mag-aani sila bukas. — They will harvest tomorrow." }
         }
       }
@@ -3326,23 +3261,13 @@ const VERB_DATABASE = {
   selos: {
     root: "selos",
     meaning: "to be jealous",
-    notes: "Stative (ma-) focus. (from Spanish 'celos')",
+    notes: "Takes mag- (from Spanish 'celos'). Note: 'maselan' is an unrelated word meaning 'fussy / sensitive'.",
     conjugations: {
-      "Actor (ma-)": {
-        focus: "Actor Focus (Stative)",
-        description: "The person in the state of jealousy is the focus.",
-        forms: {
-          infinitive:   { form: "maselan",   use: "To become jealous", /* note: actual word is 'magselos' but 'maselan' is stative */ example: "Magseselos siya. — He will be jealous." },
-          complete:     { form: "naselan",   use: "Became jealous — past",                       example: "Nagseselos siya kagabi. — He was jealous last night." },
-          progressive:  { form: "naseselan", use: "Being jealous (ongoing)",                     example: "Naseselan siya ngayon. — He is being jealous now." },
-          contemplated: { form: "maseselan", use: "Will become jealous",                          example: "Maseselan siya bukas. — He will become jealous tomorrow." }
-        }
-      },
       "Actor (mag-)": {
-        focus: "Actor Focus (mag- variant)",
-        description: "The jealous person performing the action of being jealous.",
+        focus: "Actor Focus",
+        description: "The jealous person is the subject. 'Magselos' is the verb; this root has no ma- stative form.",
         forms: {
-          infinitive:   { form: "magselos",     use: "To be jealous (action)",                    example: "Magselos siya sa kapatid. — He is jealous of his sibling." },
+          infinitive:   { form: "magselos",    use: "To be / get jealous",                            example: "Huwag kang magselos. — Don't be jealous." },
           complete:     { form: "nagselos",     use: "Was jealous — past",                        example: "Nagselos siya kagabi. — He was jealous last night." },
           progressive:  { form: "nagseselos",   use: "Currently being jealous",                    example: "Nagseselos siya ngayon. — He is being jealous now." },
           contemplated: { form: "magseselos",   use: "Will be jealous",                           example: "Magseselos siya bukas. — He will be jealous tomorrow." }
@@ -3352,23 +3277,6 @@ const VERB_DATABASE = {
   },
 
   // OTHER COMMON
-  kita: {
-    root: "kita",
-    meaning: "to meet / to see each other",
-    notes: "Reciprocal: 'magkita' (to meet each other). Also: 'kita' = earnings (noun)",
-    conjugations: {
-      "Reciprocal (mag-...-an)": {
-        focus: "Reciprocal / Mutual Focus",
-        description: "Meeting each other (appointments, dates, reunions).",
-        forms: {
-          infinitive:   { form: "magkita",     use: "To meet each other (infinitive)",          example: "Magkita tayo mamaya. — Let's meet later." },
-          complete:     { form: "nagkita",     use: "Met each other — past",                    example: "Nagkita sila kagabi. — They met each other last night." },
-          progressive:  { form: "nagkikita",   use: "Currently meeting each other",             example: "Nagkikita sila ngayon. — They are meeting each other now." },
-          contemplated: { form: "magkikita",   use: "Will meet each other",                      example: "Magkikita sila bukas. — They will meet each other tomorrow." }
-        }
-      }
-    }
-  },
 
   // TIME OF DAY
   gabi: {
@@ -3376,14 +3284,14 @@ const VERB_DATABASE = {
     meaning: "to become night / evening",
     notes: "Stative; often 'Gabi na' (It's already night)",
     conjugations: {
-      "Actor (ma-)": {
-        focus: "Actor Focus (Stative — time)",
-        description: "The evening/night state.",
+      "Actor (-um-)": {
+        focus: "Actor Focus (impersonal — nightfall)",
+        description: "Night falling. 'Gabi' by itself is the noun 'night'; the verb is 'gumabi'.",
         forms: {
-          infinitive:   { form: "magabi",   use: "To become evening/night",                     example: "Magabi na. — It's getting night." },
-          complete:     { form: "nagabi",   use: "Became evening/night — past",                  example: "Nagabi kagabi. — It became night last night." },
-          progressive:  { form: "nagagabi", use: "Getting evening/night (ongoing)",              example: "Nagagabi na. — It's getting night now." },
-          contemplated: { form: "magagabi", use: "Will become evening/night",                    example: "Magagabi na bukas. — It will be night tomorrow." }
+          infinitive:   { form: "gumabi",      use: "For night to fall",                              example: "Baka gumabi ka sa daan. — Night may catch you on the road." },
+          complete:     { form: "gumabi",      use: "Night fell — past",                              example: "Gumabi na sa bukid. — Night fell on the farm." },
+          progressive:  { form: "gumagabi",    use: "Getting dark (ongoing)",                         example: "Gumagabi na. — It's getting dark." },
+          contemplated: { form: "gagabi",      use: "Night will fall",                                example: "Gagabi na kung hindi tayo aalis. — It'll be night if we don't leave." }
         }
       }
     }
@@ -3454,9 +3362,9 @@ const VERB_DATABASE = {
     meaning: "to live / to be alive",
     notes: "Takes -um- and mag-",
     conjugations: {
-      "Actor (-um-)": {
-        focus: "Actor Focus",
-        description: "The person living is the focus.",
+      "Actor (ma-)": {
+        focus: "Actor Focus (Stative)",
+        description: "The person living is the subject. 'Buhay' takes ma-, not -um-.",
         forms: {
           infinitive:   { form: "mabuhay",   use: "To live / to be alive",                       example: "Mabuhay ka! — Long live! / Be alive!" },
           complete:     { form: "nabuhay",   use: "Lived — past",                                  example: "Nabuhay siya nang mahaba. — He lived a long life." },
@@ -3491,16 +3399,16 @@ const VERB_DATABASE = {
   bigat: {
     root: "bigat",
     meaning: "to be heavy",
-    notes: "Stative (ma-) focus",
+    notes: "'Mabigat' = heavy (adjective). The change-of-state verb is bumigat.",
     conjugations: {
-      "Actor (ma-)": {
-        focus: "Actor Focus (Stative — adjective)",
-        description: "The thing in the state of being heavy.",
+      "Change of state": {
+        focus: "Inchoative Focus",
+        description: "'mabigat' is the adjective ('heavy') and takes no aspect affixes. To say something BECOMES heavy, use the forms below.",
         forms: {
-          infinitive:   { form: "mabigat",   use: "To be heavy / to become heavy",               example: "Mabigat ang bag. — The bag is heavy." },
-          complete:     { form: "nabigat",   use: "Became heavy — past",                          example: "Nabigat ang bag. — The bag got heavy." },
-          progressive:  { form: "nagbibigat", use: "Getting heavy (ongoing)",                      example: "Nagbibigat ang bag. — The bag is getting heavy." },
-          contemplated: { form: "mabibigat", use: "Will be heavy",                                 example: "Mabibigat ang bag. — The bag will be heavy." }
+          infinitive:   { form: "bumigat",     use: "To become heavy",                                example: "Baka bumigat ang bag mo. — Your bag might get heavier." },
+          complete:     { form: "bumigat",     use: "Became heavy — past",                            example: "Bumigat ang bag. — The bag got heavier." },
+          progressive:  { form: "bumibigat",   use: "Becoming heavy — ongoing",                       example: "Bumibigat ang bag. — The bag is getting heavier." },
+          contemplated: { form: "bibigat",     use: "Will become heavy",                              example: "Bibigat ang bag. — The bag will get heavier." }
         }
       }
     }
@@ -3509,16 +3417,16 @@ const VERB_DATABASE = {
   gaan: {
     root: "gaan",
     meaning: "to be light (weight)",
-    notes: "Stative (ma-) focus",
+    notes: "'Magaan' = light (adjective). The change-of-state verb is gumaan.",
     conjugations: {
-      "Actor (ma-)": {
-        focus: "Actor Focus (Stative — adjective)",
-        description: "The thing in the state of being light.",
+      "Change of state": {
+        focus: "Inchoative Focus",
+        description: "'magaan' is the adjective ('light') and takes no aspect affixes. To say something BECOMES light, use the forms below.",
         forms: {
-          infinitive:   { form: "magaan",   use: "To be light / to become light",                example: "Magaan ang bag. — The bag is light." },
-          complete:     { form: "nagaan",   use: "Became light — past",                           example: "Nagaan ang bag. — The bag got light." },
-          progressive:  { form: "naggagaan", use: "Getting light (ongoing)",                       example: "Naggagaan ang bag. — The bag is getting light." },
-          contemplated: { form: "magagaan", use: "Will be light",                                  example: "Magagaan ang bag. — The bag will be light." }
+          infinitive:   { form: "gumaan",      use: "To become light",                                example: "Gusto kong gumaan ang bag. — I want the bag to get lighter." },
+          complete:     { form: "gumaan",      use: "Became light — past",                            example: "Gumaan ang bag. — The bag got lighter." },
+          progressive:  { form: "gumagaan",    use: "Becoming light — ongoing",                       example: "Gumagaan ang bag. — The bag is getting lighter." },
+          contemplated: { form: "gagaan",      use: "Will become light",                              example: "Gagaan ang bag. — The bag will get lighter." }
         }
       }
     }
@@ -3527,16 +3435,16 @@ const VERB_DATABASE = {
   haba: {
     root: "haba",
     meaning: "to be long",
-    notes: "Stative (ma-) focus",
+    notes: "'Mahaba' = long (adjective). The change-of-state verb is humaba.",
     conjugations: {
-      "Actor (ma-)": {
-        focus: "Actor Focus (Stative — adjective)",
-        description: "The thing in the state of being long.",
+      "Change of state": {
+        focus: "Inchoative Focus",
+        description: "'mahaba' is the adjective ('long') and takes no aspect affixes. To say something BECOMES long, use the forms below.",
         forms: {
-          infinitive:   { form: "mahaba",   use: "To be long / to become long",                  example: "Mahaba ang buhok ko. — My hair is long." },
-          complete:     { form: "nahaba",   use: "Became long — past",                           example: "Nahaba ang buhok ko. — My hair got long." },
-          progressive:  { form: "nahahaba", use: "Getting long (ongoing)",                        example: "Nahahaba ang buhok ko. — My hair is getting long." },
-          contemplated: { form: "mahahaba", use: "Will be long",                                  example: "Mahahaba ang buhok ko. — My hair will be long." }
+          infinitive:   { form: "humaba",      use: "To become long",                                 example: "Hayaan mong humaba ang buhok mo. — Let your hair grow long." },
+          complete:     { form: "humaba",      use: "Became long — past",                             example: "Humaba ang buhok ko. — My hair got long." },
+          progressive:  { form: "humahaba",    use: "Becoming long — ongoing",                        example: "Humahaba ang buhok ko. — My hair is getting long." },
+          contemplated: { form: "hahaba",      use: "Will become long",                               example: "Hahaba ang buhok ko. — My hair will get long." }
         }
       }
     }
@@ -3545,52 +3453,35 @@ const VERB_DATABASE = {
   ikli: {
     root: "ikli",
     meaning: "to be short (length / time)",
-    notes: "Stative (ma-) focus. Also: 'maikli' (short)",
+    notes: "'Maikli' = short (adjective). The change-of-state verb is umikli.",
     conjugations: {
-      "Actor (ma-)": {
-        focus: "Actor Focus (Stative — adjective)",
-        description: "The thing in the state of being short.",
+      "Change of state": {
+        focus: "Inchoative Focus",
+        description: "'maikli' is the adjective ('short') and takes no aspect affixes. To say something BECOMES short, use the forms below.",
         forms: {
-          infinitive:   { form: "maikli",   use: "To be short / to become short",                example: "Maikli ang oras. — The time is short." },
-          complete:     { form: "naikli",   use: "Became short — past",                          example: "Naikli ang oras. — The time got short." },
-          progressive:  { form: "naiikli",  use: "Getting short (ongoing)",                       example: "Naiikli ang oras. — The time is getting short." },
-          contemplated: { form: "maiikli",  use: "Will be short",                                 example: "Maiikli ang oras. — The time will be short." }
+          infinitive:   { form: "umikli",      use: "To become short",                                example: "Baka umikli ang oras natin. — Our time might get short." },
+          complete:     { form: "umikli",      use: "Became short — past",                            example: "Umikli ang oras. — The time got short." },
+          progressive:  { form: "umiikli",     use: "Becoming short — ongoing",                       example: "Umiikli ang oras. — The time is getting short." },
+          contemplated: { form: "iikli",       use: "Will become short",                              example: "Iikli ang oras. — The time will get short." }
         }
       }
     }
   },
 
-  baba: {
-    root: "baba",
-    meaning: "to be low / to go down (height/level)",
-    notes: "Stative (ma-) focus. (Different meaning from 'baba' = to descend)",
-    conjugations: {
-      "Actor (ma-)": {
-        focus: "Actor Focus (Stative — adjective)",
-        description: "The thing in the state of being low.",
-        forms: {
-          infinitive:   { form: "mababa",   use: "To be low / to become low",                    example: "Mababa ang mesa. — The table is low." },
-          complete:     { form: "nababa",   use: "Became low — past",                             example: "Nababa ang mesa. — The table got low." },
-          progressive:  { form: "nagbababa", use: "Getting low (ongoing)",                         example: "Nagbababa ang presyo. — The price is getting low." },
-          contemplated: { form: "mabababa", use: "Will be low",                                    example: "Mabababa ang presyo. — The price will be low." }
-        }
-      }
-    }
-  },
 
   bilis: {
     root: "bilis",
     meaning: "to be fast / to be quick",
-    notes: "Stative (ma-) focus",
+    notes: "'Mabilis' = fast (adjective). The change-of-state verb is bumilis.",
     conjugations: {
-      "Actor (ma-)": {
-        focus: "Actor Focus (Stative — adjective)",
-        description: "The thing in the state of being fast.",
+      "Change of state": {
+        focus: "Inchoative Focus",
+        description: "'mabilis' is the adjective ('fast') and takes no aspect affixes. To say something BECOMES fast, use the forms below.",
         forms: {
-          infinitive:   { form: "mabilis",  use: "To be fast / to become fast",                  example: "Mabilis ang kotse. — The car is fast." },
-          complete:     { form: "nabilis",  use: "Became fast — past",                             example: "Nabilis ang kotse. — The car got fast." },
-          progressive:  { form: "nagmamabilis", use: "Getting fast (ongoing)",                       example: "Nagmamabilis ang kotse. — The car is getting fast." },
-          contemplated: { form: "mamabilis", use: "Will be fast",                                  example: "Mamabilis ang kotse. — The car will be fast." }
+          infinitive:   { form: "bumilis",     use: "To become fast",                                 example: "Gusto niyang bumilis ang kotse. — He wants the car to go faster." },
+          complete:     { form: "bumilis",     use: "Became fast — past",                             example: "Bumilis ang kotse. — The car got faster." },
+          progressive:  { form: "bumibilis",   use: "Becoming fast — ongoing",                        example: "Bumibilis ang kotse. — The car is getting faster." },
+          contemplated: { form: "bibilis",     use: "Will become fast",                               example: "Bibilis ang kotse. — The car will get faster." }
         }
       }
     }
@@ -3599,16 +3490,16 @@ const VERB_DATABASE = {
   bagal: {
     root: "bagal",
     meaning: "to be slow",
-    notes: "Stative (ma-) focus",
+    notes: "'Mabagal' = slow (adjective). The change-of-state verb is bumagal.",
     conjugations: {
-      "Actor (ma-)": {
-        focus: "Actor Focus (Stative — adjective)",
-        description: "The thing in the state of being slow.",
+      "Change of state": {
+        focus: "Inchoative Focus",
+        description: "'mabagal' is the adjective ('slow') and takes no aspect affixes. To say something BECOMES slow, use the forms below.",
         forms: {
-          infinitive:   { form: "mabagal",  use: "To be slow / to become slow",                  example: "Mabagal ang bus. — The bus is slow." },
-          complete:     { form: "nabagal",  use: "Became slow — past",                             example: "Nabagal ang bus. — The bus got slow." },
-          progressive:  { form: "nagmamabagal", use: "Getting slow (ongoing)",                       example: "Nagmamabagal ang bus. — The bus is getting slow." },
-          contemplated: { form: "mamabagal", use: "Will be slow",                                  example: "Mamabagal ang bus. — The bus will be slow." }
+          infinitive:   { form: "bumagal",     use: "To become slow",                                 example: "Baka bumagal ang bus. — The bus might slow down." },
+          complete:     { form: "bumagal",     use: "Became slow — past",                             example: "Bumagal ang bus. — The bus slowed down." },
+          progressive:  { form: "bumabagal",   use: "Becoming slow — ongoing",                        example: "Bumabagal ang bus. — The bus is slowing down." },
+          contemplated: { form: "babagal",     use: "Will become slow",                               example: "Babagal ang bus. — The bus will slow down." }
         }
       }
     }
@@ -3617,16 +3508,16 @@ const VERB_DATABASE = {
   mura: {
     root: "mura",
     meaning: "to be cheap",
-    notes: "Stative (ma-) focus",
+    notes: "'Mura' = cheap (adjective). Prices dropping = nagmura / bumaba. Careful: 'magmura' also means 'to swear / curse'.",
     conjugations: {
-      "Actor (ma-)": {
-        focus: "Actor Focus (Stative — adjective)",
-        description: "The thing in the state of being cheap.",
+      "Change of state": {
+        focus: "Inchoative Focus",
+        description: "'mura' is the adjective ('cheap') and takes no aspect affixes. To say something BECOMES cheap, use the forms below.",
         forms: {
-          infinitive:   { form: "mamura",   use: "To be cheap / to become cheap",                example: "Mamura ito. — This is cheap." },
-          complete:     { form: "namura",   use: "Became cheap — past",                           example: "Namura ito. — This got cheap." },
-          progressive:  { form: "nagmamura", use: "Getting cheap (ongoing)",                       example: "Nagmamura ang bilihin. — Things are getting cheap." },
-          contemplated: { form: "mamamura", use: "Will be cheap",                                  example: "Mamamura ang bilihin. — Things will be cheap." }
+          infinitive:   { form: "magmura",     use: "To become cheap",                                example: "Sana magmura ang bilihin. — I hope goods get cheaper." },
+          complete:     { form: "nagmura",     use: "Became cheap — past",                            example: "Nagmura ang bilihin. — Goods got cheaper." },
+          progressive:  { form: "nagmumura",   use: "Becoming cheap — ongoing",                       example: "Nagmumura ang bilihin. — Goods are getting cheaper." },
+          contemplated: { form: "magmumura",   use: "Will become cheap",                              example: "Magmumura ang bilihin. — Goods will get cheaper." }
         }
       }
     }
@@ -3635,16 +3526,16 @@ const VERB_DATABASE = {
   mahal: {
     root: "mahal",
     meaning: "to be expensive",
-    notes: "Stative (ma-) focus",
+    notes: "'Mahal' = expensive / dear (adjective). Prices rising = nagmahal. Careful: 'magmahal' also means 'to love'.",
     conjugations: {
-      "Actor (ma-)": {
-        focus: "Actor Focus (Stative — adjective)",
-        description: "The thing in the state of being expensive.",
+      "Change of state": {
+        focus: "Inchoative Focus",
+        description: "'mahal' is the adjective ('expensive') and takes no aspect affixes. To say something BECOMES expensive, use the forms below.",
         forms: {
-          infinitive:   { form: "mamahal",  use: "To be expensive / to become expensive",         example: "Mamahal ito. — This is/will be expensive." },
-          complete:     { form: "namahal",  use: "Became expensive — past",                        example: "Namahal ito. — This got expensive." },
-          progressive:  { form: "nagmamahal", use: "Getting expensive (ongoing)",                    example: "Nagmamahal ang bilihin. — Things are getting expensive." },
-          contemplated: { form: "mamamahal", use: "Will be expensive",                              example: "Mamamahal ang bilihin. — Things will be expensive." }
+          infinitive:   { form: "magmahal",    use: "To become expensive",                            example: "Baka magmahal ang bigas. — Rice might get expensive." },
+          complete:     { form: "nagmahal",    use: "Became expensive — past",                        example: "Nagmahal ang bilihin. — Goods got expensive." },
+          progressive:  { form: "nagmamahal",  use: "Becoming expensive — ongoing",                   example: "Nagmamahal ang bilihin. — Goods are getting expensive." },
+          contemplated: { form: "magmamahal",  use: "Will become expensive",                          example: "Magmamahal ang bilihin. — Goods will get expensive." }
         }
       }
     }
@@ -3653,16 +3544,16 @@ const VERB_DATABASE = {
   laki: {
     root: "laki",
     meaning: "to be big / to grow (in size)",
-    notes: "Stative (ma-) focus for adjective / mag- for the action",
+    notes: "'Malaki' = big (adjective). The change-of-state verb is lumaki (to grow).",
     conjugations: {
-      "Actor (ma-)": {
-        focus: "Actor Focus (Stative — adjective)",
-        description: "The thing in the state of being big.",
+      "Change of state": {
+        focus: "Inchoative Focus",
+        description: "'malaki' is the adjective ('big') and takes no aspect affixes. To say something BECOMES big, use the forms below.",
         forms: {
-          infinitive:   { form: "malaki",   use: "To be big / to become big",                    example: "Malaki ang bahay. — The house is big." },
-          complete:     { form: "nalaki",   use: "Became big — past",                             example: "Nalaki ang bata. — The child got big." },
-          progressive:  { form: "naglalaki", use: "Getting big (ongoing)",                         example: "Naglalaki ang bata. — The child is getting big." },
-          contemplated: { form: "malalaki", use: "Will be big",                                    example: "Malalaki ang bata. — The child will be big." }
+          infinitive:   { form: "lumaki",      use: "To become big",                                  example: "Gusto niyang lumaki ang negosyo. — He wants the business to grow." },
+          complete:     { form: "lumaki",      use: "Became big — past",                              example: "Lumaki ang bata. — The child grew." },
+          progressive:  { form: "lumalaki",    use: "Becoming big — ongoing",                         example: "Lumalaki ang bata. — The child is growing." },
+          contemplated: { form: "lalaki",      use: "Will become big",                                example: "Lalaki ang bata. — The child will grow." }
         }
       }
     }
@@ -3671,16 +3562,16 @@ const VERB_DATABASE = {
   liit: {
     root: "liit",
     meaning: "to be small",
-    notes: "Stative (ma-) focus. (Note: 'liit' as verb; noun is 'liitan' or use 'maliit')",
+    notes: "'Maliit' = small (adjective). The change-of-state verb is lumiit (to shrink).",
     conjugations: {
-      "Actor (ma-)": {
-        focus: "Actor Focus (Stative — adjective)",
-        description: "The thing in the state of being small.",
+      "Change of state": {
+        focus: "Inchoative Focus",
+        description: "'maliit' is the adjective ('small') and takes no aspect affixes. To say something BECOMES small, use the forms below.",
         forms: {
-          infinitive:   { form: "maliit",   use: "To be small / to become small",                example: "Maliit ang bahay. — The house is small." },
-          complete:     { form: "naliit",   use: "Became small — past",                            example: "Naliit ang kuwarto. — The room got small." },
-          progressive:  { form: "nagliliit", use: "Getting small (ongoing)",                       example: "Nagliliit ang bahay. — The house is getting small." },
-          contemplated: { form: "maliit",   use: "Will be small",                                  example: "Maliit ang bahay. — The house will be small." }
+          infinitive:   { form: "lumiit",      use: "To become small / to shrink",                    example: "Baka lumiit ang damit sa labada. — The shirt might shrink in the wash." },
+          complete:     { form: "lumiit",      use: "Became small — past",                            example: "Lumiit ang damit. — The shirt shrank." },
+          progressive:  { form: "lumiliit",    use: "Becoming small — ongoing",                       example: "Lumiliit ang damit. — The shirt is shrinking." },
+          contemplated: { form: "liliit",      use: "Will become small",                              example: "Liliit ang damit. — The shirt will shrink." }
         }
       }
     }
@@ -3689,16 +3580,16 @@ const VERB_DATABASE = {
   ganda: {
     root: "ganda",
     meaning: "to be beautiful / pretty",
-    notes: "Stative (ma-) focus. (Note: 'maganda' for 'beautiful' is more common as an adjective; 'ganda' as a verb is the action of becoming beautiful)",
+    notes: "'Maganda' = beautiful (adjective). The change-of-state verb is gumanda.",
     conjugations: {
-      "Actor (ma-)": {
-        focus: "Actor Focus (Stative — adjective)",
-        description: "The thing in the state of being beautiful.",
+      "Change of state": {
+        focus: "Inchoative Focus",
+        description: "'maganda' is the adjective ('beautiful') and takes no aspect affixes. To say something BECOMES beautiful, use the forms below.",
         forms: {
-          infinitive:   { form: "maganda",  use: "To be beautiful / to become beautiful",        example: "Maganda siya. — She is beautiful." },
-          complete:     { form: "naganda",  use: "Became beautiful — past",                       example: "Naganda siya. — She became beautiful." },
-          progressive:  { form: "nagiganda", use: "Getting beautiful (ongoing)",                  example: "Nagiganda siya ngayon. — She is getting beautiful now." },
-          contemplated: { form: "magiganda", use: "Will be beautiful",                            example: "Magiganda siya bukas. — She will be beautiful tomorrow." }
+          infinitive:   { form: "gumanda",     use: "To become beautiful",                            example: "Gusto niyang gumanda ang hardin. — She wants the garden to become beautiful." },
+          complete:     { form: "gumanda",     use: "Became beautiful — past",                        example: "Gumanda ang hardin. — The garden became beautiful." },
+          progressive:  { form: "gumaganda",   use: "Becoming beautiful — ongoing",                   example: "Gumaganda ang panahon. — The weather is getting nice." },
+          contemplated: { form: "gaganda",     use: "Will become beautiful",                          example: "Gaganda ang lugar. — The place will look better." }
         }
       }
     }
@@ -3707,16 +3598,16 @@ const VERB_DATABASE = {
   pangit: {
     root: "pangit",
     meaning: "to be ugly",
-    notes: "Stative (ma-) focus. ('Mapangit' is sometimes used)",
+    notes: "'Pangit' = ugly (adjective). The change-of-state verb is pumangit.",
     conjugations: {
-      "Actor (ma-)": {
-        focus: "Actor Focus (Stative — adjective)",
-        description: "The thing in the state of being ugly.",
+      "Change of state": {
+        focus: "Inchoative Focus",
+        description: "'pangit' is the adjective ('ugly') and takes no aspect affixes. To say something BECOMES ugly, use the forms below.",
         forms: {
-          infinitive:   { form: "mapangit", use: "To be ugly / to become ugly",                  example: "Mapangit ito. — This is ugly." },
-          complete:     { form: "napangit", use: "Became ugly — past",                            example: "Napangit ito. — This got ugly." },
-          progressive:  { form: "nagmamapangit", use: "Getting ugly (ongoing)",                     example: "Nagmamapangit ito. — This is getting ugly." },
-          contemplated: { form: "mamapangit", use: "Will be ugly",                                  example: "Mamapangit ito. — This will be ugly." }
+          infinitive:   { form: "pumangit",    use: "To become ugly",                                 example: "Baka pumangit ang ayos nito. — This might end up looking bad." },
+          complete:     { form: "pumangit",    use: "Became ugly — past",                             example: "Pumangit ang panahon. — The weather turned bad." },
+          progressive:  { form: "pumapangit",  use: "Becoming ugly — ongoing",                        example: "Pumapangit ang tanawin. — The view is getting worse." },
+          contemplated: { form: "papangit",    use: "Will become ugly",                               example: "Papangit ang itsura nito. — This will look worse." }
         }
       }
     }
@@ -3724,17 +3615,17 @@ const VERB_DATABASE = {
 
   bago: {
     root: "bago",
-    meaning: "to be new",
+    meaning: "to be new / to change",
     notes: "Stative (ma-) focus. ('Bago' can also be 'before' as a conjunction)",
     conjugations: {
-      "Actor (ma-)": {
-        focus: "Actor Focus (Stative — adjective)",
-        description: "The thing in the state of being new.",
+      "Change of state": {
+        focus: "Inchoative Focus",
+        description: "'bago' is the adjective ('new') and takes no aspect affixes. To say something BECOMES new, use the forms below.",
         forms: {
-          infinitive:   { form: "mabago",   use: "To be new / to become new",                    example: "Mabago ang kotse. — The car is new." },
-          complete:     { form: "nabago",   use: "Became new — past",                             example: "Nabago ang kotse. — The car got new." },
-          progressive:  { form: "nagbabago", use: "Becoming new / changing (ongoing)",              example: "Nagbabago ang kotse. — The car is getting new." },
-          contemplated: { form: "mababago", use: "Will be new",                                    example: "Mababago ang kotse. — The car will be new." }
+          infinitive:   { form: "magbago",     use: "To become new",                                  example: "Gusto niyang magbago. — He wants to change." },
+          complete:     { form: "nagbago",     use: "Changed — past",                                 example: "Nagbago ang isip niya. — He changed his mind." },
+          progressive:  { form: "nagbabago",   use: "Becoming new — ongoing",                         example: "Nagbabago ang panahon. — The weather is changing." },
+          contemplated: { form: "magbabago",   use: "Will become new",                                example: "Magbabago ang lahat. — Everything will change." }
         }
       }
     }
@@ -3743,16 +3634,16 @@ const VERB_DATABASE = {
   luma: {
     root: "luma",
     meaning: "to be old / aged",
-    notes: "Stative (ma-) focus. (Different from 'luma' as noun)",
+    notes: "'Luma' = old, worn (adjective, for things). The change-of-state verb is lumuma.",
     conjugations: {
-      "Actor (ma-)": {
-        focus: "Actor Focus (Stative — adjective)",
-        description: "The thing in the state of being old.",
+      "Change of state": {
+        focus: "Inchoative Focus",
+        description: "'luma' is the adjective ('old') and takes no aspect affixes. To say something BECOMES old, use the forms below.",
         forms: {
-          infinitive:   { form: "maluma",   use: "To be old / to become old",                    example: "Maluma na ang bahay. — The house is old now." },
-          complete:     { form: "naluma",   use: "Became old — past",                             example: "Naluma ang bahay. — The house got old." },
-          progressive:  { form: "naglulumaluma", use: "Getting old (ongoing)",                       example: "Naglulumaluma ang bahay. — The house is getting old." },
-          contemplated: { form: "malulumaluma", use: "Will be old",                                  example: "Malulumaluma ang bahay. — The house will be old." }
+          infinitive:   { form: "lumuma",      use: "To become old",                                  example: "Baka lumuma ang telepono mo. — Your phone might get old." },
+          complete:     { form: "lumuma",      use: "Became old — past",                              example: "Lumuma ang bahay. — The house got old." },
+          progressive:  { form: "lumuluma",    use: "Becoming old — ongoing",                         example: "Lumuluma ang bahay. — The house is getting old." },
+          contemplated: { form: "luluma",      use: "Will become old",                                example: "Luluma rin ito. — This will get old too." }
         }
       }
     }
@@ -3768,10 +3659,10 @@ const VERB_DATABASE = {
         focus: "Actor Focus (Impersonal)",
         description: "The rain is the focus — the natural phenomenon. Often used impersonally.",
         forms: {
-          infinitive:   { form: "umulan",   use: "To rain",                                       example: "Umuulan ngayon. — It's raining now." },
-          complete:     { form: "umulan",   use: "Rained — past",                                  example: "Umuulan kagabi. — It rained last night." },
+          infinitive:   { form: "umulan",      use: "To rain",                                        example: "Baka umulan mamaya. — It might rain later." },
+          complete:     { form: "umulan",      use: "Rained — past",                                  example: "Umulan kagabi. — It rained last night." },
           progressive:  { form: "umuulan",  use: "Currently raining",                              example: "Umuulan ngayon. — It is raining now." },
-          contemplated: { form: "ulan",     use: "Will rain",                                      example: "Uulan bukas. — It will rain tomorrow." }
+          contemplated: { form: "uulan",       use: "Will rain",                                      example: "Uulan bukas. — It will rain tomorrow." }
         }
       }
     }
@@ -3805,7 +3696,7 @@ const VERB_DATABASE = {
         focus: "Actor Focus (Stative — forgetting)",
         description: "The person in the state of forgetting.",
         forms: {
-          infinitive:   { form: "makalimot",  use: "To forget",                                  example: "Makalimot ka. — You will forget." },
+          infinitive:   { form: "makalimot",   use: "To forget",                                      example: "Baka makalimot ka. — You might forget." },
           complete:     { form: "nakalimot",  use: "Forgot — past",                              example: "Nakalimot siya. — He forgot." },
           progressive:  { form: "nakakalimot", use: "Forgetting (ongoing)",                       example: "Nakakalimot siya. — He is forgetting." },
           contemplated: { form: "makakalimot", use: "Will forget",                                example: "Makakalimot siya bukas. — He will forget." }
@@ -3843,7 +3734,7 @@ const VERB_DATABASE = {
         forms: {
           infinitive:   { form: "mabigo",   use: "To fail / to become disappointed",            example: "Mabigo siya. — He will fail." },
           complete:     { form: "nabigo",   use: "Failed — past",                                example: "Nabigo siya sa exam. — He failed the exam." },
-          progressive:  { form: "nagbebigo", use: "Currently failing",                            example: "Nagbebigo siya sa exam. — He is failing the exam." },
+          progressive:  { form: "nabibigo",    use: "Currently failing / being let down",             example: "Nabibigo siya sa exam. — He is failing the exam." },
           contemplated: { form: "mabibigo", use: "Will fail",                                     example: "Mabibigo siya sa exam. — He will fail the exam." }
         }
       }
@@ -3856,14 +3747,14 @@ const VERB_DATABASE = {
     meaning: "to bathe / to take a bath / to swim",
     notes: "Takes mag- (also used for swimming)",
     conjugations: {
-      "Actor (mag-)": {
+      "Actor (ma-)": {
         focus: "Actor Focus",
-        description: "The bather/swimmer is the focus.",
+        description: "The bather/swimmer is the subject. 'Ligo' takes ma-: maligo. ('Magligo' means to bathe someone else.)",
         forms: {
-          infinitive:   { form: "magligo",   use: "To bathe / to swim",                        example: "Magligo ka na. — Bathe now." },
-          complete:     { form: "nagligo",   use: "Bathed / swam — past",                       example: "Nagligo siya kagabi. — He bathed last night." },
-          progressive:  { form: "naglilig",  use: "Currently bathing",                           example: "Naglilig siya ngayon. — He is bathing now." },
-          contemplated: { form: "maglilig",  use: "Will bathe",                                  example: "Maglilig siya bukas. — He will bathe tomorrow." }
+          infinitive:   { form: "maligo",      use: "To bathe / to swim",                             example: "Maligo ka na. — Take a bath now." },
+          complete:     { form: "naligo",      use: "Bathed / swam — past",                           example: "Naligo siya kagabi. — He bathed last night." },
+          progressive:  { form: "naliligo",    use: "Currently bathing",                              example: "Naliligo siya ngayon. — He is bathing now." },
+          contemplated: { form: "maliligo",    use: "Will bathe",                                     example: "Maliligo siya bukas. — He will bathe tomorrow." }
         }
       }
     }
@@ -3880,7 +3771,7 @@ const VERB_DATABASE = {
         forms: {
           infinitive:   { form: "mag-ahit",   use: "To shave",                                 example: "Mag-ahit ka tuwing umaga. — Shave every morning." },
           complete:     { form: "nag-ahit",   use: "Shaved — past",                            example: "Nag-ahit siya kagabi. — He shaved last night." },
-          progressive:  { form: "nagaahit",   use: "Currently shaving",                         example: "Nagaahit siya ngayon. — He is shaving now." },
+          progressive:  { form: "nag-aahit",   use: "Currently shaving",                         example: "Nag-aahit siya ngayon. — He is shaving now." },
           contemplated: { form: "mag-aahit",  use: "Will shave",                                example: "Mag-aahit siya bukas. — He will shave tomorrow." }
         }
       }
@@ -3899,8 +3790,8 @@ const VERB_DATABASE = {
         forms: {
           infinitive:   { form: "magbadminton",  use: "To play badminton",                       example: "Magbadminton tayo sa hapon. — Let's play badminton in the afternoon." },
           complete:     { form: "nagbadminton",  use: "Played badminton — past",                 example: "Nagbadminton siya kagabi. — He played badminton last night." },
-          progressive:  { form: "nagbabdminton", use: "Currently playing badminton",             example: "Nagbabdminton siya ngayon. — He is playing badminton now." },
-          contemplated: { form: "magbabdminton", use: "Will play badminton",                      example: "Magbabdminton siya bukas. — He will play badminton tomorrow." }
+          progressive:  { form: "nagbabadminton", use: "Currently playing badminton",             example: "Nagbabadminton siya ngayon. — He is playing badminton now." },
+          contemplated: { form: "magbabadminton", use: "Will play badminton",                      example: "Magbabadminton siya bukas. — He will play badminton tomorrow." }
         }
       }
     }
@@ -3917,8 +3808,8 @@ const VERB_DATABASE = {
         forms: {
           infinitive:   { form: "magvolleyball",  use: "To play volleyball",                   example: "Magvolleyball tayo sa Sabado. — Let's play volleyball on Saturday." },
           complete:     { form: "nagvolleyball",  use: "Played volleyball — past",              example: "Nagvolleyball siya kagabi. — He played volleyball last night." },
-          progressive:  { form: "nagbovolleyball", use: "Currently playing volleyball",         example: "Nagbovolleyball siya ngayon. — He is playing volleyball now." },
-          contemplated: { form: "magbovolleyball", use: "Will play volleyball",                  example: "Magbovolleyball siya bukas. — He will play volleyball tomorrow." }
+          progressive:  { form: "nagvo-volleyball", use: "Currently playing volleyball",         example: "Nagvo-volleyball siya ngayon. — He is playing volleyball now." },
+          contemplated: { form: "magvo-volleyball", use: "Will play volleyball",                  example: "Magvo-volleyball siya bukas. — He will play volleyball tomorrow." }
         }
       }
     }
@@ -3954,8 +3845,8 @@ const VERB_DATABASE = {
         forms: {
           infinitive:   { form: "maggrill",   use: "To grill",                                 example: "Maggrill ka ng isda. — Grill the fish." },
           complete:     { form: "naggrill",   use: "Grilled — past",                             example: "Naggrill siya ng isda. — He grilled fish." },
-          progressive:  { form: "naggrigrill", use: "Currently grilling",                         example: "Naggrigrill siya ngayon. — He is grilling now." },
-          contemplated: { form: "maggrigrill", use: "Will grill",                                 example: "Maggrigrill siya bukas. — He will grill tomorrow." }
+          progressive:  { form: "naggi-grill", use: "Currently grilling",                         example: "Naggi-grill siya ngayon. — He is grilling now." },
+          contemplated: { form: "maggi-grill", use: "Will grill",                                 example: "Maggi-grill siya bukas. — He will grill tomorrow." }
         }
       }
     }
@@ -3989,10 +3880,10 @@ const VERB_DATABASE = {
         focus: "Actor Focus",
         description: "The person resigning is the focus.",
         forms: {
-          infinitive:   { form: "magresign",   use: "To resign",                                example: "Magresign siya sa trabaho. — He will resign from work." },
+          infinitive:   { form: "magresign",   use: "To resign",                                      example: "Gusto niyang magresign sa trabaho. — He wants to resign from work." },
           complete:     { form: "nagresign",   use: "Resigned — past",                            example: "Nagresign siya sa trabaho. — He resigned from work." },
-          progressive:  { form: "nagresign",   use: "Currently resigning",                       example: "Nagresign siya ngayon. — He is resigning now." },
-          contemplated: { form: "magresign",   use: "Will resign",                                example: "Magresign siya bukas. — He will resign tomorrow." }
+          progressive:  { form: "nagre-resign",use: "Currently resigning",                            example: "Nagre-resign siya ngayon. — He is resigning now." },
+          contemplated: { form: "magre-resign",use: "Will resign",                                    example: "Magre-resign siya bukas. — He will resign tomorrow." }
         }
       }
     }
@@ -4066,7 +3957,7 @@ const VERB_DATABASE = {
         forms: {
           infinitive:   { form: "maging",     use: "To become",                                example: "Maging doktor siya. — He will become a doctor." },
           complete:     { form: "naging",     use: "Became — past",                            example: "Naging doktor siya. — He became a doctor." },
-          progressive:  { form: "nagmimithi", use: "Currently becoming",                       example: "Nagmimithi siya nang mas mabuti. — He is becoming better." },
+          progressive:  { form: "nagiging",    use: "Currently becoming",                             example: "Nagiging mas mabuti siya. — He is becoming better." },
           contemplated: { form: "magiging",   use: "Will become",                              example: "Magiging doktor siya. — He will become a doctor." }
         }
       }
@@ -4079,14 +3970,14 @@ const VERB_DATABASE = {
     meaning: "to make / to do",
     notes: "Polymorphic: takes both -um- and mag- forms. The -um- form focuses on the result; mag- focuses on the action.",
     conjugations: {
-      "Actor (mag-)": {
+      "Actor (-um-)": {
         focus: "Actor Focus",
-        description: "Focuses on the one making/doing something. Most common form for active making/doing.",
+        description: "Focuses on the one making or doing something. 'Gawa' takes -um- in actor focus: gumawa.",
         forms: {
-          infinitive:   { form: "gawa",     use: "To do / to make (infinitive)",                  example: "Gawa tayo ng proyekto. — Let's make a project." },
-          complete:     { form: "gawa",     use: "Did / made — past",                              example: "Gawa niya ng cake kagabi. — She made a cake last night." },
-          progressive:  { form: "gagawa",   use: "Currently making / doing",                       example: "Gagawa siya ng assignment ngayon. — She is doing homework now." },
-          contemplated: { form: "gagawa",   use: "Will make / will do",                            example: "Gagawa siya ng cake bukas. — She will make a cake tomorrow." }
+          infinitive:   { form: "gumawa",      use: "To do / to make (infinitive)",                   example: "Gumawa tayo ng proyekto. — Let's make a project." },
+          complete:     { form: "gumawa",      use: "Did / made — past",                              example: "Gumawa siya ng cake kagabi. — She made a cake last night." },
+          progressive:  { form: "gumagawa",    use: "Currently making / doing",                       example: "Gumagawa siya ng assignment ngayon. — She is doing homework now." },
+          contemplated: { form: "gagawa",      use: "Will make / will do",                            example: "Gagawa siya ng cake bukas. — She will make a cake tomorrow." }
         }
       },
       "Object (-in)": {
@@ -4105,68 +3996,14 @@ const VERB_DATABASE = {
         forms: {
           infinitive:   { form: "gawan",     use: "To make at (a place)",                          example: "Gawan mo ng cake ang kusina. — Make a cake in the kitchen." },
           complete:     { form: "ginawan",   use: "Worked at (a place) — past",                    example: "Ginawan niya ng bahay ang lote. — He built a house on the lot." },
-          progressive:  { form: "ginagawa",  use: "Working at (a place) — ongoing",                example: "Ginagawa niya ang opisina ngayon. — He is working on the office now." },
-          contemplated: { form: "gagawaan",  use: "Will work at (a place)",                        example: "Gagawaan niya bukas ang bagong kwarto. — He will work on the new room tomorrow." }
+          progressive:  { form: "ginagawan",   use: "Working at (a place) — ongoing",                 example: "Ginagawan niya ng bahay ang lote. — He is building a house on the lot." },
+          contemplated: { form: "gagawan",     use: "Will work at (a place)",                         example: "Gagawan niya bukas ng kwarto ang taas. — He will build a room upstairs tomorrow." }
         }
       }
     }
   },
 
-  sabi: {
-    root: "sabi",
-    meaning: "to say / to tell",
-    notes: "Takes mag- for active saying. The conjugated form 'sabi' itself is the root word as a noun ('saying') too.",
-    conjugations: {
-      "Actor (mag-)": {
-        focus: "Actor Focus",
-        description: "Focuses on the one saying something. Very common in everyday speech.",
-        forms: {
-          infinitive:   { form: "sabi",     use: "To say / to tell (infinitive)",                 example: "Sabi mo sa kanya ang totoo. — Tell him the truth." },
-          complete:     { form: "nagsabi",  use: "Said / told — past",                              example: "Nagsabi siya ng totoo kagabi. — She told the truth last night." },
-          progressive:  { form: "nagsasabi",use: "Currently saying / telling",                     example: "Nagsasabi siya ng kwento ngayon. — She is telling a story now." },
-          contemplated: { form: "magsasabi",use: "Will say / will tell",                            example: "Magsasabi siya ng plano bukas. — He will tell the plan tomorrow." }
-        }
-      },
-      "Object (-in)": {
-        focus: "Object Focus",
-        description: "Focuses on what is being said.",
-        forms: {
-          infinitive:   { form: "sabihin",   use: "To say (something specific)",                  example: "Sabihin mo ang totoo. — Say the truth." },
-          complete:     { form: "sinabi",    use: "Said (something) — past",                       example: "Sinabi niya ang totoo kagabi. — He said the truth last night." },
-          progressive:  { form: "sinabi",    use: "Saying (something) — ongoing",                  example: "Sinabi niya ang plano ngayon. — He is saying the plan now." },
-          contemplated: { form: "sasabihin", use: "Will say (something)",                          example: "Sasabihin niya bukas ang plano. — He will say the plan tomorrow." }
-        }
-      }
-    }
-  },
 
-  hanap: {
-    root: "hanap",
-    meaning: "to search / to look for",
-    notes: "Takes mag- actor focus. The noun 'hanap' = 'search / quest'.",
-    conjugations: {
-      "Actor (mag-)": {
-        focus: "Actor Focus",
-        description: "Focuses on the one searching. Common for looking for lost items, opportunities.",
-        forms: {
-          infinitive:   { form: "hanap",     use: "To search / to look for (infinitive)",          example: "Hanap tayo ng magandang lugar. — Let's look for a nice place." },
-          complete:     { form: "naghanap",  use: "Searched — past",                                example: "Naghanap siya ng trabaho kagabi. — She looked for a job last night." },
-          progressive:  { form: "naghahanap",use: "Currently searching",                            example: "Naghahanap sila ng apartment ngayon. — They are looking for an apartment now." },
-          contemplated: { form: "maghahanap",use: "Will search",                                    example: "Maghahanap sila ng bahay bukas. — They will look for a house tomorrow." }
-        }
-      },
-      "Object (-in)": {
-        focus: "Object Focus",
-        description: "Focuses on what is being searched for.",
-        forms: {
-          infinitive:   { form: "hanapin",   use: "To search for (something specific)",           example: "Hanapin mo ang susi. — Look for the key." },
-          complete:     { form: "hinanap",   use: "Searched for (something) — past",                example: "Hinanap niya ang kuwintas kagabi. — She searched for the necklace last night." },
-          progressive:  { form: "hinahanap", use: "Searching for (something) — ongoing",           example: "Hinahanap niya ngayon ang wallet. — He is looking for the wallet now." },
-          contemplated: { form: "hahanapin", use: "Will search for (something)",                   example: "Hahanapin niya bukas ang libro. — He will look for the book tomorrow." }
-        }
-      }
-    }
-  },
 
   tanggap: {
     root: "tanggap",
@@ -4177,10 +4014,10 @@ const VERB_DATABASE = {
         focus: "Actor Focus",
         description: "Focuses on the one receiving. Common for gifts, news, requests.",
         forms: {
-          infinitive:   { form: "tanggap",   use: "To receive / to accept (infinitive)",          example: "Tanggap natin ang regalo. — Let's accept the gift." },
+          infinitive:   { form: "magtanggap",  use: "To receive / to accept (infinitive)",            example: "Magtanggap tayo ng bisita. — Let's receive guests." },
           complete:     { form: "nagtanggap",use: "Received / accepted — past",                    example: "Nagtanggap siya ng bulaklak kagabi. — She received flowers last night." },
           progressive:  { form: "nagtatanggap",use: "Currently receiving",                         example: "Nagtatanggap siya ng bisita ngayon. — He is receiving visitors now." },
-          contemplated: { form: "magtatatanggap",use: "Will receive",                              example: "Magtatatanggap siya ng award bukas. — He will receive an award tomorrow." }
+          contemplated: { form: "magtatanggap",use: "Will receive",                              example: "Magtatanggap siya ng award bukas. — He will receive an award tomorrow." }
         }
       },
       "Object (-in)": {
@@ -4205,7 +4042,7 @@ const VERB_DATABASE = {
         focus: "Actor Focus",
         description: "Focuses on the one passing something.",
         forms: {
-          infinitive:   { form: "pasa",      use: "To pass (infinitive)",                          example: "Pasa mo sa kanya ang bola. — Pass him the ball." },
+          infinitive:   { form: "magpasa",     use: "To pass (infinitive)",                           example: "Magpasa ka ng papel sa guro. — Pass a paper to the teacher." },
           complete:     { form: "nagpasa",   use: "Passed — past",                                 example: "Nagpasa siya ng sulat kagabi. — She passed a letter last night." },
           progressive:  { form: "nagpapasa", use: "Currently passing",                             example: "Nagpapasa siya ng papeles ngayon. — He is passing papers now." },
           contemplated: { form: "magpapasa", use: "Will pass",                                      example: "Magpapasa siya ng bayad bukas. — He will pass the payment tomorrow." }
@@ -4233,17 +4070,17 @@ const VERB_DATABASE = {
         focus: "Actor Focus",
         description: "Focuses on the one stopping something. Common in 'stop the car', 'stop the noise'.",
         forms: {
-          infinitive:   { form: "tigil",     use: "To stop (infinitive)",                         example: "Tigil mo ang kotse. — Stop the car." },
+          infinitive:   { form: "magtigil",    use: "To stop (infinitive)",                           example: "Magtigil ka ng ingay. — Stop the noise." },
           complete:     { form: "nagtigil",  use: "Stopped — past",                                example: "Nagtigil siya ng kotse kagabi. — She stopped the car last night." },
           progressive:  { form: "nagtitigil",use: "Currently stopping",                            example: "Nagtitigil siya ng awto ngayon. — He is stopping the car now." },
           contemplated: { form: "magtitigil",use: "Will stop",                                      example: "Magtitigil siya ng bus bukas. — He will stop the bus tomorrow." }
         }
       },
-      "Object (-in)": {
+      "Object (i-)": {
         focus: "Object Focus",
-        description: "Focuses on what is being stopped.",
+        description: "Focuses on what is being stopped. 'Tigil' takes i-: itigil.",
         forms: {
-          infinitive:   { form: "igilin",    use: "To stop (something specific)",                 example: "Igilin mo ang gulong. — Stop the wheel." },
+          infinitive:   { form: "itigil",      use: "To stop (something specific)",                   example: "Itigil mo ang gulong. — Stop the wheel." },
           complete:     { form: "itinigil",  use: "Stopped (something) — past",                   example: "Itinigil niya ang kotse kagabi. — He stopped the car last night." },
           progressive:  { form: "itinitigil",use: "Stopping (something) — ongoing",               example: "Itinitigil niya ang bus ngayon. — He is stopping the bus now." },
           contemplated: { form: "ititigil",  use: "Will stop (something)",                        example: "Ititigil niya bukas ang bus. — He will stop the bus tomorrow." }
@@ -4252,23 +4089,6 @@ const VERB_DATABASE = {
     }
   },
 
-  hintay: {
-    root: "hintay",
-    meaning: "to wait",
-    notes: "Takes mag- actor focus. Common in everyday conversation.",
-    conjugations: {
-      "Actor (mag-)": {
-        focus: "Actor Focus",
-        description: "Focuses on the one waiting. The most common way to say 'wait'.",
-        forms: {
-          infinitive:   { form: "hintay",    use: "To wait (infinitive)",                         example: "Hintay mo ako. — Wait for me." },
-          complete:     { form: "naghintay", use: "Waited — past",                                 example: "Naghintay siya ng oras kagabi. — She waited for an hour last night." },
-          progressive:  { form: "naghihintay",use: "Currently waiting",                            example: "Naghihintay sila ngayon sa labas. — They are waiting outside now." },
-          contemplated: { form: "maghihintay",use: "Will wait",                                     example: "Maghihintay sila bukas sa terminal. — They will wait at the terminal tomorrow." }
-        }
-      }
-    }
-  },
 
   simula: {
     root: "simula",
@@ -4279,7 +4099,7 @@ const VERB_DATABASE = {
         focus: "Actor Focus",
         description: "Focuses on the one beginning something.",
         forms: {
-          infinitive:   { form: "simula",    use: "To begin / to start (infinitive)",              example: "Simula na natin ang klase. — Let's start the class." },
+          infinitive:   { form: "magsimula",   use: "To begin / to start (infinitive)",               example: "Magsimula na tayo ng klase. — Let's start the class." },
           complete:     { form: "nagsimula", use: "Began / started — past",                        example: "Nagsimula siya ng proyekto kagabi. — He started the project last night." },
           progressive:  { form: "nagsisimula",use: "Currently beginning / starting",               example: "Nagsisimula sila ngayon ng laro. — They are starting the game now." },
           contemplated: { form: "magsisimula",use: "Will begin / will start",                      example: "Magsisimula sila bukas ng negosyo. — They will start a business tomorrow." }
@@ -4288,23 +4108,6 @@ const VERB_DATABASE = {
     }
   },
 
-  tapos: {
-    root: "tapos",
-    meaning: "to finish / to be done",
-    notes: "Takes mag- actor focus. Also used as 'done already' ('Tapos na.' = 'It's done.').",
-    conjugations: {
-      "Actor (mag-)": {
-        focus: "Actor Focus",
-        description: "Focuses on the one finishing something.",
-        forms: {
-          infinitive:   { form: "tapos",     use: "To finish (infinitive)",                       example: "Tapos na natin ang report. — Let's finish the report." },
-          complete:     { form: "nagtapos",  use: "Finished — past",                               example: "Nagtapos siya ng trabaho kagabi. — She finished the work last night." },
-          progressive:  { form: "nagtatapos",use: "Currently finishing",                          example: "Nagtatapos siya ngayon ng homework. — He is finishing homework now." },
-          contemplated: { form: "magtatapos",use: "Will finish",                                   example: "Magtatapos siya bukas ng thesis. — He will finish the thesis tomorrow." }
-        }
-      }
-    }
-  },
 
   tuloy: {
     root: "tuloy",
@@ -4315,7 +4118,7 @@ const VERB_DATABASE = {
         focus: "Actor Focus",
         description: "Focuses on the one continuing something.",
         forms: {
-          infinitive:   { form: "tuloy",     use: "To continue / to proceed (infinitive)",        example: "Tuloy natin ang usapan. — Let's continue the conversation." },
+          infinitive:   { form: "magtuloy",    use: "To continue / to proceed (infinitive)",          example: "Magtuloy tayo sa usapan. — Let's continue the conversation." },
           complete:     { form: "nagtuloy",  use: "Continued — past",                              example: "Nagtuloy siya sa pag-aaral kagabi. — He continued studying last night." },
           progressive:  { form: "nagtutuloy",use: "Currently continuing",                         example: "Nagtutuloy siya ngayon ng trabaho. — He is continuing work now." },
           contemplated: { form: "magtutuloy",use: "Will continue",                                 example: "Magtutuloy siya bukas sa negosyo. — He will continue the business tomorrow." }
@@ -4324,79 +4127,8 @@ const VERB_DATABASE = {
     }
   },
 
-  alis: {
-    root: "alis",
-    meaning: "to leave / to remove",
-    notes: "Takes mag- actor focus. Common in 'leave the house' and 'remove the stain'.",
-    conjugations: {
-      "Actor (mag-)": {
-        focus: "Actor Focus",
-        description: "Focuses on the one leaving or removing.",
-        forms: {
-          infinitive:   { form: "alis",      use: "To leave / to remove (infinitive)",            example: "Alis na tayo. — Let's leave now." },
-          complete:     { form: "nag-alis",  use: "Left / removed — past",                        example: "Nag-alis siya ng bahay kagabi. — He left the house last night." },
-          progressive:  { form: "nag-aalis", use: "Currently leaving / removing",                example: "Nag-aalis siya ngayon ng dumi. — He is removing dirt now." },
-          contemplated: { form: "mag-aalis", use: "Will leave / will remove",                     example: "Mag-aalis siya bukas ng mantsa. — He will remove the stain tomorrow." }
-        }
-      },
-      "Object (-in)": {
-        focus: "Object Focus",
-        description: "Focuses on what is being removed.",
-        forms: {
-          infinitive:   { form: "alisin",    use: "To remove (something specific)",              example: "Alisin mo ang mantsa. — Remove the stain." },
-          complete:     { form: "inalis",    use: "Removed (something) — past",                   example: "Inalis niya ang mantsa kagabi. — He removed the stain last night." },
-          progressive:  { form: "inialis",   use: "Removing (something) — ongoing",              example: "Inaalis niya ngayon ang mantsa. — He is removing the stain now." },
-          contemplated: { form: "aalisin",   use: "Will remove (something)",                     example: "Aalisin niya bukas ang mantsa. — He will remove the stain tomorrow." }
-        }
-      }
-    }
-  },
 
-  dating: {
-    root: "dating",
-    meaning: "to arrive",
-    notes: "Takes mag- actor focus. Common in 'arrive at the office', 'arrive home'.",
-    conjugations: {
-      "Actor (mag-)": {
-        focus: "Actor Focus",
-        description: "Focuses on the one arriving.",
-        forms: {
-          infinitive:   { form: "dating",    use: "To arrive (infinitive)",                       example: "Dating tayo sa party. — Let's arrive at the party." },
-          complete:     { form: "nagdating",  use: "Arrived — past",                                example: "Nagdating siya sa opisina kagabi. — She arrived at the office last night." },
-          progressive:  { form: "nagdadating",use: "Currently arriving",                            example: "Nagdadating ang mga bisita ngayon. — The guests are arriving now." },
-          contemplated: { form: "magdadating",use: "Will arrive",                                   example: "Magdadating ang bisita bukas. — The guests will arrive tomorrow." }
-        }
-      }
-    }
-  },
 
-  kuha: {
-    root: "kuha",
-    meaning: "to take / to get",
-    notes: "Takes mag- for active taking and -in for object focus.",
-    conjugations: {
-      "Actor (mag-)": {
-        focus: "Actor Focus",
-        description: "Focuses on the one taking or getting something.",
-        forms: {
-          infinitive:   { form: "kuha",      use: "To take / to get (infinitive)",                example: "Kuha mo ang libro. — Get the book." },
-          complete:     { form: "nagkuha",   use: "Took / got — past",                             example: "Nagkuha siya ng tickets kagabi. — She got tickets last night." },
-          progressive:  { form: "nagkukuha", use: "Currently taking / getting",                   example: "Nagkukuha siya ngayon ng tubig. — He is getting water now." },
-          contemplated: { form: "magkukuha", use: "Will take / will get",                          example: "Magkukuha siya bukas ng payong. — He will get an umbrella tomorrow." }
-        }
-      },
-      "Object (-in)": {
-        focus: "Object Focus",
-        description: "Focuses on what is being taken or gotten.",
-        forms: {
-          infinitive:   { form: "kunin",     use: "To take (something specific)",                 example: "Kunin mo ang payong. — Get the umbrella." },
-          complete:     { form: "kinuha",    use: "Took (something) — past",                      example: "Kinuha niya ang payong kagabi. — He got the umbrella last night." },
-          progressive:  { form: "kinukuha",  use: "Taking (something) — ongoing",                example: "Kinukuha niya ngayon ang tubig. — He is getting the water now." },
-          contemplated: { form: "kukuha",    use: "Will take (something)",                       example: "Kukuha niya bukas ang payong. — He will get the umbrella tomorrow." }
-        }
-      }
-    }
-  },
 
   taya: {
     root: "taya",
@@ -4407,7 +4139,7 @@ const VERB_DATABASE = {
         focus: "Actor Focus",
         description: "Focuses on the one betting or guessing.",
         forms: {
-          infinitive:   { form: "taya",      use: "To bet / to guess (infinitive)",               example: "Taya mo sa lotto. — Bet on the lotto." },
+          infinitive:   { form: "magtaya",     use: "To bet / to guess (infinitive)",                 example: "Magtaya ka sa lotto. — Bet on the lotto." },
           complete:     { form: "nagtaya",   use: "Bet / guessed — past",                          example: "Nagtaya siya ng pera kagabi. — He bet money last night." },
           progressive:  { form: "nagtataya", use: "Currently betting / guessing",                  example: "Nagtataya siya ngayon sa palaro. — He is betting on the game now." },
           contemplated: { form: "magtataya", use: "Will bet / will guess",                         example: "Magtataya sila bukas sa karera. — They will bet on the race tomorrow." }
@@ -4425,7 +4157,7 @@ const VERB_DATABASE = {
         focus: "Actor Focus",
         description: "Focuses on the one combing.",
         forms: {
-          infinitive:   { form: "suklay",    use: "To comb (infinitive)",                         example: "Suklay mo ang buhok mo. — Comb your hair." },
+          infinitive:   { form: "magsuklay",   use: "To comb (infinitive)",                           example: "Magsuklay ka ng buhok. — Comb your hair." },
           complete:     { form: "nagsuklay", use: "Combed — past",                                 example: "Nagsuklay siya ng buhok kagabi. — She combed her hair last night." },
           progressive:  { form: "nagsusuklay",use: "Currently combing",                            example: "Nagsusuklay siya ngayon. — He is combing now." },
           contemplated: { form: "magsusuklay",use: "Will comb",                                     example: "Magsusuklay siya bukas bago party. — He will comb before the party tomorrow." }
@@ -4443,8 +4175,8 @@ const VERB_DATABASE = {
         focus: "Actor Focus",
         description: "Focuses on the one bowing or bending down. Common for picking things up or showing respect.",
         forms: {
-          infinitive:   { form: "yumuko",    use: "To bow / to bend down (infinitive)",           example: "Yumuko ka at mag-simba. — Bow down and pray." },
-          complete:     { form: "yumuko",    use: "Bowed / bent down — past",                      example: "Yumuko siya kagabi para mag-pickup. — He bent down to pick it up last night." },
+          infinitive:   { form: "yumuko",      use: "To bow / to bend down (infinitive)",             example: "Yumuko ka at magdasal. — Bow your head and pray." },
+          complete:     { form: "yumuko",      use: "Bowed / bent down — past",                       example: "Yumuko siya kagabi para pulutin ito. — He bent down last night to pick it up." },
           progressive:  { form: "yumuyuko",  use: "Currently bowing / bending down",              example: "Yumuyuko siya ngayon para maglinis. — He is bending down to clean now." },
           contemplated: { form: "yuyuko",    use: "Will bow / will bend down",                    example: "Yuyuko siya bukas sa altar. — He will bow at the altar tomorrow." }
         }
@@ -4461,7 +4193,7 @@ const VERB_DATABASE = {
         focus: "Actor Focus",
         description: "Focuses on the one moving or transferring.",
         forms: {
-          infinitive:   { form: "lipat",     use: "To move / to transfer (infinitive)",           example: "Lipat tayo ng bahay. — Let's move houses." },
+          infinitive:   { form: "maglipat",    use: "To move / to transfer (infinitive)",             example: "Maglipat tayo ng bahay. — Let's move houses." },
           complete:     { form: "naglipat",  use: "Moved / transferred — past",                   example: "Naglipat siya ng bahay kagabi. — She moved houses last night." },
           progressive:  { form: "naglilipat",use: "Currently moving / transferring",              example: "Naglilipat siya ngayon ng gamit. — He is moving his things now." },
           contemplated: { form: "maglilipat",use: "Will move / will transfer",                    example: "Maglilipat siya bukas ng opisina. — He will move offices tomorrow." }
@@ -4489,7 +4221,7 @@ const VERB_DATABASE = {
         focus: "Actor Focus",
         description: "Focuses on the one pulling out something.",
         forms: {
-          infinitive:   { form: "hugot",     use: "To pull out / to draw (infinitive)",           example: "Hugot mo ang baril. — Pull out the gun." },
+          infinitive:   { form: "maghugot",    use: "To pull out / to draw (infinitive)",             example: "Maghugot ka ng pera sa bangko. — Withdraw money from the bank." },
           complete:     { form: "naghugot",  use: "Pulled out — past",                             example: "Naghugot siya ng pera kagabi. — He pulled out money last night." },
           progressive:  { form: "naghuhugot",use: "Currently pulling out",                        example: "Naghuhugot siya ngayon ng baril. — He is pulling out a gun now." },
           contemplated: { form: "maghuhugot",use: "Will pull out",                                example: "Maghuhugot siya bukas ng baril. — He will pull out a gun tomorrow." }
@@ -4517,7 +4249,7 @@ const VERB_DATABASE = {
         focus: "Actor Focus",
         description: "Focuses on the one pushing something.",
         forms: {
-          infinitive:   { form: "tulak",     use: "To push (infinitive)",                         example: "Tulak mo ang pinto. — Push the door." },
+          infinitive:   { form: "magtulak",    use: "To push (infinitive)",                           example: "Magtulak tayo ng kotse. — Let's push the car." },
           complete:     { form: "nagtulak",  use: "Pushed — past",                                 example: "Nagtulak siya ng kama kagabi. — He pushed the bed last night." },
           progressive:  { form: "nagtutulak",use: "Currently pushing",                            example: "Nagtutulak siya ngayon ng cart. — He is pushing a cart now." },
           contemplated: { form: "magtutulak",use: "Will push",                                     example: "Magtutulak siya bukas ng kotse. — He will push the car tomorrow." }
@@ -4545,7 +4277,7 @@ const VERB_DATABASE = {
         focus: "Actor Focus",
         description: "Focuses on the one smashing or throwing down something.",
         forms: {
-          infinitive:   { form: "salpak",    use: "To smash / to throw down (infinitive)",        example: "Salpak mo ang bola. — Throw down the ball." },
+          infinitive:   { form: "magsalpak",   use: "To smash / to slam down (infinitive)",           example: "Huwag kang magsalpak ng pinto. — Don't slam the door." },
           complete:     { form: "nagsalpak", use: "Smashed / threw down — past",                  example: "Nagsalpak siya ng bola kagabi. — He threw down the ball last night." },
           progressive:  { form: "nagsasalpak",use: "Currently smashing",                          example: "Nagsasalpak siya ngayon ng pinggan. — He is smashing plates now." },
           contemplated: { form: "magsasalpak",use: "Will smash",                                   example: "Magsasalpak siya bukas ng bola. — He will smash the ball tomorrow." }
@@ -4555,33 +4287,6 @@ const VERB_DATABASE = {
   },
 
   // ============== 20 NEW VERBS (ROUND 3) ==============
-  hatid: {
-    root: "hatid",
-    meaning: "to deliver / to accompany someone home",
-    notes: "Takes mag- for active delivering/accompanying. Common in 'ihatid sa' = drop off at.",
-    conjugations: {
-      "Actor (mag-)": {
-        focus: "Actor Focus",
-        description: "Focuses on the one delivering or accompanying.",
-        forms: {
-          infinitive:   { form: "hatid",     use: "To deliver / to accompany (infinitive)",        example: "Hatid mo siya sa bahay. — Accompany her home." },
-          complete:     { form: "naghatid",  use: "Delivered / accompanied — past",               example: "Naghatid siya ng bulaklak kagabi. — She delivered flowers last night." },
-          progressive:  { form: "naghatid",  use: "Delivering / accompanying",                     example: "Naghatid siya ngayon ng bata. — She is accompanying a child now." },
-          contemplated: { form: "maghahatid",use: "Will deliver / will accompany",                 example: "Maghahatid siya bukas ng kapatid. — He will drop off his sibling tomorrow." }
-        }
-      },
-      "Object (i-)": {
-        focus: "Object Focus",
-        description: "Focuses on the thing or person being delivered/accompanied.",
-        forms: {
-          infinitive:   { form: "ihatid",    use: "To deliver / to accompany (someone/something)",example: "Ihatid mo siya sa terminal. — Drop him off at the terminal." },
-          complete:     { form: "inihatid",  use: "Delivered / accompanied — past",               example: "Inihatid niya ang bata kagabi. — He dropped off the child last night." },
-          progressive:  { form: "inihahatid",use: "Delivering / accompanying (ongoing)",          example: "Inihahatid niya ngayon ang bulaklak. — He is delivering the flowers now." },
-          contemplated: { form: "ihahatid",  use: "Will deliver / will accompany",                example: "Ihahatid niya bukas ang pasahero. — He will drop off the passenger tomorrow." }
-        }
-      }
-    }
-  },
 
   pili: {
     root: "pili",
@@ -4592,7 +4297,7 @@ const VERB_DATABASE = {
         focus: "Actor Focus",
         description: "Focuses on the one choosing. Common in everyday decision-making.",
         forms: {
-          infinitive:   { form: "pili",      use: "To choose / to select (infinitive)",          example: "Pili tayo ng regalo. — Let's choose a gift." },
+          infinitive:   { form: "magpili",     use: "To choose / to select (infinitive)",             example: "Magpili tayo ng regalo. — Let's choose a gift." },
           complete:     { form: "nagpili",   use: "Chose / selected — past",                      example: "Nagpili siya ng damit kagabi. — She chose clothes last night." },
           progressive:  { form: "nagpipili", use: "Currently choosing",                           example: "Nagpipili siya ngayon ng bahay. — He is choosing a house now." },
           contemplated: { form: "magpipili", use: "Will choose",                                   example: "Magpipili siya bukas ng kotse. — He will choose a car tomorrow." }
@@ -4620,7 +4325,7 @@ const VERB_DATABASE = {
         focus: "Actor Focus",
         description: "Focuses on the one selling. Common in market and sari-sari store context.",
         forms: {
-          infinitive:   { form: "tinda",     use: "To sell (retail, infinitive)",                 example: "Tinda tayo ng pagkain sa palengke. — Let's sell food at the market." },
+          infinitive:   { form: "magtinda",    use: "To sell (retail, infinitive)",                   example: "Magtinda tayo ng pagkain sa palengke. — Let's sell food at the market." },
           complete:     { form: "nagtinda",  use: "Sold (retail) — past",                          example: "Nagtinda siya ng isda kagabi. — She sold fish last night." },
           progressive:  { form: "nagtitinda",use: "Currently selling",                            example: "Nagtitinda siya ngayon ng prutas. — She is selling fruit now." },
           contemplated: { form: "magtitinda",use: "Will sell (retail)",                            example: "Magtitinda siya bukas ng damit. — He will sell clothes tomorrow." }
@@ -4638,7 +4343,7 @@ const VERB_DATABASE = {
         focus: "Actor Focus",
         description: "Focuses on the one trying on or measuring. Common when shopping for clothes.",
         forms: {
-          infinitive:   { form: "sukat",     use: "To try on / to measure (infinitive)",          example: "Sukat mo ang damit. — Try on the dress." },
+          infinitive:   { form: "magsukat",    use: "To try on / to measure (infinitive)",            example: "Magsukat ka ng damit. — Try on some clothes." },
           complete:     { form: "nagsukat",  use: "Tried on / measured — past",                   example: "Nagsukat siya ng sapatos kagabi. — She tried on shoes last night." },
           progressive:  { form: "nagsusukat",use: "Currently trying on / measuring",              example: "Nagsusukat siya ngayon ng pantalon. — He is trying on pants now." },
           contemplated: { form: "magsusukat",use: "Will try on / will measure",                    example: "Magsusukat siya bukas ng bagong damit. — She will try on new clothes tomorrow." }
@@ -4666,7 +4371,7 @@ const VERB_DATABASE = {
         focus: "Actor Focus",
         description: "Focuses on the one weighing.",
         forms: {
-          infinitive:   { form: "timbang",   use: "To weigh (infinitive)",                        example: "Timbang mo ang prutas. — Weigh the fruit." },
+          infinitive:   { form: "magtimbang",  use: "To weigh (infinitive)",                          example: "Magtimbang ka ng prutas. — Weigh some fruit." },
           complete:     { form: "nagtimbang",use: "Weighed — past",                               example: "Nagtimbang siya ng bigas kagabi. — She weighed rice last night." },
           progressive:  { form: "nagtitimbang",use: "Currently weighing",                         example: "Nagtitimbang siya ngayon ng isda. — He is weighing fish now." },
           contemplated: { form: "magtitimbang",use: "Will weigh",                                  example: "Magtitimbang siya bukas ng mga prutas. — He will weigh the fruits tomorrow." }
@@ -4702,7 +4407,7 @@ const VERB_DATABASE = {
         focus: "Actor Focus",
         description: "Focuses on the one reaching.",
         forms: {
-          infinitive:   { form: "abot",      use: "To reach (infinitive)",                        example: "Abot mo ang libro. — Reach the book." },
+          infinitive:   { form: "mag-abot",    use: "To hand over / to reach (infinitive)",           example: "Mag-abot ka ng plato sa kanya. — Hand him a plate." },
           complete:     { form: "nag-abot",  use: "Reached — past",                                example: "Nag-abot siya ng kendi kagabi. — He reached for candy last night." },
           progressive:  { form: "nag-aabot", use: "Currently reaching",                            example: "Nag-aabot siya ngayon ng pera. — He is reaching for money now." },
           contemplated: { form: "mag-aabot", use: "Will reach",                                     example: "Mag-aabot siya bukas ng ulap. — He will reach the cloud tomorrow." }
@@ -4716,11 +4421,11 @@ const VERB_DATABASE = {
     meaning: "to cross",
     notes: "Takes mag- for active crossing (a street, a river).",
     conjugations: {
-      "Actor (mag-)": {
+      "Actor (-um-)": {
         focus: "Actor Focus",
-        description: "Focuses on the one crossing. Common in 'tumawid sa kalsada' = cross the street.",
+        description: "Focuses on the one crossing. 'Tawid' takes -um-: tumawid sa kalsada = cross the street.",
         forms: {
-          infinitive:   { form: "tawid",     use: "To cross (infinitive)",                        example: "Tawid mo ang kalsada. — Cross the street." },
+          infinitive:   { form: "tumawid",     use: "To cross (infinitive)",                          example: "Tumawid ka sa tamang tawiran. — Cross at the proper crossing." },
           complete:     { form: "tumawid",  use: "Crossed — past",                                example: "Tumawid siya sa tulay kagabi. — He crossed the bridge last night." },
           progressive:  { form: "tumatawid", use: "Currently crossing",                            example: "Tumatawid siya ngayon sa daan. — He is crossing the road now." },
           contemplated: { form: "tatawid",   use: "Will cross",                                     example: "Tatawid siya bukas sa ilog. — He will cross the river tomorrow." }
@@ -4747,37 +4452,21 @@ const VERB_DATABASE = {
     }
   },
 
-  langoy: {
-    root: "langoy",
-    meaning: "to swim",
-    notes: "Takes mag- for active swimming.",
-    conjugations: {
-      "Actor (mag-)": {
-        focus: "Actor Focus",
-        description: "Focuses on the one swimming.",
-        forms: {
-          infinitive:   { form: "langoy",    use: "To swim (infinitive)",                         example: "Langoy tayo sa dagat. — Let's swim in the sea." },
-          complete:     { form: "naglangoy", use: "Swam — past",                                   example: "Naglangoy siya sa pool kagabi. — She swam in the pool last night." },
-          progressive:  { form: "naglalangoy",use: "Currently swimming",                          example: "Naglalangoy siya ngayon sa beach. — She is swimming at the beach now." },
-          contemplated: { form: "maglalangoy",use: "Will swim",                                    example: "Maglalangoy siya bukas sa ilog. — He will swim in the river tomorrow." }
-        }
-      }
-    }
-  },
 
-  lupa: {
-    root: "lupa",
-    meaning: "to kneel down / to bow to the ground",
-    notes: "Takes mag- for active kneeling. Common in religious contexts.",
+
+  luhod: {
+    root: "luhod",
+    meaning: "to kneel / to kneel down",
+    notes: "Takes -um- (lumuhod). Note: 'lupa' is not a verb — it is the noun 'ground / earth'.",
     conjugations: {
-      "Actor (mag-)": {
+      "Actor (-um-)": {
         focus: "Actor Focus",
-        description: "Focuses on the one kneeling down.",
+        description: "Focuses on the one kneeling. Common in religious contexts.",
         forms: {
-          infinitive:   { form: "lupa",      use: "To kneel down (infinitive)",                  example: "Lupa tayo at magdasal. — Let's kneel down and pray." },
-          complete:     { form: "naglu-pa",  use: "Knelt down — past",                             example: "Naglu-pa siya sa altar kagabi. — He knelt at the altar last night." },
-          progressive:  { form: "naglulu-pa",use: "Currently kneeling",                            example: "Naglulu-pa siya ngayon sa simbahan. — He is kneeling at the church now." },
-          contemplated: { form: "maglulu-pa",use: "Will kneel down",                               example: "Maglulu-pa siya bukas sa simbahan. — He will kneel at the church tomorrow." }
+          infinitive:   { form: "lumuhod",   use: "To kneel (infinitive)",                       example: "Lumuhod tayo at magdasal. — Let's kneel and pray." },
+          complete:     { form: "lumuhod",   use: "Knelt — past",                                 example: "Lumuhod siya sa altar kagabi. — He knelt at the altar last night." },
+          progressive:  { form: "lumuluhod", use: "Currently kneeling",                           example: "Lumuluhod siya ngayon sa simbahan. — He is kneeling at the church now." },
+          contemplated: { form: "luluhod",   use: "Will kneel",                                   example: "Luluhod siya bukas sa simbahan. — He will kneel at the church tomorrow." }
         }
       }
     }
@@ -4792,7 +4481,7 @@ const VERB_DATABASE = {
         focus: "Actor Focus",
         description: "Focuses on the one hiding.",
         forms: {
-          infinitive:   { form: "tago",      use: "To hide (infinitive)",                        example: "Tago mo ang regalo. — Hide the gift." },
+          infinitive:   { form: "magtago",     use: "To hide (infinitive)",                           example: "Magtago tayo sa likod ng puno. — Let's hide behind the tree." },
           complete:     { form: "nagtago",   use: "Hid — past",                                    example: "Nagtago siya ng pera kagabi. — She hid money last night." },
           progressive:  { form: "nagtatago", use: "Currently hiding",                              example: "Nagtatago siya ngayon ng key. — He is hiding the key now." },
           contemplated: { form: "magtatago", use: "Will hide",                                     example: "Magtatago siya bukas ng cellphone. — He will hide the cellphone tomorrow." }
@@ -4811,37 +4500,20 @@ const VERB_DATABASE = {
     }
   },
 
-  iwas: {
-    root: "iwas",
-    meaning: "to avoid",
-    notes: "Takes mag- or umiwas for active avoiding.",
-    conjugations: {
-      "Actor (-um-)": {
-        focus: "Actor Focus",
-        description: "Focuses on the one avoiding.",
-        forms: {
-          infinitive:   { form: "umiwas",    use: "To avoid (infinitive)",                        example: "Umiwas ka sa masamang tao. — Avoid bad people." },
-          complete:     { form: "umiwas",    use: "Avoided — past",                                example: "Umiwas siya sa kalsada kagabi. — He avoided the street last night." },
-          progressive:  { form: "umiiwas",   use: "Currently avoiding",                            example: "Umiiwas siya ngayon sa aso. — He is avoiding the dog now." },
-          contemplated: { form: "iiwas",     use: "Will avoid",                                     example: "Iiwas siya bukas sa maingay na lugar. — He will avoid the noisy place tomorrow." }
-        }
-      }
-    }
-  },
 
   ayaw: {
     root: "ayaw",
     meaning: "to not want / to refuse",
-    notes: "Takes mag- in some forms. 'Ayaw' is more commonly a modal/auxiliary ('Ayaw ko.' = 'I don't want.').",
+    notes: "'Ayaw' is normally a modal: 'Ayaw ko.' = 'I don't want.' As a verb it takes -um- (umayaw = to back out, to refuse).",
     conjugations: {
-      "Actor (mag-)": {
+      "Actor (-um-)": {
         focus: "Actor Focus",
-        description: "Focuses on the one refusing. Note: 'ayaw' is more often used as a modal than as a conjugated verb.",
+        description: "Focuses on the one refusing or backing out. Note: 'ayaw' is far more often used as a modal than conjugated.",
         forms: {
-          infinitive:   { form: "mag-ayaw",  use: "To refuse (infinitive)",                       example: "Mag-ayaw ka sa bisyo. — Refuse the vice." },
-          complete:     { form: "nag-ayaw",  use: "Refused — past",                                example: "Nag-ayaw siya sa alak kagabi. — He refused alcohol last night." },
-          progressive:  { form: "nag-aayaw", use: "Currently refusing",                            example: "Nag-aayaw siya ngayon sa kanyang trabaho. — He is refusing his work now." },
-          contemplated: { form: "mag-aayaw", use: "Will refuse",                                    example: "Mag-aayaw siya bukas sa pagkain. — He will refuse the food tomorrow." }
+          infinitive:   { form: "umayaw",      use: "To refuse / to back out",                        example: "Huwag kang umayaw sa laban. — Don't back out of the fight." },
+          complete:     { form: "umayaw",      use: "Refused / backed out — past",                    example: "Umayaw siya sa kasunduan. — He backed out of the deal." },
+          progressive:  { form: "umaayaw",     use: "Currently refusing",                             example: "Umaayaw siya sa trabaho. — He is refusing the work." },
+          contemplated: { form: "aayaw",       use: "Will refuse",                                    example: "Aayaw siya sa alok. — He will turn down the offer." }
         }
       }
     }
@@ -4856,32 +4528,15 @@ const VERB_DATABASE = {
         focus: "Actor Focus",
         description: "Focuses on the one wanting or loving.",
         forms: {
-          infinitive:   { form: "ibig",      use: "To want / to love (infinitive)",              example: "Ibig kong matulog. — I want to sleep." },
-          complete:     { form: "nag-ibig",  use: "Wanted / loved — past",                        example: "Nag-ibig siya ng kendi kagabi. — She wanted candy last night." },
-          progressive:  { form: "nag-iibig", use: "Currently wanting / loving",                   example: "Nag-iibig siya ngayon ng bagong kotse. — He is wanting a new car now." },
-          contemplated: { form: "mag-iibig", use: "Will want / will love",                         example: "Mag-iibig siya bukas ng libro. — He will want a book tomorrow." }
+          infinitive:   { form: "mag-ibig",    use: "To love (infinitive)",                           example: "Natutong mag-ibig ang bata. — The child learned to love." },
+          complete:     { form: "nag-ibig",    use: "Fell in love — past",                            example: "Nag-ibig siya noong tag-init. — He fell in love that summer." },
+          progressive:  { form: "nag-iibig",   use: "Currently in love",                              example: "Nag-iibig sila ngayon. — They are in love now." },
+          contemplated: { form: "mag-iibig",   use: "Will love",                                      example: "Mag-iibig din siya balang araw. — He will fall in love someday." }
         }
       }
     }
   },
 
-  lungkot: {
-    root: "lungkot",
-    meaning: "to be sad",
-    notes: "Takes ma- for the stative sense. The noun 'lungkot' = 'sadness'.",
-    conjugations: {
-      "Actor (ma-)": {
-        focus: "Actor Focus (Stative)",
-        description: "Focuses on the state of being sad. The stative form for emotions.",
-        forms: {
-          infinitive:   { form: "malungkot", use: "To be sad (infinitive)",                       example: "Huwag kang malungkot. — Don't be sad." },
-          complete:     { form: "nalungkot", use: "Became sad — past",                              example: "Nalungkot siya nang umalis ang kaibigan. — She became sad when her friend left." },
-          progressive:  { form: "nalulungkot",use: "Being sad (ongoing)",                          example: "Nalulungkot siya ngayon. — She is being sad now." },
-          contemplated: { form: "malulungkot",use: "Will be sad",                                   example: "Malulungkot siya bukas kapag umalis ka. — He will be sad tomorrow if you leave." }
-        }
-      }
-    }
-  },
 
   hiya: {
     root: "hiya",
@@ -4892,7 +4547,7 @@ const VERB_DATABASE = {
         focus: "Actor Focus (Stative)",
         description: "Focuses on the state of being ashamed. The stative form for emotional states.",
         forms: {
-          infinitive:   { form: "mahihya",   use: "To be ashamed (infinitive)",                   example: "Mahihya ka sa ginagawa mo. — You'll be ashamed of what you're doing." },
+          infinitive:   { form: "mahiya",   use: "To be ashamed (infinitive)",                   example: "Mahiya ka sa ginagawa mo. — You'll be ashamed of what you're doing." },
           complete:     { form: "nahiya",    use: "Was ashamed — past",                            example: "Nahiya siya sa pagkakamali. — He was ashamed of the mistake." },
           progressive:  { form: "nahihiya",  use: "Being ashamed (ongoing)",                        example: "Nahihiya siya ngayon sa kanyang damit. — She is being ashamed of her clothes now." },
           contemplated: { form: "mahihiya",  use: "Will be ashamed",                               example: "Mahihiya siya bukas kapag nalaman. — He will be ashamed tomorrow when found out." }
@@ -4912,8 +4567,8 @@ const VERB_DATABASE = {
         forms: {
           infinitive:   { form: "mainis",    use: "To be annoyed (infinitive)",                   example: "Mainis ka sa ingay. — You'll be annoyed by the noise." },
           complete:     { form: "nainis",    use: "Became annoyed — past",                          example: "Nainis siya sa mabagal na trapiko. — She became annoyed at the slow traffic." },
-          progressive:  { form: "naiinpis",  use: "Being annoyed (ongoing)",                        example: "Naiinpis siya ngayon sa kanyang kapatid. — He is being annoyed by his sibling now." },
-          contemplated: { form: "maiinpis",  use: "Will be annoyed",                                example: "Maiinpis siya bukas kapag hindi ka sumipot. — He will be annoyed tomorrow if you don't show up." }
+          progressive:  { form: "naiinis",  use: "Being annoyed (ongoing)",                        example: "Naiinis siya ngayon sa kanyang kapatid. — He is being annoyed by his sibling now." },
+          contemplated: { form: "maiinis",  use: "Will be annoyed",                                example: "Maiinis siya bukas kapag hindi ka sumipot. — He will be annoyed tomorrow if you don't show up." }
         }
       }
     }
@@ -4946,10 +4601,10 @@ const VERB_DATABASE = {
         focus: "Actor Focus",
         description: "Focuses on the one investigating or inquiring.",
         forms: {
-          infinitive:   { form: "usisa",     use: "To investigate / to inquire (infinitive)",    example: "Usisa mo ang katotohanan. — Investigate the truth." },
+          infinitive:   { form: "mag-usisa",   use: "To investigate / to inquire (infinitive)",       example: "Mag-usisa ka tungkol sa kaso. — Inquire about the case." },
           complete:     { form: "nag-usisa", use: "Investigated / inquired — past",                example: "Nag-usisa siya tungkol sa krimen kagabi. — He inquired about the crime last night." },
-          progressive:  { form: "naguusisa",use: "Currently investigating",                       example: "Naguusisa siya ngayon sa nawawalang bata. — He is investigating the missing child now." },
-          contemplated: { form: "maguusisa",use: "Will investigate",                              example: "Maguusisa siya bukas sa bagong kaso. — He will investigate the new case tomorrow." }
+          progressive:  { form: "nag-uusisa",use: "Currently investigating",                       example: "Nag-uusisa siya ngayon sa nawawalang bata. — He is investigating the missing child now." },
+          contemplated: { form: "mag-uusisa",use: "Will investigate",                              example: "Mag-uusisa siya bukas sa bagong kaso. — He will investigate the new case tomorrow." }
         }
       }
     }
@@ -4996,10 +4651,9 @@ const CONJUGATED_LOOKUP = {
   "itinapon":    { root: "tapon", affix: "in",  aspect: "complete" },
   "tatapunan":   { root: "tapon", affix: "an",  aspect: "contemplated" },
   // bili
-  "magbili":     { root: "bili", affix: "mag", aspect: "infinitive" },
-  "nagbili":     { root: "bili", affix: "mag", aspect: "complete" },
-  "nagbibili":   { root: "bili", affix: "mag", aspect: "progressive" },
-  "magbibili":   { root: "bili", affix: "mag", aspect: "contemplated" },
+  "bumili":        { root: "bili", affix: "um", aspect: "complete" },
+  "bumibili":      { root: "bili", affix: "um", aspect: "progressive" },
+  "bibili":        { root: "bili", affix: "um", aspect: "contemplated" },
   "bilhin":      { root: "bili", affix: "in",  aspect: "infinitive" },
   "binili":      { root: "bili", affix: "in",  aspect: "complete" },
   "binibili":    { root: "bili", affix: "in",  aspect: "progressive" },
@@ -5041,19 +4695,15 @@ const CONJUGATED_LOOKUP = {
   "natulog":     { root: "tulog", affix: "ma",  aspect: "complete" },
   "natutulog":   { root: "tulog", affix: "ma",  aspect: "progressive" },
   "matutulog":   { root: "tulog", affix: "ma",  aspect: "contemplated" },
-  "itulog":      { root: "tulog", affix: "i",   aspect: "infinitive" },
-  "itinulog":    { root: "tulog", affix: "i",   aspect: "complete" },
-  "itinutulog":  { root: "tulog", affix: "i",   aspect: "progressive" },
-  "itutulog":    { root: "tulog", affix: "i",   aspect: "contemplated" },
+  "patulugin":     { root: "tulog", affix: "pain", aspect: "infinitive" },
+  "pinatulog":     { root: "tulog", affix: "pain", aspect: "complete" },
+  "pinapatulog":   { root: "tulog", affix: "pain", aspect: "progressive" },
+  "papatulugin":   { root: "tulog", affix: "pain", aspect: "contemplated" },
   // sabi
   "magsabi":     { root: "sabi", affix: "mag", aspect: "infinitive" },
   "nagsabi":     { root: "sabi", affix: "mag", aspect: "complete" },
   "nagsasabi":   { root: "sabi", affix: "mag", aspect: "progressive" },
   "magsasabi":   { root: "sabi", affix: "mag", aspect: "contemplated" },
-  "isabi":       { root: "sabi", affix: "i",   aspect: "infinitive" },
-  "inasabi":     { root: "sabi", affix: "i",   aspect: "complete" },
-  "inasasabi":   { root: "sabi", affix: "i",   aspect: "progressive" },
-  "isasabi":     { root: "sabi", affix: "i",   aspect: "contemplated" },
   "sabihan":     { root: "sabi", affix: "pagan", aspect: "infinitive" },
   "sinabihan":   { root: "sabi", affix: "pagan", aspect: "complete" },
   "sinasabihan": { root: "sabi", affix: "pagan", aspect: "progressive" },
@@ -5078,7 +4728,7 @@ const CONJUGATED_LOOKUP = {
   "basahin":     { root: "basa", affix: "in",  aspect: "infinitive" },
   "binasa":      { root: "basa", affix: "in",  aspect: "complete" },
   "binabasa":    { root: "basa", affix: "in",  aspect: "progressive" },
-  "babasa?in":   { root: "basa", affix: "in",  aspect: "contemplated" },
+  "babasahin":   { root: "basa", affix: "in",  aspect: "contemplated" },
   // linis
   "maglinis":    { root: "linis", affix: "mag", aspect: "infinitive" },
   "naglinis":    { root: "linis", affix: "mag", aspect: "complete" },
@@ -5091,7 +4741,7 @@ const CONJUGATED_LOOKUP = {
   // aral
   "mag-aral":    { root: "aral", affix: "mag", aspect: "infinitive" },
   "nag-aral":    { root: "aral", affix: "mag", aspect: "complete" },
-  "nagaaral":    { root: "aral", affix: "mag", aspect: "progressive" },
+  "nag-aaral":    { root: "aral", affix: "mag", aspect: "progressive" },
   "mag-aaral":   { root: "aral", affix: "mag", aspect: "contemplated" },
   "aralin":      { root: "aral", affix: "in",  aspect: "infinitive" },
   "inaral":      { root: "aral", affix: "in",  aspect: "complete" },
@@ -5128,9 +4778,9 @@ const CONJUGATED_LOOKUP = {
   "kikita":      { root: "kita", affix: "um",  aspect: "contemplated" },
   "nakakita":    { root: "kita", affix: "maka", aspect: "complete" },
   "makakita":    { root: "kita", affix: "maka", aspect: "infinitive" },
-  "kitain":      { root: "kita", affix: "in",  aspect: "infinitive" },
-  "kinita":      { root: "kita", affix: "in",  aspect: "complete" },
-  "kinikita":    { root: "kita", affix: "in",  aspect: "progressive" },
+  "makita":        { root: "kita", affix: "ma", aspect: "infinitive" },
+  "nakikita":      { root: "kita", affix: "ma", aspect: "progressive" },
+  "makikita":      { root: "kita", affix: "ma", aspect: "contemplated" },
   // rinig
   "marinig":     { root: "rinig", affix: "ma",  aspect: "infinitive" },
   "narinig":     { root: "rinig", affix: "ma",  aspect: "complete" },
@@ -5150,7 +4800,7 @@ const CONJUGATED_LOOKUP = {
   "aawit":       { root: "awit", affix: "um",  aspect: "contemplated" },
   "mag-awit":    { root: "awit", affix: "mag", aspect: "infinitive" },
   "nag-awit":    { root: "awit", affix: "mag", aspect: "complete" },
-  "nagaawit":    { root: "awit", affix: "mag", aspect: "progressive" },
+  "nag-aawit":    { root: "awit", affix: "mag", aspect: "progressive" },
   "mag-aawit":   { root: "awit", affix: "mag", aspect: "contemplated" },
   // sayaw
   "sumayaw":     { root: "sayaw", affix: "um",  aspect: "complete" },
@@ -5252,8 +4902,8 @@ const CONJUGATED_LOOKUP = {
   "sumasalita":  { root: "salita", affix: "um",  aspect: "progressive" },
   "sasalita":    { root: "salita", affix: "um",  aspect: "contemplated" },
   "isalita":     { root: "salita", affix: "i",   aspect: "infinitive" },
-  "inasalita":   { root: "salita", affix: "i",   aspect: "complete" },
-  "inasasalita": { root: "salita", affix: "i",   aspect: "progressive" },
+  "isinalita":     { root: "salita", affix: "i", aspect: "complete" },
+  "isinasalita":   { root: "salita", affix: "i", aspect: "progressive" },
   "isasalita":   { root: "salita", affix: "i",   aspect: "contemplated" },
   // hintay
   "humintay":    { root: "hintay", affix: "um",  aspect: "complete" },
@@ -5275,7 +4925,7 @@ const CONJUGATED_LOOKUP = {
   // away
   "mag-away":    { root: "away", affix: "mag", aspect: "infinitive" },
   "nag-away":    { root: "away", affix: "mag", aspect: "complete" },
-  "nagaaway":    { root: "away", affix: "mag", aspect: "progressive" },
+  "nag-aaway":    { root: "away", affix: "mag", aspect: "progressive" },
   "mag-aaway":   { root: "away", affix: "mag", aspect: "contemplated" },
   // maka- forms
   "makakain":    { root: "kain", affix: "maka", aspect: "infinitive" },
@@ -5321,7 +4971,7 @@ const CONJUGATED_LOOKUP = {
   // sundo
   "magsundo":    { root: "sundo", affix: "mag", aspect: "infinitive" },
   "nagsundo":    { root: "sundo", affix: "mag", aspect: "complete" },
-  "sundin":      { root: "sundo", affix: "in",  aspect: "infinitive" },
+  "sunduin":       { root: "sundo", affix: "in", aspect: "infinitive" },
   "sinundo":     { root: "sundo", affix: "in",  aspect: "complete" },
   // dala
   "magdala":     { root: "dala", affix: "mag", aspect: "infinitive" },
@@ -5353,8 +5003,8 @@ const CONJUGATED_LOOKUP = {
   // usap
   "mag-usap":    { root: "usap", affix: "mag", aspect: "infinitive" },
   "nag-usap":    { root: "usap", affix: "mag", aspect: "complete" },
-  "naguusap":    { root: "usap", affix: "mag", aspect: "progressive" },
-  "maguusap":    { root: "usap", affix: "mag", aspect: "contemplated" },
+  "nag-uusap":    { root: "usap", affix: "mag", aspect: "progressive" },
+  "mag-uusap":    { root: "usap", affix: "mag", aspect: "contemplated" },
   "mag-usapan":  { root: "usap", affix: "mag-an", aspect: "infinitive" },
   // hatid
   "maghatid":    { root: "hatid", affix: "mag", aspect: "infinitive" },
@@ -5405,8 +5055,8 @@ const CONJUGATED_LOOKUP = {
   // tawad
   "magtawad":      { root: "tawad", affix: "mag", aspect: "infinitive" },
   "nagtawad":      { root: "tawad", affix: "mag", aspect: "complete" },
-  "tawirin":       { root: "tawad", affix: "in",  aspect: "infinitive" },
-  "tinawad":       { root: "tawad", affix: "in",  aspect: "complete" },
+  "tawaran":       { root: "tawad", affix: "an", aspect: "infinitive" },
+  "tinawaran":     { root: "tawad", affix: "an", aspect: "complete" },
   // amin
   "umamin":        { root: "amin",  affix: "um",  aspect: "complete" },
   "umaamin":       { root: "amin",  affix: "um",  aspect: "progressive" },
@@ -5433,8 +5083,6 @@ const CONJUGATED_LOOKUP = {
   // tanggap
   "tumanggap":     { root: "tanggap", affix: "um",  aspect: "complete" },
   "tatanggap":     { root: "tanggap", affix: "um",  aspect: "contemplated" },
-  "itanggap":      { root: "tanggap", affix: "i",   aspect: "infinitive" },
-  "itinanggap":    { root: "tanggap", affix: "i",   aspect: "complete" },
   // lipat
   "maglipat":      { root: "lipat", affix: "mag", aspect: "infinitive" },
   "naglipat":      { root: "lipat", affix: "mag", aspect: "complete" },
@@ -5442,23 +5090,23 @@ const CONJUGATED_LOOKUP = {
   "umingat":       { root: "ingat", affix: "um",  aspect: "complete" },
   "umiingat":      { root: "ingat", affix: "um",  aspect: "progressive" },
   // ayus
-  "mag-ayos":      { root: "ayus",  affix: "mag", aspect: "infinitive" },
-  "nag-ayos":      { root: "ayus",  affix: "mag", aspect: "complete" },
+  "mag-ayos":      { root: "ayos", affix: "mag", aspect: "infinitive" },
+  "nag-ayos":      { root: "ayos", affix: "mag", aspect: "complete" },
   // hiram
-  "umhiram":       { root: "hiram", affix: "um",  aspect: "complete" },
-  "umhihiram":     { root: "hiram", affix: "um",  aspect: "progressive" },
+  "humiram":       { root: "hiram", affix: "um", aspect: "complete" },
+  "humihiram":     { root: "hiram", affix: "um", aspect: "progressive" },
   // ===== BATCH 3: 30 more common everyday verbs =====
   // health / body
   "masipon":       { root: "sipon", affix: "ma",  aspect: "infinitive" },
   "nasipon":       { root: "sipon", affix: "ma",  aspect: "complete" },
   "malagnat":      { root: "lagnat", affix: "ma",  aspect: "infinitive" },
   "nalagnat":      { root: "lagnat", affix: "ma",  aspect: "complete" },
-  "masakit":       { root: "sakit", affix: "ma",  aspect: "infinitive" },
-  "nasakit":       { root: "sakit", affix: "ma",  aspect: "complete" },
+  "sumakit":       { root: "sakit", affix: "um", aspect: "complete" },
+  "sumasakit":     { root: "sakit", affix: "um", aspect: "progressive" },
   "humilik":       { root: "hilik", affix: "um",  aspect: "complete" },
   "humihilik":     { root: "hilik", affix: "um",  aspect: "progressive" },
-  "umngiti":       { root: "ngiti", affix: "um",  aspect: "complete" },
-  "umangiti":      { root: "ngiti", affix: "um",  aspect: "progressive" },
+  "ngumiti":       { root: "ngiti", affix: "um", aspect: "complete" },
+  "ngumingiti":    { root: "ngiti", affix: "um", aspect: "progressive" },
   "huminga":       { root: "hinga", affix: "um",  aspect: "complete" },
   "humihinga":     { root: "hinga", affix: "um",  aspect: "progressive" },
   // family
@@ -5509,9 +5157,11 @@ const CONJUGATED_LOOKUP = {
   "magsimba":      { root: "simba", affix: "mag", aspect: "infinitive" },
   "nagsimba":      { root: "simba", affix: "mag", aspect: "complete" },
   // states
-  "nasaya":        { root: "masaya", affix: "ma",  aspect: "complete" },
-  "nasasaya":      { root: "masaya", affix: "ma",  aspect: "progressive" },
-  "masasaya":      { root: "masaya", affix: "ma",  aspect: "contemplated" },
+  "magsaya":       { root: "saya", affix: "mag", aspect: "infinitive" },
+  "nagsaya":       { root: "saya", affix: "mag", aspect: "complete" },
+  "nagsasaya":     { root: "saya", affix: "mag", aspect: "progressive" },
+  "magsasaya":     { root: "saya", affix: "mag", aspect: "contemplated" },
+  "masaya":        { root: "saya", affix: "ma", aspect: "infinitive" },
   "malungkot":     { root: "lungkot", affix: "ma",  aspect: "infinitive" },
   "nalungkot":     { root: "lungkot", affix: "ma",  aspect: "complete" },
   "malamig":       { root: "lamig", affix: "ma",  aspect: "infinitive" },
@@ -5530,23 +5180,22 @@ const CONJUGATED_LOOKUP = {
   // ===== BATCH 4: 30 more common everyday verbs =====
   // body needs
   "umihi":         { root: "ihi", affix: "um",  aspect: "complete" },
-  "umiiihi":       { root: "ihi", affix: "um",  aspect: "progressive" },
+  "umiihi":       { root: "ihi", affix: "um",  aspect: "progressive" },
   "iihi":          { root: "ihi", affix: "um",  aspect: "contemplated" },
   "dumumi":        { root: "dumi", affix: "um",  aspect: "complete" },
   "dumudumi":      { root: "dumi", affix: "um",  aspect: "progressive" },
   "dudumi":        { root: "dumi", affix: "um",  aspect: "contemplated" },
   "mag-ubo":       { root: "ubo", affix: "mag", aspect: "infinitive" },
   "nag-ubo":       { root: "ubo", affix: "mag", aspect: "complete" },
-  "naguubo":       { root: "ubo", affix: "mag", aspect: "progressive" },
+  "nag-uubo":       { root: "ubo", affix: "mag", aspect: "progressive" },
   "mag-uubo":      { root: "ubo", affix: "mag", aspect: "contemplated" },
   "magsipilyo":    { root: "sipilyo", affix: "mag", aspect: "infinitive" },
   "nagsipilyo":    { root: "sipilyo", affix: "mag", aspect: "complete" },
   "nagsisipilyo":  { root: "sipilyo", affix: "mag", aspect: "progressive" },
   "magsisipilyo":  { root: "sipilyo", affix: "mag", aspect: "contemplated" },
-  "maghilam":      { root: "hilam", affix: "mag", aspect: "infinitive" },
-  "naghilam":      { root: "hilam", affix: "mag", aspect: "complete" },
-  "naghihilam":    { root: "hilam", affix: "mag", aspect: "progressive" },
-  "maghihilam":    { root: "hilam", affix: "mag", aspect: "contemplated" },
+  "humikab":       { root: "hikab", affix: "um", aspect: "infinitive" },
+  "humihikab":     { root: "hikab", affix: "um", aspect: "progressive" },
+  "hihikab":       { root: "hikab", affix: "um", aspect: "contemplated" },
   // time
   "mag-umpisa":    { root: "umpisa", affix: "mag", aspect: "infinitive" },
   "nag-umpisa":    { root: "umpisa", affix: "mag", aspect: "complete" },
@@ -5557,8 +5206,9 @@ const CONJUGATED_LOOKUP = {
   "dumating":      { root: "dating", affix: "um",  aspect: "complete" },
   "dumarating":    { root: "dating", affix: "um",  aspect: "progressive" },
   "darating":      { root: "dating", affix: "um",  aspect: "contemplated" },
-  "maguwi":        { root: "uwi", affix: "mag", aspect: "infinitive" },
-  "naguwi":        { root: "uwi", affix: "mag", aspect: "complete" },
+  "umuwi":         { root: "uwi", affix: "um", aspect: "infinitive" },
+  "umuuwi":        { root: "uwi", affix: "um", aspect: "progressive" },
+  "uuwi":          { root: "uwi", affix: "um", aspect: "contemplated" },
   // send
   "magpadala":     { root: "padala", affix: "mag", aspect: "infinitive" },
   "nagpadala":     { root: "padala", affix: "mag", aspect: "complete" },
@@ -5612,10 +5262,10 @@ const CONJUGATED_LOOKUP = {
   "nagkikita":     { root: "kita", affix: "mag", aspect: "progressive" },
   "magkikita":     { root: "kita", affix: "mag", aspect: "contemplated" },
   // time of day
-  "magabi":        { root: "gabi", affix: "ma",  aspect: "infinitive" },
-  "nagabi":        { root: "gabi", affix: "ma",  aspect: "complete" },
-  "nagagabi":      { root: "gabi", affix: "ma",  aspect: "progressive" },
-  "magagabi":      { root: "gabi", affix: "ma",  aspect: "contemplated" },
+  "gumabi":        { root: "gabi", affix: "um", aspect: "infinitive" },
+  "gumabi":        { root: "gabi", affix: "um", aspect: "complete" },
+  "gumagabi":      { root: "gabi", affix: "um", aspect: "progressive" },
+  "gagabi":        { root: "gabi", affix: "um", aspect: "contemplated" },
   // typing / communication
   "mag-type":      { root: "type", affix: "mag", aspect: "infinitive" },
   "nag-type":      { root: "type", affix: "mag", aspect: "complete" },
@@ -5635,39 +5285,39 @@ const CONJUGATED_LOOKUP = {
   // ===== BATCH 5: 40 more common everyday verbs =====
   // ADJECTIVES (stative)
   "mabigat":       { root: "bigat", affix: "ma",  aspect: "infinitive" },
-  "nabigat":       { root: "bigat", affix: "ma",  aspect: "complete" },
+  "bumigat":       { root: "bigat", affix: "um", aspect: "complete" },
   "magaan":        { root: "gaan", affix: "ma",  aspect: "infinitive" },
-  "nagaan":        { root: "gaan", affix: "ma",  aspect: "complete" },
+  "gumaan":        { root: "gaan", affix: "um", aspect: "complete" },
   "mahaba":        { root: "haba", affix: "ma",  aspect: "infinitive" },
-  "nahaba":        { root: "haba", affix: "ma",  aspect: "complete" },
+  "humaba":        { root: "haba", affix: "um", aspect: "complete" },
   "maikli":        { root: "ikli", affix: "ma",  aspect: "infinitive" },
-  "naikli":        { root: "ikli", affix: "ma",  aspect: "complete" },
+  "umikli":        { root: "ikli", affix: "um", aspect: "complete" },
   "mababa":        { root: "baba", affix: "ma",  aspect: "infinitive" },
-  "nababa":        { root: "baba", affix: "ma",  aspect: "complete" },
+  "bumaba":        { root: "baba", affix: "um", aspect: "complete" },
   "mabilis":       { root: "bilis", affix: "ma",  aspect: "infinitive" },
-  "nabilis":       { root: "bilis", affix: "ma",  aspect: "complete" },
+  "bumilis":       { root: "bilis", affix: "um", aspect: "complete" },
   "mabagal":       { root: "bagal", affix: "ma",  aspect: "infinitive" },
-  "nabagal":       { root: "bagal", affix: "ma",  aspect: "complete" },
+  "bumagal":       { root: "bagal", affix: "um", aspect: "complete" },
   "mamura":        { root: "mura", affix: "ma",  aspect: "infinitive" },
-  "namura":        { root: "mura", affix: "ma",  aspect: "complete" },
+  "nagmura":       { root: "mura", affix: "um", aspect: "complete" },
   "mamahal":       { root: "mahal", affix: "ma",  aspect: "infinitive" },
-  "namahal":       { root: "mahal", affix: "ma",  aspect: "complete" },
+  "nagmahal":      { root: "mahal", affix: "um", aspect: "complete" },
   "malaki":        { root: "laki", affix: "ma",  aspect: "infinitive" },
-  "nalaki":        { root: "laki", affix: "ma",  aspect: "complete" },
+  "lumaki":        { root: "laki", affix: "um", aspect: "complete" },
   "maliit":        { root: "liit", affix: "ma",  aspect: "infinitive" },
-  "naliit":        { root: "liit", affix: "ma",  aspect: "complete" },
+  "lumiit":        { root: "liit", affix: "um", aspect: "complete" },
   "maganda":       { root: "ganda", affix: "ma",  aspect: "infinitive" },
-  "naganda":       { root: "ganda", affix: "ma",  aspect: "complete" },
+  "gumanda":       { root: "ganda", affix: "um", aspect: "complete" },
   "mapangit":      { root: "pangit", affix: "ma",  aspect: "infinitive" },
-  "napangit":      { root: "pangit", affix: "ma",  aspect: "complete" },
+  "pumangit":      { root: "pangit", affix: "um", aspect: "complete" },
   "mabago":        { root: "bago", affix: "ma",  aspect: "infinitive" },
-  "nabago":        { root: "bago", affix: "ma",  aspect: "complete" },
+  "nagbago":       { root: "bago", affix: "um", aspect: "complete" },
   "maluma":        { root: "luma", affix: "ma",  aspect: "infinitive" },
-  "naluma":        { root: "luma", affix: "ma",  aspect: "complete" },
+  "lumuma":        { root: "luma", affix: "um", aspect: "complete" },
   // weather
   "umulan":        { root: "ulan", affix: "um",  aspect: "complete" },
   "umuulan":       { root: "ulan", affix: "um",  aspect: "progressive" },
-  "ulan":          { root: "ulan", affix: "um",  aspect: "contemplated" },
+  "uulan":         { root: "ulan", affix: "um", aspect: "contemplated" },
   // emotions / mental
   "maalala":       { root: "alala", affix: "ma",  aspect: "infinitive" },
   "naalala":       { root: "alala", affix: "ma",  aspect: "complete" },
@@ -5681,28 +5331,28 @@ const CONJUGATED_LOOKUP = {
   "mabigo":        { root: "bigo", affix: "ma",  aspect: "infinitive" },
   "nabigo":        { root: "bigo", affix: "ma",  aspect: "complete" },
   // body / hygiene
-  "magligo":       { root: "ligo", affix: "mag", aspect: "infinitive" },
-  "nagligo":       { root: "ligo", affix: "mag", aspect: "complete" },
-  "naglilig":      { root: "ligo", affix: "mag", aspect: "progressive" },
-  "maglilig":      { root: "ligo", affix: "mag", aspect: "contemplated" },
+  "maligo":        { root: "ligo", affix: "ma", aspect: "infinitive" },
+  "naligo":        { root: "ligo", affix: "ma", aspect: "complete" },
+  "naliligo":      { root: "ligo", affix: "ma", aspect: "progressive" },
+  "maliligo":      { root: "ligo", affix: "ma", aspect: "contemplated" },
   "mag-ahit":      { root: "ahit", affix: "mag", aspect: "infinitive" },
   "nag-ahit":      { root: "ahit", affix: "mag", aspect: "complete" },
-  "nagaahit":      { root: "ahit", affix: "mag", aspect: "progressive" },
+  "nag-aahit":      { root: "ahit", affix: "mag", aspect: "progressive" },
   "mag-aahit":     { root: "ahit", affix: "mag", aspect: "contemplated" },
   // sports
   "magbadminton":  { root: "badminton", affix: "mag", aspect: "infinitive" },
   "nagbadminton":  { root: "badminton", affix: "mag", aspect: "complete" },
-  "nagbabdminton": { root: "badminton", affix: "mag", aspect: "progressive" },
+  "nagbabadminton": { root: "badminton", affix: "mag", aspect: "progressive" },
   "magvolleyball": { root: "volleyball", affix: "mag", aspect: "infinitive" },
   "nagvolleyball": { root: "volleyball", affix: "mag", aspect: "complete" },
-  "nagbovolleyball": { root: "volleyball", affix: "mag", aspect: "progressive" },
+  "nagvo-volleyball": { root: "volleyball", affix: "mag", aspect: "progressive" },
   // cooking more
   "magboil":       { root: "boil", affix: "mag", aspect: "infinitive" },
   "nagboil":       { root: "boil", affix: "mag", aspect: "complete" },
   "nagboboil":     { root: "boil", affix: "mag", aspect: "progressive" },
   "maggrill":      { root: "grill", affix: "mag", aspect: "infinitive" },
   "naggrill":      { root: "grill", affix: "mag", aspect: "complete" },
-  "naggrigrill":   { root: "grill", affix: "mag", aspect: "progressive" },
+  "naggi-grill":   { root: "grill", affix: "mag", aspect: "progressive" },
   "magbake":       { root: "bake", affix: "mag", aspect: "infinitive" },
   "nagbake":       { root: "bake", affix: "mag", aspect: "complete" },
   "nagbabake":     { root: "bake", affix: "mag", aspect: "progressive" },
@@ -5752,7 +5402,7 @@ const CONJUGATED_LOOKUP = {
   "hahanapin":  { root: "hanap", affix: "in",  aspect: "contemplated" },
   // tanggap
   "tumanggap":  { root: "tanggap", affix: "um",  aspect: "complete" },
-  "tumtanggap": { root: "tanggap", affix: "um",  aspect: "progressive" },
+  "tumatanggap": { root: "tanggap", affix: "um",  aspect: "progressive" },
   "tatanggap":  { root: "tanggap", affix: "um",  aspect: "contemplated" },
   "tanggapin":  { root: "tanggap", affix: "in",  aspect: "infinitive" },
   "tinanggap":  { root: "tanggap", affix: "in",  aspect: "complete" },
@@ -5918,10 +5568,9 @@ const CONJUGATED_LOOKUP = {
   "naglalangoy": { root: "langoy", affix: "mag", aspect: "progressive" },
   "maglalangoy": { root: "langoy", affix: "mag", aspect: "contemplated" },
   // lupa
-  "maglu-pa":    { root: "lupa", affix: "mag", aspect: "infinitive" },
-  "naglu-pa":    { root: "lupa", affix: "mag", aspect: "complete" },
-  "naglulu-pa":  { root: "lupa", affix: "mag", aspect: "progressive" },
-  "maglulu-pa":  { root: "lupa", affix: "mag", aspect: "contemplated" },
+  "lumuhod":       { root: "luhod", affix: "um", aspect: "infinitive" },
+  "lumuluhod":     { root: "luhod", affix: "um", aspect: "progressive" },
+  "luluhod":       { root: "luhod", affix: "um", aspect: "contemplated" },
   // tago
   "magtago":     { root: "tago", affix: "mag", aspect: "infinitive" },
   "nagtago":     { root: "tago", affix: "mag", aspect: "complete" },
@@ -5936,10 +5585,10 @@ const CONJUGATED_LOOKUP = {
   "umiiwas":     { root: "iwas", affix: "um",  aspect: "progressive" },
   "iiwas":       { root: "iwas", affix: "um",  aspect: "contemplated" },
   // ayaw
-  "mag-ayaw":    { root: "ayaw", affix: "mag", aspect: "infinitive" },
-  "nag-ayaw":    { root: "ayaw", affix: "mag", aspect: "complete" },
-  "nag-aayaw":   { root: "ayaw", affix: "mag", aspect: "progressive" },
-  "mag-aayaw":   { root: "ayaw", affix: "mag", aspect: "contemplated" },
+  "umayaw":        { root: "ayaw", affix: "um", aspect: "infinitive" },
+  "umayaw":        { root: "ayaw", affix: "um", aspect: "complete" },
+  "umaayaw":       { root: "ayaw", affix: "um", aspect: "progressive" },
+  "aayaw":         { root: "ayaw", affix: "um", aspect: "contemplated" },
   // ibig
   "mag-ibig":    { root: "ibig", affix: "mag", aspect: "infinitive" },
   "nag-ibig":    { root: "ibig", affix: "mag", aspect: "complete" },
@@ -5951,15 +5600,15 @@ const CONJUGATED_LOOKUP = {
   "nalulungkot": { root: "lungkot", affix: "ma",  aspect: "progressive" },
   "malulungkot": { root: "lungkot", affix: "ma",  aspect: "contemplated" },
   // hiya
-  "mahihya":     { root: "hiya", affix: "ma",  aspect: "infinitive" },
+  "mahiya":     { root: "hiya", affix: "ma",  aspect: "infinitive" },
   "nahiya":      { root: "hiya", affix: "ma",  aspect: "complete" },
   "nahihiya":    { root: "hiya", affix: "ma",  aspect: "progressive" },
   "mahihiya":    { root: "hiya", affix: "ma",  aspect: "contemplated" },
   // inis
   "mainis":      { root: "inis", affix: "ma",  aspect: "infinitive" },
   "nainis":      { root: "inis", affix: "ma",  aspect: "complete" },
-  "naiinpis":    { root: "inis", affix: "ma",  aspect: "progressive" },
-  "maiinpis":    { root: "inis", affix: "ma",  aspect: "contemplated" },
+  "naiinis":    { root: "inis", affix: "ma",  aspect: "progressive" },
+  "maiinis":    { root: "inis", affix: "ma",  aspect: "contemplated" },
   // antok
   "maantok":     { root: "antok", affix: "ma",  aspect: "infinitive" },
   "naantok":     { root: "antok", affix: "ma",  aspect: "complete" },
@@ -5968,8 +5617,8 @@ const CONJUGATED_LOOKUP = {
   // usisa
   "mag-usisa":   { root: "usisa", affix: "mag", aspect: "infinitive" },
   "nag-usisa":   { root: "usisa", affix: "mag", aspect: "complete" },
-  "naguusisa":   { root: "usisa", affix: "mag", aspect: "progressive" },
-  "maguusisa":   { root: "usisa", affix: "mag", aspect: "contemplated" }
+  "nag-uusisa":   { root: "usisa", affix: "mag", aspect: "progressive" },
+  "mag-uusisa":   { root: "usisa", affix: "mag", aspect: "contemplated" }
 };
 
 // Export to window so other scripts can use it

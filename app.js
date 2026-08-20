@@ -24,7 +24,11 @@ function firstSyllable(root) {
   if (lower.length >= 2 && VOWELS.includes(lower[1])) {
     return lower.slice(0, 2);
   }
-  // Consonant cluster
+  // Consonant cluster: Tagalog reduplicates the first consonant + first vowel
+  // (plantsa → pa-plantsa, trabaho → ta-trabaho), not the whole cluster.
+  for (let i = 1; i < lower.length; i++) {
+    if (VOWELS.includes(lower[i])) return lower[0] + lower[i];
+  }
   return lower.slice(0, 2);
 }
 
@@ -65,6 +69,10 @@ function generateConjugations(root) {
   const rAn = (lastVowelIdx >= 0 && r[lastVowelIdx] === "o")
     ? r.slice(0, lastVowelIdx) + "u" + r.slice(lastVowelIdx + 1)
     : r;
+
+  // Roots beginning with l, r, w or y take the prefix ni- instead of the -in- infix:
+  //   luto → niluto (not "linuto"), linis → nilinis, lagay → nilagay/nilagyan
+  const usesNi = !isVowelInitial && "lrwy".includes(c1);
 
   const result = {};
 
@@ -117,15 +125,16 @@ function generateConjugations(root) {
 
   // ============== ACTOR FOCUS — ma- (stative) ==============
   {
-    const maPrefix = isVowelInitial ? "ma-" : "ma";
-    const naPrefix = isVowelInitial ? "na-" : "na";
+    // ma-/na- attach directly, with no hyphen, even before a vowel (maantok, naaantok)
+    const maPrefix = "ma";
+    const naPrefix = "na";
     const infinitive = `${maPrefix}${r}`;
     const complete = `${naPrefix}${r}`;
-    // Progressive: na + reduplicated first syllable + root (for consonant-initial)
+    // Progressive: na + reduplicated first syllable + root
     //   e.g. tulog → na + tu + tulog = "natutulog"
-    // For vowel-initial: just na + root
-    const progressive = isVowelInitial ? `${naPrefix}${r}` : `${naPrefix}${redup}`;
-    const contemplated = isVowelInitial ? `${maPrefix}${r}` : `${maPrefix}${redup}`;
+    //   e.g. antok → na + a + antok = "naaantok"  (vowel-initial reduplicates the vowel)
+    const progressive = `${naPrefix}${redup}`;
+    const contemplated = `${maPrefix}${redup}`;
     result["Actor (ma-)"] = {
       focus: "Actor Focus (Stative)",
       description: `Focuses on a state or accidental action involving ${r}. ma- prefix (infinitive / future); na- for past. Often indicates 'to become' or 'to get' the state of ${r}-ing.`,
@@ -140,26 +149,30 @@ function generateConjugations(root) {
 
   // ============== OBJECT FOCUS — -in ==============
   {
-    // infinitive: root + -in
-    const infinitive = isVowelInitial ? `${r}in` : `${r}in`;
+    // infinitive: root + -in (a final 'o' shifts to 'u': luto → lutuin, tulong → tulungin)
+    const infinitive = `${rAn}in`;
     // complete: C-in-V-rest (insert -in- after first consonant)
     //   e.g. kain → k + in + ain = "kinain"
     //   e.g. aral → (in) + aral = "inaral"  (no consonant, so in- prefix)
     const complete = isVowelInitial
-      ? `in${r}`               // aral → inaral
-      : `${c1}in${r.slice(1)}`;  // kain → kinain
+      ? `in${r}`                  // aral → inaral
+      : usesNi
+        ? `ni${r}`                // luto → niluto
+        : `${c1}in${r.slice(1)}`; // kain → kinain
     // progressive: C-in-V-C-V-rest (where the first V-C-V is the reduplicated first syllable, after the vowel is echoed)
     //   e.g. kain: k + in + a + ka + in = "kinakain"
     //   e.g. sulat: s + in + u + su + lat = "sinusulat"
     //   e.g. aral: in + a + a + ral = "inaaral"  (vowel-initial: in + v1 + v1 + restAfterV)
     const progressive = isVowelInitial
-      ? `in${v1}${v1}${restAfterV}`
-      : `${c1}in${v1}${fs}${restAfterV}`;
+      ? `in${redup}`
+      : usesNi
+        ? `ni${redup}`              // luto → niluluto
+        : `${c1}in${redup.slice(1)}`;
     // contemplated: reduplicated first syllable + root + -in
     //   e.g. kain → ka + kain + in = "kakainin"
     //   e.g. sulat → su + sulat + in = "susulatin"
     //   e.g. aral → a + aral + in = "aaralin"
-    const contemplated = `${fs}${r}in`;
+    const contemplated = `${firstSyllable(rAn)}${rAn}in`;
     result["Object (-in)"] = {
       focus: "Object Focus",
       description: `Focuses on the object of the action (the thing being ${getEnglish(r).past}). The -in suffix is added to the root.`,
@@ -176,19 +189,18 @@ function generateConjugations(root) {
   {
     // infinitive: i + root
     const infinitive = `i${r}`;
-    // complete: i + C-in-V-rest
+    // complete: i + C-in-V-rest; vowel-initial roots take ini- as a prefix
     //   e.g. sulat → i + s + in + u + lat = "isinulat"
-    //   e.g. aral → i + in + aral = "iinaral"? actually "iaral"? Let me think.
-    //   For vowel-initial, i- + in- + root = "iinaral" (some forms are written "iaral" colloquially but "iinaral" is more correct)
-    const complete = isVowelInitial
-      ? `iin${r}`                    // aral → iinaral
+    //   e.g. abot  → ini + abot = "iniabot"
+    const complete = (isVowelInitial || usesNi)
+      ? `ini${r}`                    // abot → iniabot, lagay → inilagay
       : `i${c1}in${r.slice(1)}`;     // sulat → isinulat
     // progressive: i + C + in + V + [firstSyllable] + rest
     //   e.g. sulat: i + s + in + u + su + lat = "isinusulat"
-    //   e.g. aral: i + in + a + a + ral = "iinaaral"
-    const progressive = isVowelInitial
-      ? `iin${v1}${v1}${restAfterV}`
-      : `i${c1}in${v1}${fs}${restAfterV}`;
+    //   e.g. abot:  ini + a + abot = "iniaabot"
+    const progressive = (isVowelInitial || usesNi)
+      ? `ini${redup}`
+      : `i${c1}in${redup.slice(1)}`;
     // contemplated: i + reduplicated first syllable + root
     //   e.g. sulat: i + su + sulat = "isusulat"
     //   e.g. aral: i + a + aral = "iaaral"
@@ -227,13 +239,18 @@ function generateConjugations(root) {
     //   Hmm, that looks right. So formula: c1 + in + r.slice(1) + an
     const complete = isVowelInitial
       ? `in${rAn}${suffix}`
-      : `${c1}in${rAn.slice(1)}${suffix}`;
+      : usesNi
+        ? `ni${rAn}${suffix}`                 // luto → nilutuhan, lagay → nilagyan
+        : `${c1}in${rAn.slice(1)}${suffix}`;
     // progressive: C-in-V-[firstSyllable]-rest-an
     //   e.g. kain: k + in + a + ka + in + an = "kinakainan"
     //   e.g. aral: in + a + a + ral + an = "inaaralan"
+    const rAnRedup0 = firstSyllable(rAn) + rAn;
     const progressive = isVowelInitial
-      ? `in${v1}${v1}${restAfterV}${suffix}`
-      : `${c1}in${v1}${fs}${restAfterV}${suffix}`;
+      ? `in${rAnRedup0}${suffix}`
+      : usesNi
+        ? `ni${rAnRedup0}${suffix}`
+        : `${c1}in${rAnRedup0.slice(1)}${suffix}`;
     // contemplated: reduplicated first syllable + root + -an
     //   e.g. kain: ka + kain + an = "kainan"
     //   e.g. sulat: su + sulat + an = "susulatan"
@@ -414,8 +431,8 @@ function generateConjugations(root) {
     //   ipapag- + reduplicated / ipag- + reduplicated (contemplated)
     const infinitive = `ipag${r}`;
     const complete = `ipinag${r}`;
-    const progressive = `ipinapag${fs}${r}`;
-    const contemplated = `ipapag${fs}${r}`;
+    const progressive = `ipinag${fs}${r}`;   // luto → ipinagluluto
+    const contemplated = `ipag${fs}${r}`;    // luto → ipagluluto
     result["Benefactive (ipag-)"] = {
       focus: "Benefactive Focus",
       description: `Focuses on doing ${r} for someone — cooking for, writing for, buying for. Uses the ipag- prefix. "Ipinagluto niya sa bata" = "She cooked for the child".`,
@@ -445,8 +462,8 @@ function generateConjugations(root) {
     }
     const infinitive = `${ipangPrefix}${r}`;
     const complete = `${ipinangPrefix}${r}`;
-    const progressive = `ipinapang${fs.slice(-1) || r[0]}${r}`;
-    const contemplated = `ipapang${fs.slice(-1) || r[0]}${r}`;
+    const progressive = `ipina${ipangPrefix.slice(1)}${r}`;   // kain → ipinapangkain
+    const contemplated = `ipa${ipangPrefix.slice(1)}${r}`;    // kain → ipapangkain
     result["Instrumental (ipang-)"] = {
       focus: "Instrumental Focus",
       description: `Focuses on the instrument used to do ${r}. "Ipangkain" = "use [something] for eating" (e.g., a fork). The instrument becomes the subject of the sentence.`,
@@ -469,24 +486,19 @@ function generateConjugations(root) {
     // Note: -an suffix is added to the REDUPLICATED form
     // For vowel-initial: same pattern with the vowel as first syllable
     //   e.g. aral: mag + a + aral + an = "mag-aaralan"  (to learn from each other / discuss)
-    // Forms:
-    //   infinitive: mag + redup + an
-    //   complete: nag + redup + an
-    //   progressive: nag + redup + redup + an (with extra reduplication sometimes)
-    //   contemplated: mag + redup + redup + an
-    // For simplicity, use the same template as Actor (mag-) but with -an suffix
-    const infinitive = isVowelInitial
-      ? `mag${fs}${r}an`      // mag-aaralan
-      : `mag${fs}${r}an`;     // mag-uusapan
-    const complete = isVowelInitial
-      ? `nag${fs}${r}an`
-      : `nag${fs}${r}an`;
-    const progressive = isVowelInitial
-      ? `nag${fs}${fs}${r}an`
-      : `nag${fs}${fs}${r}an`;
-    const contemplated = isVowelInitial
-      ? `mag${fs}${fs}${r}an`
-      : `mag${fs}${fs}${r}an`;
+    // Forms (the -an suffix goes on the root; only the aspect prefixes reduplicate):
+    //   infinitive:   mag- + root + -an     usap → mag-usapan
+    //   complete:     nag- + root + -an     usap → nag-usapan
+    //   progressive:  nag- + redup + -an    usap → nag-uusapan
+    //   contemplated: mag- + redup + -an    usap → mag-uusapan
+    // The final 'o' of the root shifts to 'u' before -an (tulong → magtulungan).
+    const magR = isVowelInitial ? "mag-" : "mag";
+    const nagR = isVowelInitial ? "nag-" : "nag";
+    const rAnRedup = firstSyllable(rAn) + rAn;
+    const infinitive = `${magR}${rAn}an`;
+    const complete = `${nagR}${rAn}an`;
+    const progressive = `${nagR}${rAnRedup}an`;
+    const contemplated = `${magR}${rAnRedup}an`;
     // The reciprocal pattern is productive for action verbs where mutual action
     // is conceptually natural (usap → mag-usapan = talk to each other,
     // tulong → magtulungan = help each other). For other verbs, the
@@ -511,26 +523,27 @@ function generateConjugations(root) {
 
   // ============== NEGATION — hindi- / huwag- (NOT doing) ==============
   {
-    // Negation in Tagalog uses the hindi- prefix (or "huwag" for imperative).
-    // When negated, the verb shifts to the CONTINGENT aspect (ka-/mag-ka-).
-    //   e.g. kain → kakain (will eat)  /  Negated: hindi kakain (will not eat)
-    //   e.g. kain → nakakain (is eating / was eating)  /  Negated: hindi nakakain (is not / was not eating)
-    // For the negative imperative, use "huwag" + the affirmative verb form:
+    // Negation in Tagalog does NOT change the aspect: put "hindi" before the
+    // ordinary conjugated form.
+    //   kumain (ate)      → hindi kumain (did not eat)
+    //   kumakain (eating) → hindi kumakain (is not eating)
+    //   kakain (will eat) → hindi kakain (will not eat)
+    // For the negative imperative, use "huwag" + the infinitive form:
     //   "Huwag kang kumain!" (Don't eat!) - Actor focus with um- infix
     //   "Huwag mong kainin!" (Don't eat [it]!) - Object focus with -in
-    // We provide the most useful negative forms.
-    const pastPresentNegated = `hindi naka${r}`;       // did not / is not X (contingent)
-    const futureNegated = `hindi ka${r}`;               // will not X (contingent)
-    const imperativeNegated = isVowelInitial
-      ? `huwag kang um${r}`     // aral → huwag kang umaral
-      : `huwag kang ${c1}um${r.slice(1)}`;  // kain → huwag kang kumain
+    const umComplete = isVowelInitial ? `um${r}` : `${c1}um${r.slice(1)}`;
+    const umProgressive = isVowelInitial ? `um${redup}` : `${c1}um${redup.slice(1)}`;
+    const pastNegated = `hindi ${umComplete}`;
+    const presentNegated = `hindi ${umProgressive}`;
+    const futureNegated = `hindi ${redup}`;
+    const imperativeNegated = `huwag kang ${umComplete}`;
     result["Negation (hindi-)"] = {
       focus: "Negative / Negation",
-      description: `Negated forms of ${r}. Tagalog uses "hindi" (not) before the verb for past/present/future, and "huwag" (literally "don't") for the negative imperative. When negated, the verb shifts to the CONTINGENT aspect: "kumain" (ate) → "hindi nakakain" (did not / is not eating); "kakain" (will eat) → "hindi kakain" (will not eat).`,
+      description: `Negated forms of ${r}. Tagalog puts "hindi" (not) before the ordinary conjugated verb — the aspect does not change — and uses "huwag" (literally "don't") for the negative imperative: "hindi kumain" (did not eat), "hindi kumakain" (is not eating), "hindi kakain" (will not eat).`,
       forms: {
         infinitive:   { form: imperativeNegated, use: "Negative command: don't " + getEnglish(r).base,           example: `${capitalize(imperativeNegated)}. — Don't ${getEnglish(r).base}!` },
-        complete:     { form: pastPresentNegated, use: "Did not " + getEnglish(r).base + " (past negative)",  example: `${capitalize(pastPresentNegated)} siya kagabi. — He/she did not ${getEnglish(r).base} last night.` },
-        progressive:  { form: pastPresentNegated, use: "Is not " + getEnglish(r).gerund + " (present)",          example: `${capitalize(pastPresentNegated)} siya ngayon. — He/she is not ${getEnglish(r).gerund} now.` },
+        complete:     { form: pastNegated,    use: "Did not " + getEnglish(r).base + " (past negative)",  example: `${capitalize(pastNegated)} siya kagabi. — He/she did not ${getEnglish(r).base} last night.` },
+        progressive:  { form: presentNegated, use: "Is not " + getEnglish(r).gerund + " (present)",          example: `${capitalize(presentNegated)} siya ngayon. — He/she is not ${getEnglish(r).gerund} now.` },
         contemplated: { form: futureNegated,      use: "Will not " + getEnglish(r).base + " (future negative)", example: `${capitalize(futureNegated)} siya bukas. — He/she will not ${getEnglish(r).base} tomorrow.` }
       }
     };
@@ -698,7 +711,9 @@ const TAGALOG_ENGLISH = {
   tawid: { base: "cross",     gerund: "crossing",     past: "crossed",   state: "crossed" },
   talon: { base: "jump",      gerund: "jumping",      past: "jumped",    state: "jumped" },
   langoy: { base: "swim",      gerund: "swimming",     past: "swam",      state: "swum" },
-  lupa: { base: "kneel down", gerund: "kneeling down", past: "knelt down", state: "kneeling" },
+  luhod: { base: "kneel down", gerund: "kneeling down", past: "knelt down", state: "kneeling" },
+  hikab: { base: "yawn",      gerund: "yawning",      past: "yawned",     state: "yawned" },
+  saya: { base: "enjoy oneself", gerund: "enjoying oneself", past: "enjoyed oneself", state: "happy" },
   tago: { base: "hide",       gerund: "hiding",       past: "hid",       state: "hidden" },
   iwas: { base: "avoid",      gerund: "avoiding",     past: "avoided",   state: "avoided" },
   ayaw: { base: "not want / refuse", gerund: "not wanting/refusing", past: "didn't want / refused", state: "refused" },

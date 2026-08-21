@@ -24,7 +24,366 @@ function essentialCard(focus, description, forms) {
   return { focus, description, forms };
 }
 
+function curatedEverydayEntry({ root, meanings, pattern, focusKey, focus, english, forms, examples, notes }) {
+  return {
+    root,
+    meanings: Array.isArray(meanings) ? meanings : [meanings],
+    allowedPatterns: [pattern],
+    overrides: {
+      [focusKey]: essentialCard(
+        focus,
+        `A reviewed ${focus.toLowerCase()} paradigm for this high-frequency everyday verb.`,
+        essentialForms(forms, english, examples)
+      )
+    },
+    examples: [],
+    status: "curated",
+    sources: [],
+    notes
+  };
+}
+
 const CURATED_LEXICON_ENTRIES = Object.freeze({
+  sama: curatedEverydayEntry({
+    root: "sama",
+    meanings: ["to join", "to accompany"],
+    pattern: "um",
+    focusKey: "Actor (-um-)",
+    focus: "Actor Focus",
+    english: "join or accompany someone",
+    forms: ["sumama", "sumama", "sumasama", "sasama"],
+    examples: [
+      "Sumama ka sa amin. — Come with us.",
+      "Sumama siya sa biyahe. — He/she joined the trip.",
+      "Sumasama siya sa akin. — He/she is coming with me.",
+      "Sasama kami bukas. — We will come along tomorrow."
+    ],
+    notes: "Sumama is the everyday verb for joining or accompanying a person or group."
+  }),
+
+  handa: curatedEverydayEntry({
+    root: "handa",
+    meanings: "to prepare",
+    pattern: "mag",
+    focusKey: "Actor (mag-)",
+    focus: "Actor Focus",
+    english: "prepare",
+    forms: ["maghanda", "naghanda", "naghahanda", "maghahanda"],
+    examples: [
+      "Maghanda tayo ng pagkain. — Let's prepare food.",
+      "Naghanda siya para sa bisita. — He/she prepared for the guest.",
+      "Naghahanda kami para sa klase. — We are preparing for class.",
+      "Maghahanda sila bukas. — They will prepare tomorrow."
+    ],
+    notes: "Maghanda is used for preparing food, events, and other plans."
+  }),
+
+  subok: curatedEverydayEntry({
+    root: "subok",
+    meanings: "to try",
+    pattern: "um",
+    focusKey: "Actor (-um-)",
+    focus: "Actor Focus",
+    english: "try",
+    forms: ["sumubok", "sumubok", "sumusubok", "susubok"],
+    examples: [
+      "Sumubok ka ulit. — Try again.",
+      "Sumubok siya ng bagong pagkain. — He/she tried new food.",
+      "Sumusubok ako araw-araw. — I am trying every day.",
+      "Susubok kami mamaya. — We will try later."
+    ],
+    notes: "Sumubok means to try or attempt something."
+  }),
+
+  paliwanag: curatedEverydayEntry({
+    root: "paliwanag",
+    meanings: "to explain",
+    pattern: "mag",
+    focusKey: "Actor (mag-)",
+    focus: "Actor Focus",
+    english: "explain",
+    forms: ["magpaliwanag", "nagpaliwanag", "nagpapaliwanag", "magpapaliwanag"],
+    examples: [
+      "Magpaliwanag ka nang malinaw. — Explain clearly.",
+      "Nagpaliwanag siya ng problema. — He/she explained the problem.",
+      "Nagpapaliwanag ang guro. — The teacher is explaining.",
+      "Magpapaliwanag ako mamaya. — I will explain later."
+    ],
+    notes: "Magpaliwanag is the standard actor-focus verb for explaining."
+  }),
+
+  tanggi: curatedEverydayEntry({
+    root: "tanggi",
+    meanings: "to refuse",
+    pattern: "um",
+    focusKey: "Actor (-um-)",
+    focus: "Actor Focus",
+    english: "refuse",
+    forms: ["tumanggi", "tumanggi", "tumatanggi", "tatanggi"],
+    examples: [
+      "Tumanggi ka kung ayaw mo. — Refuse if you do not want to.",
+      "Tumanggi siya sa alok. — He/she refused the offer.",
+      "Tumatanggi siya nang maayos. — He/she is refusing politely.",
+      "Tatanggi kami sa imbitasyon. — We will decline the invitation."
+    ],
+    notes: "Tumanggi means to refuse or decline."
+  }),
+
+  "sang-ayon": curatedEverydayEntry({
+    root: "sang-ayon",
+    meanings: "to agree",
+    pattern: "um",
+    focusKey: "Actor (-um-)",
+    focus: "Actor Focus",
+    english: "agree",
+    forms: ["sumang-ayon", "sumang-ayon", "sumasang-ayon", "sasang-ayon"],
+    examples: [
+      "Sumang-ayon ka ba? — Do you agree?",
+      "Sumang-ayon siya sa plano. — He/she agreed with the plan.",
+      "Sumasang-ayon kami sa iyo. — We agree with you.",
+      "Sasang-ayon sila kung malinaw ito. — They will agree if this is clear."
+    ],
+    notes: "Sumang-ayon is the everyday verb for agreeing with a person, idea, or plan."
+  }),
+
+  desisyon: curatedEverydayEntry({
+    root: "desisyon",
+    meanings: "to decide",
+    pattern: "mag",
+    focusKey: "Actor (mag-)",
+    focus: "Actor Focus",
+    english: "decide",
+    forms: ["magdesisyon", "nagdesisyon", "nagdedesisyon", "magdedesisyon"],
+    examples: [
+      "Magdesisyon ka nang mabuti. — Decide carefully.",
+      "Nagdesisyon siya kahapon. — He/she decided yesterday.",
+      "Nagdedesisyon pa kami. — We are still deciding.",
+      "Magdedesisyon ako bukas. — I will decide tomorrow."
+    ],
+    notes: "Magdesisyon is a common Filipino verb formed from the Spanish loanword desisyon."
+  }),
+
+  karga: curatedEverydayEntry({
+    root: "karga",
+    meanings: "to load or carry",
+    pattern: "mag",
+    focusKey: "Actor (mag-)",
+    focus: "Actor Focus",
+    english: "load or carry",
+    forms: ["magkarga", "nagkarga", "nagkakarga", "magkakarga"],
+    examples: [
+      "Magkarga tayo ng mga kahon. — Let's load the boxes.",
+      "Nagkarga siya ng gamit. — He/she loaded the things.",
+      "Nagkakarga kami sa kotse. — We are loading the car.",
+      "Magkakarga sila mamaya. — They will load later."
+    ],
+    notes: "Magkarga is used for loading or carrying a load."
+  }),
+
+  ikot: curatedEverydayEntry({
+    root: "ikot",
+    meanings: "to turn or go around",
+    pattern: "um",
+    focusKey: "Actor (-um-)",
+    focus: "Actor Focus",
+    english: "turn or go around",
+    forms: ["umikot", "umikot", "umiikot", "iikot"],
+    examples: [
+      "Umikot ka sa kanto. — Turn at the corner.",
+      "Umikot siya sa parke. — He/she went around the park.",
+      "Umiikot ang gulong. — The wheel is turning.",
+      "Iikot kami sa bayan. — We will go around town."
+    ],
+    notes: "Umikot covers turning, circling, and going around."
+  }),
+
+  kilos: curatedEverydayEntry({
+    root: "kilos",
+    meanings: "to move or act",
+    pattern: "um",
+    focusKey: "Actor (-um-)",
+    focus: "Actor Focus",
+    english: "move or act",
+    forms: ["kumilos", "kumilos", "kumikilos", "kikilos"],
+    examples: [
+      "Kumilos ka agad. — Act right away.",
+      "Kumilos siya nang mabilis. — He/she acted quickly.",
+      "Kumikilos ang bata. — The child is moving.",
+      "Kikilos kami pagkatapos. — We will act afterward."
+    ],
+    notes: "Kumilos means to move or take action."
+  }),
+
+  bantay: curatedEverydayEntry({
+    root: "bantay",
+    meanings: "to watch or guard",
+    pattern: "mag",
+    focusKey: "Actor (mag-)",
+    focus: "Actor Focus",
+    english: "watch or guard",
+    forms: ["magbantay", "nagbantay", "nagbabantay", "magbabantay"],
+    examples: [
+      "Magbantay ka sa pinto. — Watch the door.",
+      "Nagbantay siya sa bata. — He/she watched the child.",
+      "Nagbabantay kami sa tindahan. — We are guarding the store.",
+      "Magbabantay sila mamaya. — They will keep watch later."
+    ],
+    notes: "Magbantay is used for watching over a person, place, or thing."
+  }),
+
+  gamot: curatedEverydayEntry({
+    root: "gamot",
+    meanings: "to seek medical treatment",
+    pattern: "magpa",
+    focusKey: "Actor (magpa-)",
+    focus: "Actor Focus",
+    english: "seek medical treatment",
+    forms: ["magpagamot", "nagpagamot", "nagpapagamot", "magpapagamot"],
+    examples: [
+      "Magpagamot ka sa doktor. — Get medical treatment from a doctor.",
+      "Nagpagamot siya kahapon. — He/she sought treatment yesterday.",
+      "Nagpapagamot siya ngayon. — He/she is getting treatment now.",
+      "Magpapagamot kami bukas. — We will get treatment tomorrow."
+    ],
+    notes: "Magpagamot means to have oneself treated medically."
+  }),
+
+  kumpuni: curatedEverydayEntry({
+    root: "kumpuni",
+    meanings: "to repair",
+    pattern: "mag",
+    focusKey: "Actor (mag-)",
+    focus: "Actor Focus",
+    english: "repair",
+    forms: ["magkumpuni", "nagkumpuni", "nagkukumpuni", "magkukumpuni"],
+    examples: [
+      "Magkumpuni tayo ng upuan. — Let's repair the chair.",
+      "Nagkumpuni siya ng bisikleta. — He/she repaired a bicycle.",
+      "Nagkukumpuni kami ng bubong. — We are repairing the roof.",
+      "Magkukumpuni sila bukas. — They will repair it tomorrow."
+    ],
+    notes: "Magkumpuni means to repair or fix something."
+  }),
+
+  pindot: curatedEverydayEntry({
+    root: "pindot",
+    meanings: "to press",
+    pattern: "in",
+    focusKey: "Object (-in)",
+    focus: "Object Focus",
+    english: "press something",
+    forms: ["pindutin", "pinindot", "pinipindot", "pipindutin"],
+    examples: [
+      "Pindutin mo ang pindutan. — Press the button.",
+      "Pinindot niya ang numero. — He/she pressed the number.",
+      "Pinipindot niya ang kampanilya. — He/she is pressing the bell.",
+      "Pipindutin ko ang link. — I will press the link."
+    ],
+    notes: "Pindutin is object focus: it identifies the button, key, or other thing pressed."
+  }),
+
+  sira: curatedEverydayEntry({
+    root: "sira",
+    meanings: "to break or become broken",
+    pattern: "ma",
+    focusKey: "Actor (ma-)",
+    focus: "Actor Focus",
+    english: "break or become broken",
+    forms: ["masira", "nasira", "nasisira", "masisira"],
+    examples: [
+      "Huwag mong hayaang masira ito. — Do not let this break.",
+      "Nasira ang telepono. — The phone broke.",
+      "Nasisira ang laruan. — The toy is breaking.",
+      "Masisira ito sa ulan. — This will break in the rain."
+    ],
+    notes: "Masira is an intransitive change-of-state verb: something breaks or becomes damaged."
+  }),
+
+  linaw: curatedEverydayEntry({
+    root: "linaw",
+    meanings: "to clarify",
+    pattern: "in",
+    focusKey: "Object (-in)",
+    focus: "Object Focus",
+    english: "clarify something",
+    forms: ["linawin", "nilinaw", "nililinaw", "lilinawin"],
+    examples: [
+      "Linawin mo ang sagot. — Clarify the answer.",
+      "Nilinaw niya ang detalye. — He/she clarified the detail.",
+      "Nililinaw namin ang plano. — We are clarifying the plan.",
+      "Lilinawin ko ito mamaya. — I will clarify this later."
+    ],
+    notes: "Linawin is object focus: it identifies what is being made clear."
+  }),
+
+  plano: curatedEverydayEntry({
+    root: "plano",
+    meanings: "to plan",
+    pattern: "mag",
+    focusKey: "Actor (mag-)",
+    focus: "Actor Focus",
+    english: "plan",
+    forms: ["magplano", "nagplano", "nagpaplano", "magpaplano"],
+    examples: [
+      "Magplano tayo para bukas. — Let's plan for tomorrow.",
+      "Nagplano siya ng biyahe. — He/she planned a trip.",
+      "Nagpaplano kami ng hapunan. — We are planning dinner.",
+      "Magpaplano sila mamaya. — They will plan later."
+    ],
+    notes: "Magplano is a common verb formed from the loanword plano."
+  }),
+
+  message: curatedEverydayEntry({
+    root: "message",
+    meanings: "to send a message",
+    pattern: "mag",
+    focusKey: "Actor (mag-)",
+    focus: "Actor Focus",
+    english: "send a message",
+    forms: ["mag-message", "nag-message", "nagme-message", "magme-message"],
+    examples: [
+      "Mag-message ka sa akin. — Send me a message.",
+      "Nag-message siya kagabi. — He/she sent a message last night.",
+      "Nagme-message kami ngayon. — We are messaging now.",
+      "Magme-message ako mamaya. — I will send a message later."
+    ],
+    notes: "Mag-message is a widely used English-loanword verb in everyday Filipino."
+  }),
+
+  order: curatedEverydayEntry({
+    root: "order",
+    meanings: "to order",
+    pattern: "mag",
+    focusKey: "Actor (mag-)",
+    focus: "Actor Focus",
+    english: "order",
+    forms: ["mag-order", "nag-order", "nag-o-order", "mag-o-order"],
+    examples: [
+      "Mag-order tayo ng pagkain. — Let's order food.",
+      "Nag-order siya ng kape. — He/she ordered coffee.",
+      "Nag-o-order kami online. — We are ordering online.",
+      "Mag-o-order sila mamaya. — They will order later."
+    ],
+    notes: "Mag-order is a widely used English-loanword verb, especially for food and online shopping."
+  }),
+
+  download: curatedEverydayEntry({
+    root: "download",
+    meanings: "to download",
+    pattern: "mag",
+    focusKey: "Actor (mag-)",
+    focus: "Actor Focus",
+    english: "download",
+    forms: ["mag-download", "nag-download", "nagda-download", "magda-download"],
+    examples: [
+      "Mag-download ka ng app. — Download an app.",
+      "Nag-download siya ng file. — He/she downloaded a file.",
+      "Nagda-download kami ng larawan. — We are downloading a picture.",
+      "Magda-download ako mamaya. — I will download later."
+    ],
+    notes: "Mag-download is a widely used English-loanword verb in everyday Filipino."
+  }),
+
   kinig: {
     root: "kinig",
     meanings: ["to listen"],

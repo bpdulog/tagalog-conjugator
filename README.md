@@ -68,7 +68,7 @@ commands (for example, `npm.cmd test`).
 
 The suite has two halves. The first pins individual forms that were once
 wrong. The second asserts invariants across every rendered form in the
-lexicon (currently 2,614), so a class of error cannot reappear through a new
+lexicon (currently 2,784), so a class of error cannot reappear through a new
 verb or a new template:
 
 | Invariant | Bug it prevents |
@@ -83,7 +83,7 @@ verb or a new template:
 
 ### Core-verb coverage
 
-`npm run audit:coverage` checks the reviewed learner-core target in
+`npm run audit:coverage` checks the reviewed 200-root learner-core target in
 [`tools/common-verb-candidates.json`](tools/common-verb-candidates.json). Every
 required root must have a curated lexicon entry that renders at least one form;
 the command fails otherwise, so CI protects the target.

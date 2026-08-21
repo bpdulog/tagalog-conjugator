@@ -959,6 +959,28 @@ const TAGALOG_ENGLISH = {
   // morning / nightfall"), most often in the mag- and ma- families.
   umaga: { base: "stay until morning", gerund: "staying until morning", past: "stayed until morning", state: "overtaken by morning" },
   gabi: { base: "stay until night", gerund: "staying until night", past: "stayed until night", state: "overtaken by night" },
+
+  // ----- Curated everyday expansion -----
+  sama: { base: "join or accompany", gerund: "joining or accompanying", past: "joined or accompanied", state: "with others" },
+  handa: { base: "prepare", gerund: "preparing", past: "prepared", state: "prepared" },
+  subok: { base: "try", gerund: "trying", past: "tried", state: "tried" },
+  paliwanag: { base: "explain", gerund: "explaining", past: "explained", state: "explained" },
+  tanggi: { base: "refuse", gerund: "refusing", past: "refused", state: "refused" },
+  "sang-ayon": { base: "agree", gerund: "agreeing", past: "agreed", state: "in agreement" },
+  desisyon: { base: "decide", gerund: "deciding", past: "decided", state: "decided" },
+  karga: { base: "load or carry", gerund: "loading or carrying", past: "loaded or carried", state: "loaded" },
+  ikot: { base: "turn or go around", gerund: "turning or going around", past: "turned or went around", state: "turned" },
+  kilos: { base: "move or act", gerund: "moving or acting", past: "moved or acted", state: "active" },
+  bantay: { base: "watch or guard", gerund: "watching or guarding", past: "watched or guarded", state: "guarded" },
+  gamot: { base: "seek medical treatment", gerund: "seeking medical treatment", past: "sought medical treatment", state: "treated" },
+  kumpuni: { base: "repair", gerund: "repairing", past: "repaired", state: "repaired" },
+  pindot: { base: "press", gerund: "pressing", past: "pressed", state: "pressed" },
+  sira: { base: "break or become broken", gerund: "breaking or becoming broken", past: "broke or became broken", state: "broken" },
+  linaw: { base: "clarify", gerund: "clarifying", past: "clarified", state: "clear" },
+  plano: { base: "plan", gerund: "planning", past: "planned", state: "planned" },
+  message: { base: "send a message", gerund: "sending a message", past: "sent a message", state: "messaged" },
+  order: { base: "order", gerund: "ordering", past: "ordered", state: "ordered" },
+  download: { base: "download", gerund: "downloading", past: "downloaded", state: "downloaded" },
 };
 
 // Get the English base/gerund/past for a Tagalog root.

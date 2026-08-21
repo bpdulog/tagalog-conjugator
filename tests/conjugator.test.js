@@ -23,7 +23,7 @@ function evaluate(source) {
   return vm.runInContext(source, context);
 }
 
-assert.equal(evaluate("Object.keys(VERB_LEXICON).length"), 211);
+assert.equal(evaluate("Object.keys(VERB_LEXICON).length"), 231);
 assert.deepEqual(
   JSON.parse(evaluate("JSON.stringify(VERB_LEXICON.kain.meanings)")),
   ["to eat"]
@@ -36,6 +36,10 @@ assert.deepEqual(
 const missingCoreRoots = coreVerbCandidates.requiredRoots.filter(
   root => !evaluate("Boolean(VERB_LEXICON[" + JSON.stringify(root) + "])")
 );
+assert.equal(coreVerbCandidates.requiredRoots.length, 200,
+  "the everyday core-verb target must contain 200 roots");
+assert.equal(new Set(coreVerbCandidates.requiredRoots).size, 200,
+  "the everyday core-verb target must not contain duplicate roots");
 assert.deepEqual(missingCoreRoots, [],
   "every required common-verb root must be in the curated lexicon");
 
@@ -206,6 +210,18 @@ for (const [form, root] of [
   ["iuwi", "uwi"], ["hiramin", "hiram"], ["ipahiram", "hiram"],
   ["turuan", "turo"], ["ituro", "turo"], ["alamin", "alam"],
   ["mahalin", "mahal"], ["magkasakit", "sakit"]
+]) {
+  assert.equal(evaluate(`ACTIVE_CONJUGATED_LOOKUP["${form}"].root`), root, form);
+}
+
+for (const [form, root] of [
+  ["sumama", "sama"], ["maghanda", "handa"], ["sumubok", "subok"],
+  ["magpaliwanag", "paliwanag"], ["tumanggi", "tanggi"], ["sumang-ayon", "sang-ayon"],
+  ["magdesisyon", "desisyon"], ["magkarga", "karga"], ["umikot", "ikot"],
+  ["kumilos", "kilos"], ["magbantay", "bantay"], ["magpagamot", "gamot"],
+  ["magkumpuni", "kumpuni"], ["pindutin", "pindot"], ["masira", "sira"],
+  ["linawin", "linaw"], ["magplano", "plano"], ["mag-message", "message"],
+  ["mag-order", "order"], ["mag-download", "download"]
 ]) {
   assert.equal(evaluate(`ACTIVE_CONJUGATED_LOOKUP["${form}"].root`), root, form);
 }

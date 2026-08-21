@@ -17,6 +17,7 @@ const projectRoot = path.resolve(__dirname, "..");
 const candidatesPath = path.join(__dirname, "common-verb-candidates.json");
 const candidates = JSON.parse(fs.readFileSync(candidatesPath, "utf8"));
 const strict = process.argv.includes("--strict");
+const CORE_TARGET_SIZE = 200;
 
 function loadApp() {
   const context = vm.createContext({
@@ -74,9 +75,21 @@ const required = auditRoots(context, candidates.requiredRoots || []);
 const review = auditRoots(context, candidates.reviewRoots || []);
 const gaps = required.filter(item => item.status !== "covered");
 const uncoveredReview = review.filter(item => item.status !== "covered");
+const duplicateRoots = candidates.requiredRoots.filter(
+  (root, index, roots) => roots.indexOf(root) !== index
+);
+const targetSizeMatches = candidates.requiredRoots.length === CORE_TARGET_SIZE;
 
 console.log(`Required core verbs: ${required.length - gaps.length}/${required.length} covered`);
 console.log(`Corpus-form hits across required roots: ${required.reduce((sum, item) => sum + item.hits, 0)}`);
+
+if (!targetSizeMatches) {
+  console.log(`\nCore target size: ${candidates.requiredRoots.length}/${CORE_TARGET_SIZE}`);
+}
+
+if (duplicateRoots.length) {
+  console.log(`\nDuplicate required roots: ${[...new Set(duplicateRoots)].join(", ")}`);
+}
 
 if (gaps.length) {
   console.log("\nRequired gaps:");
@@ -91,8 +104,8 @@ for (const item of review) {
   console.log(`- ${item.root}: ${detail}`);
 }
 
-if (strict && gaps.length) {
-  console.error("\nCoverage target is incomplete. Curate each required root or move it to the review queue.");
+if (strict && (gaps.length || !targetSizeMatches || duplicateRoots.length)) {
+  console.error("\nCoverage target is incomplete or malformed. Curate each required root and keep the core target at 200 unique roots.");
   process.exitCode = 1;
 }
 

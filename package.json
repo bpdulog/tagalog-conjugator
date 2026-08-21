@@ -6,7 +6,8 @@
   "description": "A static, lexicon-driven Tagalog verb conjugator.",
   "scripts": {
     "test": "node tests/conjugator.test.js",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "audit:coverage": "node tools/audit-coverage.js --strict"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

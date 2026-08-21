@@ -1,0 +1,22 @@
+{
+  "sources": [
+    {
+      "title": "Pinhok: Basic Tagalog Verbs",
+      "url": "https://www.pinhok.com/kb/tagalog/301/tagalog-verbs/"
+    },
+    {
+      "title": "Learning Tagalog: Course Book 1 sample",
+      "url": "https://learningtagalog.com/downloads/learning_tagalog_course_book_1_color_sample.pdf"
+    }
+  ],
+  "requiredRoots": [
+    "abot", "alaga", "alis", "aral", "basa", "bayad", "benta", "bigay",
+    "bili", "bukas", "dala", "gamit", "gawa", "gising", "gulo", "gusto",
+    "hanap", "hawak", "hinga", "hintay", "hiram", "hugas", "inom", "isip",
+    "kain", "kailangan", "kanta", "kaya", "kita", "kinig", "kuha", "lakad", "laro",
+    "ligo", "linis", "luto", "mahal", "nood", "pasok", "pili", "punta",
+    "panalo", "putol", "sabi", "sagot", "sakay", "sara", "sulat", "suot",
+    "takbo", "talo", "tawag", "tigil", "tingin", "tulog", "tulong", "turo",
+    "usap", "upo", "uwi", "walis", "trabaho", "dating", "maneho"
+  ]
+}

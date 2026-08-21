@@ -2,6 +2,7 @@ const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
 const vm = require("node:vm");
+const coreVerbCandidates = require("../tools/common-verb-candidates.json");
 
 const projectRoot = path.resolve(__dirname, "..");
 const context = vm.createContext({
@@ -22,7 +23,7 @@ function evaluate(source) {
   return vm.runInContext(source, context);
 }
 
-assert.equal(evaluate("Object.keys(VERB_LEXICON).length"), 207);
+assert.equal(evaluate("Object.keys(VERB_LEXICON).length"), 211);
 assert.deepEqual(
   JSON.parse(evaluate("JSON.stringify(VERB_LEXICON.kain.meanings)")),
   ["to eat"]
@@ -32,6 +33,11 @@ assert.deepEqual(
   ["to buy", "to sell (depending on focus)"],
   "bili should use the normalized source rather than its legacy card"
 );
+const missingCoreRoots = coreVerbCandidates.requiredRoots.filter(
+  root => !evaluate("Boolean(VERB_LEXICON[" + JSON.stringify(root) + "])")
+);
+assert.deepEqual(missingCoreRoots, [],
+  "every required common-verb root must be in the curated lexicon");
 
 const kainPatterns = JSON.parse(
   evaluate("JSON.stringify(VERB_LEXICON.kain.allowedPatterns)")
@@ -152,6 +158,10 @@ assert.deepEqual(unknownResult.conjugations, {});
 // Essential verb expansion: generated, irregular, and stative forms all
 // render from the normalized entries and resolve back to their root.
 for (const [root, focus, aspect, expected] of [
+  ["kinig", "Actor (ma-)", "progressive", "nakikinig"],
+  ["talo", "Actor (ma-)", "contemplated", "matatalo"],
+  ["panalo", "Actor (ma-)", "complete", "nanalo"],
+  ["putol", "Object (-in)", "contemplated", "puputulin"],
   ["gulo", "Actor (-um-)", "progressive", "gumugulo"],
   ["gulo", "Object (-in)", "contemplated", "guguluhin"],
   ["gamit", "Actor (-um-)", "progressive", "gumagamit"],

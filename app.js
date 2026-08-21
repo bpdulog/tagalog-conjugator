@@ -748,6 +748,9 @@ const TAGALOG_ENGLISH = {
   takot: { base: "fear",     gerund: "fearing",    past: "feared",   state: "afraid" },
   galit: { base: "be angry", gerund: "being angry",past: "got angry", state: "angry" },
   gulo: { base: "become confused/tangled", gerund: "becoming confused/tangled", past: "became confused/tangled", state: "confused/tangled" },
+  kinig: { base: "listen", gerund: "listening", past: "listened", state: "attentive" },
+  talo: { base: "lose", gerund: "losing", past: "lost", state: "defeated" },
+  panalo: { base: "win", gerund: "winning", past: "won", state: "victorious" },
   gutom: { base: "be hungry",gerund: "being hungry",past: "got hungry",state: "hungry" },
   uhaw: { base: "be thirsty",gerund: "being thirsty",past: "got thirsty",state: "thirsty" },
   tuwa: { base: "be happy", gerund: "being happy", past: "was happy", state: "happy" },
@@ -881,6 +884,7 @@ const TAGALOG_ENGLISH = {
   // ----- Food preparation -----
   prito: { base: "fry",        gerund: "frying",         past: "fried",         state: "fried" },
   gisa: { base: "sauté",       gerund: "sautéing",       past: "sautéed",       state: "sautéed" },
+  putol: { base: "cut",         gerund: "cutting",        past: "cut",           state: "cut" },
   boil: { base: "boil",        gerund: "boiling",        past: "boiled",        state: "boiled" },
   grill: { base: "grill",      gerund: "grilling",       past: "grilled",       state: "grilled" },
   bake: { base: "bake",        gerund: "baking",         past: "baked",         state: "baked" },

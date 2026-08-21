@@ -59,6 +59,7 @@ built from both curated overrides and generated approved patterns.
 npm ci
 npm test
 npm run lint
+npm run audit:coverage
 ```
 
 The same commands run in GitHub Actions for every push and pull request.
@@ -67,7 +68,7 @@ commands (for example, `npm.cmd test`).
 
 The suite has two halves. The first pins individual forms that were once
 wrong. The second asserts invariants across every rendered form in the
-lexicon (currently 2,561), so a class of error cannot reappear through a new
+lexicon (currently 2,614), so a class of error cannot reappear through a new
 verb or a new template:
 
 | Invariant | Bug it prevents |
@@ -79,6 +80,20 @@ verb or a new template:
 | Every focus key resolves to a sort rank and usage tip | New key spellings rendering uncoloured, unsorted, unlabelled |
 | Usage badge agrees with the generator's attestation | A card marked "common" for a form generated as unattested |
 | Every allowed pattern produces a card or has a curated override | A typo or unsupported pattern silently rendering nothing |
+
+### Core-verb coverage
+
+`npm run audit:coverage` checks the reviewed learner-core target in
+[`tools/common-verb-candidates.json`](tools/common-verb-candidates.json). Every
+required root must have a curated lexicon entry that renders at least one form;
+the command fails otherwise, so CI protects the target.
+
+The list is seeded from [Pinhok's basic Tagalog verbs](https://www.pinhok.com/kb/tagalog/301/tagalog-verbs/)
+and the [Learning Tagalog Course Book 1 sample](https://learningtagalog.com/downloads/learning_tagalog_course_book_1_color_sample.pdf),
+then reviewed for the root forms this app supports. The audit also reports
+corpus-form hits from `attestation.js`. Its review queue highlights likely
+additions, but does not generate forms automatically: roots can also function
+as nouns or adjectives, and irregular paradigms need curation.
 
 Focus keys are free text, so the same pattern appears under several spellings
 (`Actor (um-)` vs `Actor (-um-)`). Display data is looked up by the pattern id

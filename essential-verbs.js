@@ -25,6 +25,102 @@ function essentialCard(focus, description, forms) {
 }
 
 const CURATED_LEXICON_ENTRIES = Object.freeze({
+  kinig: {
+    root: "kinig",
+    meanings: ["to listen"],
+    allowedPatterns: ["ma"],
+    overrides: {
+      "Actor (ma-)": essentialCard(
+        "Actor Focus",
+        "Focuses on the listener. Makinig is the standard form for listening attentively.",
+        essentialForms(
+          ["makinig", "nakinig", "nakikinig", "makikinig"],
+          "listen",
+          [
+            "Makinig ka sa guro. — Listen to the teacher.",
+            "Nakinig siya sa balita. — He/she listened to the news.",
+            "Nakikinig kami sa radyo. — We are listening to the radio.",
+            "Makikinig sila sa paliwanag. — They will listen to the explanation."
+          ]
+        )
+      )
+    },
+    examples: [],
+    status: "curated",
+    sources: [],
+    notes: "Makinig is the everyday actor-focus verb for listening."
+  },
+
+  talo: {
+    root: "talo",
+    meanings: ["to lose", "to be defeated"],
+    allowedPatterns: ["ma"],
+    overrides: {
+      "Actor (ma-)": essentialCard(
+        "Actor Focus",
+        "Focuses on the person or side that loses or is defeated.",
+        essentialForms(
+          ["matalo", "natalo", "natatalo", "matatalo"],
+          "lose or be defeated",
+          [
+            "Ayaw niyang matalo. — He/she does not want to lose.",
+            "Natalo ang koponan kahapon. — The team lost yesterday.",
+            "Natatalo sila sa laro. — They are losing the game.",
+            "Matatalo tayo kung hindi tayo magsasanay. — We will lose if we do not practice."
+          ]
+        )
+      )
+    },
+    examples: [],
+    status: "curated",
+    sources: [],
+    notes: "Matalo means 'lose' or 'be defeated'; it contrasts with manalo ('win')."
+  },
+
+  panalo: {
+    root: "panalo",
+    meanings: ["to win", "to be victorious"],
+    allowedPatterns: ["ma"],
+    overrides: {
+      "Actor (ma-)": essentialCard(
+        "Actor Focus",
+        "Focuses on the person or side that wins.",
+        essentialForms(
+          ["manalo", "nanalo", "nananalo", "mananalo"],
+          "win",
+          [
+            "Gusto niyang manalo. — He/she wants to win.",
+            "Nanalo ang koponan kahapon. — The team won yesterday.",
+            "Nananalo siya sa laro. — He/she is winning the game.",
+            "Mananalo tayo kung magsasanay tayo. — We will win if we practice."
+          ]
+        )
+      )
+    },
+    examples: [],
+    status: "curated",
+    sources: [],
+    notes: "Manalo means 'win' or 'be victorious'; it contrasts with matalo ('lose')."
+  },
+
+  putol: {
+    root: "putol",
+    meanings: ["to cut", "to break or sever"],
+    allowedPatterns: ["um", "in"],
+    overrides: {},
+    examples: [
+      { pattern: "um", aspect: "infinitive", text: "Pumutol siya ng kahoy. — He/she cut some wood." },
+      { pattern: "um", aspect: "progressive", text: "Pumuputol siya ng papel. — He/she is cutting paper." },
+      { pattern: "in", aspect: "infinitive", text: "Putulin mo ang lubid. — Cut the rope." },
+      { pattern: "in", aspect: "complete", text: "Pinutol niya ang sanga. — He/she cut the branch." },
+      { pattern: "in", aspect: "progressive", text: "Pinuputol niya ang tela. — He/she is cutting the cloth." },
+      { pattern: "in", aspect: "contemplated", text: "Puputulin niya ang tali. — He/she will cut the string." }
+    ],
+    status: "curated",
+    sources: [],
+    notes: "Pumutol is actor focus ('cut'); putulin focuses on the thing cut or severed."
+  },
+
   gulo: {
     root: "gulo",
     meanings: ["to become confused or tangled", "to disturb or confuse something"],

@@ -4,7 +4,7 @@
 
 // ----- Pattern-based conjugation engine -----
 // Generates all standard forms from a base root when not in the
-// hand-verified database. Uses documented Tagalog affixation rules.
+// normalized local lexicon. Uses documented Tagalog affixation rules.
 
 const VOWELS = "aeiou";
 const GLOTTAL = "ng";
@@ -38,10 +38,10 @@ function reduplicate(root) {
   return fs + root;
 }
 
-// Build a generated conjugation set for an unknown root.
-// Returns a structure compatible with the database so the UI can
-// render it identically.
-function generateConjugations(root) {
+// Build forms only for the patterns approved by the verb's lexicon entry.
+// Returns a structure compatible with curated overrides so the UI can render
+// both through the same path.
+function generateConjugations(root, allowedPatterns = []) {
   const r = root.toLowerCase().trim();
   const fs = firstSyllable(r);
   const redup = reduplicate(r);
@@ -573,7 +573,15 @@ function generateConjugations(root) {
     };
   }
 
-  return result;
+  const allowed = new Set(allowedPatterns);
+  return Object.fromEntries(
+    Object.entries(result).filter(([focus]) => {
+      const pattern = typeof patternIdForFocus === "function"
+        ? patternIdForFocus(focus)
+        : null;
+      return pattern && allowed.has(pattern);
+    })
+  );
 }
 
 // ----- English translation helpers (best-effort, template-based) -----
@@ -912,6 +920,32 @@ function deriveImperativeExample(infinitive, focus, root) {
   return `${capitalized}${particle ? " " + particle : ""}! — ${engShort}`;
 }
 
+// Add regularly generated forms to the reverse index. Curated and legacy
+// aliases win collisions; generated forms fill only previously unknown keys.
+const ACTIVE_CONJUGATED_LOOKUP = (() => {
+  const lookup = {
+    ...(typeof LEXICON_CONJUGATED_LOOKUP !== "undefined"
+      ? LEXICON_CONJUGATED_LOOKUP
+      : {})
+  };
+  const lexicon = typeof VERB_LEXICON !== "undefined" ? VERB_LEXICON : {};
+
+  for (const [root, entry] of Object.entries(lexicon)) {
+    const generated = generateConjugations(root, entry.allowedPatterns);
+    for (const [focus, card] of Object.entries(generated)) {
+      const affix = patternIdForFocus(focus);
+      for (const [aspect, data] of Object.entries(card.forms || {})) {
+        const form = typeof cleanLookupForm === "function"
+          ? cleanLookupForm(data.form)
+          : String(data.form || "").toLowerCase().trim();
+        if (form && !lookup[form]) lookup[form] = { root, affix, aspect };
+      }
+    }
+  }
+
+  return Object.freeze(lookup);
+})();
+
 // ----- Input detection -----
 // Tries to figure out: is input a base form or a conjugated form?
 // Returns { root, affix, aspect, isConjugated, original }
@@ -919,14 +953,19 @@ function detectInput(raw) {
   const input = raw.toLowerCase().trim().replace(/[^a-z\-ñ\s]/g, "");
   if (!input) return null;
 
-  // 1. Direct lookup in CONJUGATED_LOOKUP
-  if (typeof CONJUGATED_LOOKUP !== "undefined" && CONJUGATED_LOOKUP[input]) {
-    const m = CONJUGATED_LOOKUP[input];
+  const lookup = typeof ACTIVE_CONJUGATED_LOOKUP !== "undefined"
+    ? ACTIVE_CONJUGATED_LOOKUP
+    : (typeof CONJUGATED_LOOKUP !== "undefined" ? CONJUGATED_LOOKUP : {});
+  const lexicon = typeof VERB_LEXICON !== "undefined" ? VERB_LEXICON : {};
+
+  // 1. Direct lookup in the automatically derived conjugated-form index.
+  if (lookup[input]) {
+    const m = lookup[input];
     return { ...m, isConjugated: true, original: input, baseForm: m.root };
   }
 
-  // 2. Exact root match in VERB_DATABASE
-  if (typeof VERB_DATABASE !== "undefined" && VERB_DATABASE[input]) {
+  // 2. Exact root match in the normalized lexicon.
+  if (lexicon[input]) {
     return { root: input, isConjugated: false, original: input, baseForm: input };
   }
 
@@ -1006,7 +1045,7 @@ function detectInput(raw) {
         // -in suffix
       }
       // Verify this root is in the database
-      if (typeof VERB_DATABASE !== "undefined" && VERB_DATABASE[root]) {
+      if (lexicon[root]) {
         return { root, isConjugated: true, original: input, affix: p.affix, baseForm: root };
       }
     }
@@ -1031,13 +1070,14 @@ function detectInput(raw) {
       } else {
         root = input.slice(p.restFrom);
       }
-      if (typeof VERB_DATABASE !== "undefined" && VERB_DATABASE[root]) {
+      if (lexicon[root]) {
         return { root, isConjugated: true, original: input, affix: p.affix, baseForm: root };
       }
     }
   }
 
-  // 4. If nothing matches, treat input as a base form and use pattern generator
+  // 4. Treat an unmatched input as a possible base form. Unknown roots are
+  // not conjugated until their accepted patterns are added to the lexicon.
   return { root: input, isConjugated: false, original: input, baseForm: input };
 }
 
@@ -1048,33 +1088,51 @@ function resolveVerb(input) {
 
   const root = detected.baseForm;
 
-  // Check if in the hand-verified database
-  const dbEntry = (typeof VERB_DATABASE !== "undefined") ? VERB_DATABASE[root] : null;
+  const lexiconEntry = (typeof VERB_LEXICON !== "undefined") ? VERB_LEXICON[root] : null;
 
   let conjugations;
   let isVerified = false;
   let meaning = "";
   let notes = "";
 
-  if (dbEntry) {
-    // Merge: start with the database's hand-verified conjugations,
-    // then add any generator-produced focuses (Negation, Distributive, etc.)
-    // that the database doesn't yet have. This way known verbs get the best
-    // of both worlds: database accuracy + complete focus coverage.
-    conjugations = { ...dbEntry.conjugations };
-    const generated = generateConjugations(root);
-    for (const focus in generated) {
-      if (!conjugations[focus]) {
-        conjugations[focus] = generated[focus];
+  if (lexiconEntry) {
+    // Generate only approved patterns, then let curated cards override the
+    // corresponding generated cards.
+    conjugations = generateConjugations(root, lexiconEntry.allowedPatterns);
+    const overridePatterns = new Set(
+      Object.keys(lexiconEntry.overrides).map(patternIdForFocus).filter(Boolean)
+    );
+    for (const generatedFocus of Object.keys(conjugations)) {
+      if (overridePatterns.has(patternIdForFocus(generatedFocus))) {
+        delete conjugations[generatedFocus];
       }
     }
-    meaning = dbEntry.meaning;
-    notes = dbEntry.notes || "";
-    isVerified = true;
+    Object.assign(conjugations, lexiconEntry.overrides);
+    for (const example of lexiconEntry.examples) {
+      const examplePattern = example.pattern || patternIdForFocus(example.focus);
+      const targetFocus = conjugations[example.focus]
+        ? example.focus
+        : Object.keys(conjugations).find(
+          focus => examplePattern && patternIdForFocus(focus) === examplePattern
+        );
+      const targetForm = targetFocus && conjugations[targetFocus].forms[example.aspect];
+      if (!targetForm || !example.text || targetForm.example === example.text) continue;
+
+      conjugations[targetFocus] = {
+        ...conjugations[targetFocus],
+        forms: {
+          ...conjugations[targetFocus].forms,
+          [example.aspect]: { ...targetForm, example: example.text }
+        }
+      };
+    }
+    meaning = lexiconEntry.meanings.join(" / ");
+    notes = lexiconEntry.notes;
+    isVerified = ["curated", "verified", "native-reviewed"].includes(lexiconEntry.status);
   } else {
-    conjugations = generateConjugations(root);
-    meaning = "(root not in database — forms generated by pattern)";
-    notes = "These forms are auto-generated from the standard Tagalog affixation patterns. For fully reliable forms, please consult a native speaker or a Tagalog grammar reference.";
+    conjugations = {};
+    meaning = "(root not in the local lexicon)";
+    notes = "No forms were generated because this root has not yet been assigned verified affix patterns.";
     isVerified = false;
   }
 
@@ -1087,6 +1145,8 @@ function resolveVerb(input) {
     isVerified,
     meaning,
     notes,
+    status: lexiconEntry ? lexiconEntry.status : "unknown",
+    sources: lexiconEntry ? lexiconEntry.sources : [],
     conjugations
   };
 }
@@ -1250,8 +1310,8 @@ function renderResult(result) {
           ${result.isConjugated ? `<div class="badge badge-conjugated">Conjugated form</div>` : `<div class="badge badge-base">Base form</div>`}
         </div>
         ${result.isVerified
-          ? `<div class="badge badge-verified">✓ Verified database</div>`
-          : `<div class="badge badge-generated">⚡ Pattern-generated</div>`}
+          ? `<div class="badge badge-verified">✓ Curated lexicon</div>`
+          : `<div class="badge badge-generated">Not in lexicon</div>`}
       </div>
     </div>
   `;
@@ -1269,6 +1329,17 @@ function renderResult(result) {
     if (ib === -1) return -1;
     return ia - ib;
   });
+
+  if (focusList.length === 0) {
+    html += `
+      <div class="empty-state">
+        <div class="empty-title">This root needs review</div>
+        <div class="empty-message">
+          Add the verb's accepted affix patterns and any irregular overrides to the local lexicon before publishing its forms.
+        </div>
+      </div>`;
+    return html;
+  }
 
   html += `<div class="focus-grid">`;
   for (const focus of focusList) {
@@ -1348,7 +1419,7 @@ function renderQuickReference(conjugations, focusList) {
   let html = `<div class="quick-ref">`;
   html += `<h2>Quick Reference Table</h2>`;
   html += `<div class="quick-table-wrap"><table class="quick-table">`;
-  html += `<thead><tr><th>Focus</th><th>Infinitive</th><th>Complete (Past)</th><th>Progressive</th><th>Contemplated (Future)</th></tr></thead><tbody>`;
+  html += `<thead><tr><th>Focus</th><th>Infinitive</th><th>Complete (Past)</th><th>Progressive</th><th>Contemplated (Future)</th><th>Imperative</th></tr></thead><tbody>`;
   for (const focus of focusList) {
     const c = conjugations[focus];
     html += `<tr><td class="focus-cell">${escapeHtml(focus)}</td>`;
@@ -1383,7 +1454,7 @@ function initApp() {
   function doSearch() {
     const value = input.value.trim();
     if (!value) {
-      resultsEl.innerHTML = `<div class="empty-state">Type a verb above to see all its forms.</div>`;
+      resultsEl.innerHTML = `<div class="empty-state">Type a verb above to see its curated forms.</div>`;
       return;
     }
     const result = resolveVerb(value);
@@ -1417,7 +1488,7 @@ function initApp() {
   clear.addEventListener("click", () => {
     input.value = "";
     input.focus();
-    resultsEl.innerHTML = `<div class="empty-state">Type a verb above to see all its forms.</div>`;
+    resultsEl.innerHTML = `<div class="empty-state">Type a verb above to see its curated forms.</div>`;
   });
 
   exampleChips.forEach(chip => {

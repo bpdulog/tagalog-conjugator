@@ -8,9 +8,12 @@ const VERB_DATABASE = {
   // ============== EAT / FOOD ==============
   kain: {
     root: "kain",
-    meaning: "to eat",
+    meanings: ["to eat"],
+    allowedPatterns: ["um", "maka", "in", "an", "ipa", "ipang", "magpa"],
+    status: "curated",
+    sources: [],
     notes: "Takes um- actor focus, -in object focus, and maka- (potential 'can eat')",
-    conjugations: {
+    overrides: {
       "Actor (-um-)": {
         focus: "Actor Focus",
         description: "Focuses on the person eating. Used when the eater is the subject.",
@@ -4594,20 +4597,18 @@ const VERB_DATABASE = {
 
   usisa: {
     root: "usisa",
-    meaning: "to investigate / to pry / to inquire",
+    meanings: ["to investigate", "to pry", "to inquire"],
+    allowedPatterns: ["mag"],
+    status: "curated",
+    sources: [],
     notes: "Takes mag- for active investigation. Common in 'mag-usisa tungkol sa' = to inquire about.",
-    conjugations: {
-      "Actor (mag-)": {
-        focus: "Actor Focus",
-        description: "Focuses on the one investigating or inquiring.",
-        forms: {
-          infinitive:   { form: "mag-usisa",   use: "To investigate / to inquire (infinitive)",       example: "Mag-usisa ka tungkol sa kaso. — Inquire about the case." },
-          complete:     { form: "nag-usisa", use: "Investigated / inquired — past",                example: "Nag-usisa siya tungkol sa krimen kagabi. — He inquired about the crime last night." },
-          progressive:  { form: "nag-uusisa",use: "Currently investigating",                       example: "Nag-uusisa siya ngayon sa nawawalang bata. — He is investigating the missing child now." },
-          contemplated: { form: "mag-uusisa",use: "Will investigate",                              example: "Mag-uusisa siya bukas sa bagong kaso. — He will investigate the new case tomorrow." }
-        }
-      }
-    }
+    overrides: {},
+    examples: [
+      { pattern: "mag", aspect: "infinitive", text: "Mag-usisa ka tungkol sa kaso. — Inquire about the case." },
+      { pattern: "mag", aspect: "complete", text: "Nag-usisa siya tungkol sa krimen kagabi. — He inquired about the crime last night." },
+      { pattern: "mag", aspect: "progressive", text: "Nag-uusisa siya ngayon sa nawawalang bata. — He is investigating the missing child now." },
+      { pattern: "mag", aspect: "contemplated", text: "Mag-uusisa siya bukas sa bagong kaso. — He will investigate the new case tomorrow." }
+    ]
   }
 };
 

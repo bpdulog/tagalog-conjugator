@@ -27,6 +27,11 @@ assert.deepEqual(
   JSON.parse(evaluate("JSON.stringify(VERB_LEXICON.kain.meanings)")),
   ["to eat"]
 );
+assert.deepEqual(
+  JSON.parse(evaluate("JSON.stringify(VERB_LEXICON.bili.meanings)")),
+  ["to buy", "to sell (depending on focus)"],
+  "bili should use the normalized source rather than its legacy card"
+);
 
 const kainPatterns = JSON.parse(
   evaluate("JSON.stringify(VERB_LEXICON.kain.allowedPatterns)")
@@ -95,6 +100,50 @@ assert.equal(conjugatedResult.root, "kain");
 assert.equal(conjugatedResult.isConjugated, true);
 assert.equal(conjugatedResult.detectedAspect, "progressive");
 
+// -hin is the surface spelling for some object-focus forms. It must be
+// searchable both as the infinitive and in a reduplicated contemplated form.
+for (const [form, aspect] of [["bilhin", "infinitive"], ["bibilhin", "contemplated"]]) {
+  const result = JSON.parse(evaluate(`JSON.stringify(resolveVerb("${form}"))`));
+  assert.equal(result.root, "bili", form);
+  assert.equal(result.isConjugated, true, form);
+  assert.equal(result.detectedAffix, "in", form);
+  assert.equal(result.detectedAspect, aspect, form);
+  assert.equal(
+    result.conjugations["Object (-in)"].forms[aspect].form,
+    form,
+    `${form} should resolve to the displayed object-focus form`
+  );
+}
+
+// Check several -hin spellings, including roots that delete a final vowel or
+// change o to u before the suffix. Each must remain searchable in both its
+// infinitive and reduplicated contemplated form.
+for (const [root, infinitive, contemplated] of [
+  ["bili", "bilhin", "bibilhin"],
+  ["dala", "dalhin", "dadalhin"],
+  ["sabi", "sabihin", "sasabihin"],
+  ["huli", "hulihin", "huhulihin"],
+  ["gusto", "gustuhin", "gugustuhin"]
+]) {
+  for (const [form, aspect] of [[infinitive, "infinitive"], [contemplated, "contemplated"]]) {
+    const result = JSON.parse(evaluate(`JSON.stringify(resolveVerb("${form}"))`));
+    assert.equal(result.root, root, form);
+    assert.equal(result.detectedAffix, "in", form);
+    assert.equal(result.detectedAspect, aspect, form);
+  }
+}
+
+assert.match(
+  evaluate('renderResult(resolveVerb("bili"))'),
+  /Object \(-in \/ -hin\)/,
+  "the object-focus card should name the -hin surface variant"
+);
+assert.match(
+  evaluate('renderResult(resolveVerb("bili"))'),
+  /<button[^>]*class="copy-btn"[^>]*aria-label="Copy bilhin"/,
+  "copy controls need an accessible label that identifies the form"
+);
+
 const unknownResult = JSON.parse(evaluate('JSON.stringify(resolveVerb("foobar"))'));
 assert.equal(unknownResult.status, "unknown");
 assert.equal(unknownResult.isVerified, false);
@@ -148,7 +197,12 @@ assert.equal(
 );
 assert.equal(
   negationResult.conjugations["Negation (hindi-)"].forms.imperative.form,
-  "huwag gumamit"
+  "huwag kang gumamit"
+);
+assert.match(
+  negationResult.conjugations["Negation (hindi-)"].forms.imperative.example,
+  /^Huwag kang gumamit\./,
+  "the negative imperative's displayed form and example must agree"
 );
 
 function resolveForm(root, focus, aspect) {
@@ -323,7 +377,7 @@ assert.ok(evaluate("Object.keys(CORPUS_ATTESTATION).length") > 150,
 // belong to a root that exists. A typo here would silently add nothing.
 const SUPPORTED = ["um","mag","ma","in","i","mao","an","maka","mang","mangh",
   "magpa","magka","ipa","ipag","ipang","ma-an","pa-in","state","reciprocal",
-  "negation","distributive"];
+];
 const badSuggestions = JSON.parse(evaluate(`JSON.stringify(
   Object.entries(CORPUS_SUGGESTED_PATTERNS).flatMap(([root, pats]) =>
     pats.filter(p => !${JSON.stringify(SUPPORTED)}.includes(p) || !VERB_LEXICON[root])
@@ -340,6 +394,27 @@ const unmerged = JSON.parse(evaluate(`JSON.stringify(
   )
 )`));
 assert.deepEqual(unmerged, [], "every suggested pattern must be merged into allowedPatterns");
+
+// A pattern can be offered by a generated card or supplied by a curated
+// override. Any other allowedPatterns entry is dead configuration: it silently
+// renders nothing, even though the root appears to support it.
+const deadAllowedPatterns = JSON.parse(evaluate(`JSON.stringify(
+  Object.entries(VERB_LEXICON).flatMap(([root, entry]) => {
+    const generatedPatterns = new Set(
+      Object.keys(generateConjugations(root, entry.allowedPatterns))
+        .map(patternIdForFocus)
+        .filter(Boolean)
+    );
+    const overridePatterns = new Set(
+      Object.keys(entry.overrides || {}).map(patternIdForFocus).filter(Boolean)
+    );
+    return entry.allowedPatterns
+      .filter(pattern => !generatedPatterns.has(pattern) && !overridePatterns.has(pattern))
+      .map(pattern => root + ":" + pattern);
+  })
+)`));
+assert.deepEqual(deadAllowedPatterns, [],
+  "every allowed pattern must generate a card or have a curated override");
 
 // The tiering must be monotonic: a pair with many occurrences across several
 // aspects cannot come back as unattested.

@@ -3,7 +3,8 @@
 
      node tools/build-attestation.js [corporaDir]     (default: ./corpora)
 
-   Fetch the corpora first with tools/fetch-corpora.sh. The output is
+   Fetch the corpora first with tools/fetch-corpora.sh or
+   tools/fetch-corpora.ps1. The output is
    frequency evidence per (root, affix pattern), which the app uses instead of
    hand-maintained opinion about which forms are common.
    ============================================================ */
@@ -12,8 +13,8 @@ const fs = require("fs"), vm = require("vm"), path = require("path"), readline =
 const root = path.resolve(__dirname, "..");
 const corporaDir = path.resolve(process.argv[2] || path.join(root, "corpora"));
 
-// Affixal patterns only. negation/state/distributive are multi-word or
-// periphrastic, so counting single tokens says nothing useful about them.
+// Affixal patterns only. State cards are lexical and negation is multi-word,
+// so counting single tokens says nothing useful about either of them.
 const PATTERNS = ["um","mag","ma","in","i","mao","an","maka","mang","mangh",
                   "magpa","magka","ipa","ipag","ipang","ma-an","pa-in","reciprocal"];
 const SOURCES = [
@@ -43,7 +44,7 @@ async function tally(file) {
 (async () => {
   for (const [, file] of SOURCES) {
     if (!fs.existsSync(path.join(corporaDir, file)))
-      throw new Error(`missing ${file} in ${corporaDir} — run tools/fetch-corpora.sh first`);
+      throw new Error(`missing ${file} in ${corporaDir} — run a tools/fetch-corpora script first`);
   }
   const counts = {};
   for (const [name, file] of SOURCES) {

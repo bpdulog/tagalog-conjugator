@@ -38,9 +38,7 @@ const PATTERN_FOCUS_KEYS = Object.freeze({
   "ma-an": "Ability / Understand (ma-...-an)",
   "pa-in": "Causative (pa-...-in)",
   state: "State / Need",
-  reciprocal: "Reciprocal (mag-...-an)",
-  negation: "Negation (hindi-)",
-  distributive: "Distributive (per-person)"
+  reciprocal: "Reciprocal (mag-...-an)"
 });
 
 // Conjugated forms that appeared as duplicate convenience records in the
@@ -49,12 +47,14 @@ const VERB_ALIASES = Object.freeze({
   kainin: "kain"
 });
 
+// These entries have moved to the normalized source. Keep their old records
+// temporarily for provenance while excluding them from the runtime lexicon.
+const MIGRATED_LEGACY_ROOTS = new Set(["bili"]);
+
 function patternIdForFocus(focusName) {
   const focus = String(focusName || "").toLowerCase();
 
   // Check compound affixes before their shorter prefixes.
-  if (focus.includes("negation") || focus.includes("hindi-")) return "negation";
-  if (focus.includes("distributive") || focus.includes("per-person")) return "distributive";
   if (focus.includes("reciprocal")) return "reciprocal";
   if (focus.includes("instrumental") || focus.includes("ipang-")) return "ipang";
   if (focus.includes("ipag-")) return "ipag";
@@ -71,7 +71,7 @@ function patternIdForFocus(focusName) {
   if (focus.includes("change of state")) return "ma";
   // Stative/potential object focus (makita, marinig) before the generic checks.
   if (focus.includes("object") && focus.includes("(ma-)")) return "mao";
-  if (focus.includes("actor") && /\(\-?um\-?\)/.test(focus)) return "um";
+  if (focus.includes("actor") && /\(-?um-?\)/.test(focus)) return "um";
   if (focus.includes("actor") && focus.includes("(ma-)")) return "ma";
   if (focus.includes("actor") && focus.includes("(mag-)")) return "mag";
   if (focus.includes("object") && focus.includes("(-in)")) return "in";
@@ -111,7 +111,7 @@ function normalizeLegacyVerb(root, entry) {
 
 const LEGACY_VERB_LEXICON = Object.fromEntries(
   Object.entries(VERB_DATABASE)
-    .filter(([root]) => !VERB_ALIASES[root])
+    .filter(([root]) => !VERB_ALIASES[root] && !MIGRATED_LEGACY_ROOTS.has(root))
     .map(([root, entry]) => [root, normalizeLegacyVerb(root, entry)])
 );
 

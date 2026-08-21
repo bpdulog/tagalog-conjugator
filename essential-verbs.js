@@ -25,6 +25,64 @@ function essentialCard(focus, description, forms) {
 }
 
 const CURATED_LEXICON_ENTRIES = Object.freeze({
+  bili: {
+    root: "bili",
+    meanings: ["to buy", "to sell (depending on focus)"],
+    allowedPatterns: ["um", "mang", "in", "an", "i", "ipang"],
+    overrides: {
+      "Object (-in)": essentialCard(
+        "Object Focus",
+        "Focuses on what is being bought. This family has the irregular bilhin / bibilhin spelling.",
+        essentialForms(
+          ["bilhin", "binili", "binibili", "bibilhin"],
+          "buy something",
+          [
+            "Bilhin mo ang tiket. — Buy the ticket.",
+            "Binili niya ang bulaklak. — She bought the flowers.",
+            "Binibili niya ngayon ang sapatos. — She is buying the shoes now.",
+            "Bibilhin niya ang bahay. — She will buy the house."
+          ]
+        )
+      ),
+      "Locative/Benefactive (-an)": essentialCard(
+        "Locative / Benefactive Focus",
+        "Focuses on the person or place involved in buying. This family uses the syncopated bilhan spelling.",
+        essentialForms(
+          ["bilhan", "binilhan", "binibilhan", "bibilhan"],
+          "buy for or at a person or place",
+          [
+            "Bilhan mo siya ng regalo. — Buy a gift for her.",
+            "Binilhan niya ang bata ng laruan. — She bought a toy for the child.",
+            "Binibilhan niya ang nanay ng bulaklak. — She is buying flowers for her mom.",
+            "Bibilhan niya ako ng kape. — She will buy coffee for me."
+          ]
+        )
+      ),
+      "Instrumental (ipang-)": essentialCard(
+        "Instrumental Focus",
+        "Focuses on money or another item used as the means to buy.",
+        essentialForms(
+          ["ipambili", "ipinambili", "ipinapambili", "ipapambili"],
+          "use something to buy",
+          [
+            "Ipambili mo ang pera sa pagkain. — Use the money to buy food.",
+            "Ipinambili niya ang pera sa sapatos. — She used the money to buy shoes.",
+            "Ipinapambili niya ang ipon sa kotse. — He is using his savings to buy a car.",
+            "Ipapambili niya ang pera sa bahay. — He will use the money to buy a house."
+          ]
+        )
+      )
+    },
+    examples: [
+      { pattern: "um", aspect: "infinitive", text: "Bumili tayo ng tinapay. — Let's buy bread." },
+      { pattern: "mang", aspect: "infinitive", text: "Mamili tayo ng groceries. — Let's go buy groceries." },
+      { pattern: "i", aspect: "infinitive", text: "Ibili mo siya ng kotse. — Buy a car for him/her." }
+    ],
+    status: "curated",
+    sources: [],
+    notes: "Actor focus for buying is -um- (bumili). The -an form marks the person or place involved; i- marks the person bought for."
+  },
+
   gamit: {
     root: "gamit",
     meanings: ["to use", "to employ"],

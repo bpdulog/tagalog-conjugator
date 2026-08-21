@@ -685,6 +685,12 @@ html, body {
   color: var(--primary);
 }
 
+.copy-btn:focus-visible {
+  outline: 3px solid var(--primary-soft);
+  outline-offset: 2px;
+  border-color: var(--primary);
+}
+
 .use-line {
   font-size: 13.5px;
   color: var(--text);

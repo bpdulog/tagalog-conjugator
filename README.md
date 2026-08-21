@@ -29,8 +29,12 @@ usisa: {
 
 Supported pattern IDs are `um`, `mag`, `ma`, `in`, `i`, `mao` (stative/potential
 object focus, e.g. `makita`), `an`, `maka`, `mang`, `mangh`, `magpa`, `magka`,
-`ipa`, `ipag`, `ipang`, `ma-an`, `pa-in`, `state`, `reciprocal`, `negation`,
-and `distributive`.
+`ipa`, `ipag`, `ipang`, `ma-an`, `pa-in`, `state`, and `reciprocal`.
+
+Negation is a dedicated card, derived from the root's approved actor-focus
+forms; it is not an `allowedPatterns` value. Distributive meanings are
+periphrastic and must be represented by a curated override rather than a
+verb-agnostic generated card.
 
 Use `overrides` only when a generated card or form needs curated data. During
 the ongoing migration, older entries may still contain complete focus cards;
@@ -52,12 +56,18 @@ built from both curated overrides and generated approved patterns.
 ## Regression checks
 
 ```powershell
-node tests/conjugator.test.js
+npm ci
+npm test
+npm run lint
 ```
+
+The same commands run in GitHub Actions for every push and pull request.
+If a local PowerShell execution policy blocks `npm`, use `npm.cmd` in the same
+commands (for example, `npm.cmd test`).
 
 The suite has two halves. The first pins individual forms that were once
 wrong. The second asserts invariants across every rendered form in the
-lexicon (currently ~2,260), so a class of error cannot reappear through a new
+lexicon (currently 2,561), so a class of error cannot reappear through a new
 verb or a new template:
 
 | Invariant | Bug it prevents |
@@ -68,6 +78,7 @@ verb or a new template:
 | No example contains the `do it` placeholder | The generic fallback reaching user-facing text |
 | Every focus key resolves to a sort rank and usage tip | New key spellings rendering uncoloured, unsorted, unlabelled |
 | Usage badge agrees with the generator's attestation | A card marked "common" for a form generated as unattested |
+| Every allowed pattern produces a card or has a curated override | A typo or unsupported pattern silently rendering nothing |
 
 Focus keys are free text, so the same pattern appears under several spellings
 (`Actor (um-)` vs `Actor (-um-)`). Display data is looked up by the pattern id
@@ -77,6 +88,14 @@ sort position, and usage badge of its family instead of falling through.
 Roots that commonly take an otherwise-restricted pattern are listed once, in
 the `*_COMMON_ROOTS` constants near the top of `app.js`. Both the generator and
 the usage badge read them, so the two cannot disagree.
+
+### Continuing the legacy migration
+
+New and corrected entries belong in `essential-verbs.js`, using the normalized
+schema above. When migrating a legacy entry from `verbs.js`, move its meanings,
+approved patterns, notes, overrides, and examples together; then add a
+regression for any irregular form. The adapter remains only to preserve
+unmigrated, reviewed data while that work proceeds incrementally.
 
 ### What these checks do not cover
 
@@ -93,9 +112,17 @@ corpora and holds, per (root, affix pattern), how often the paradigm actually
 occurs.
 
 ```powershell
-bash tools/fetch-corpora.sh corpora      # ~35 MB, gitignored
+# PowerShell (requires 7-Zip; see the script's error message for install help)
+powershell -ExecutionPolicy Bypass -File .\tools\fetch-corpora.ps1 -Destination corpora
+
+# Or Git Bash / WSL
+bash tools/fetch-corpora.sh corpora
+
 node tools/build-attestation.js corpora  # regenerates attestation.js
 ```
+
+The downloaded `corpora/` files are gitignored, regenerable inputs—not review
+surface. Review the generated `attestation.js` diff instead.
 
 | Corpus | Size | Register |
 | --- | --- | --- |
@@ -160,7 +187,8 @@ a glottal stop; `-hin`/`-han` follow a plain vowel. The ASCII roots do not
 record glottal stops, so this cannot be derived from the spelling — `basa`
 takes `basahan` but `alaga` takes `alagaan`. It is measured per root into
 `CORPUS_SUFFIX`; roots with no clear evidence fall back to the spelling
-heuristic.
+heuristic. Curated irregular surface forms are also indexed directly, including
+`bili` → `bilhin` / `bibilhin`.
 
 These counts measure written text. Treat them as strong evidence about usage,
 not a verdict on grammaticality — a zero does not prove a form is wrong, only

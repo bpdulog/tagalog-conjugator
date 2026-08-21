@@ -285,7 +285,7 @@ function generateConjugations(root, allowedPatterns = []) {
     const contemplated = `${firstSyllable(rAn)}${rAn}${inSuffix}`;
     result["Object (-in)"] = {
       focus: "Object Focus",
-      description: `Focuses on the object of the action (the thing being ${getEnglish(r).past}). The -in suffix is added to the root.`,
+      description: `Focuses on the object of the action (the thing being ${getEnglish(r).past}). The object-focus suffix is usually written -in, with -hin in forms such as bili → bilhin / bibilhin.`,
       forms: {
         infinitive:   { form: infinitive,      use: "To " + getEnglish(r).base + " (something specific)",           example: `${capitalize(infinitive)} mo. — ${capitalize(getEnglish(r).base)} it.` },
         complete:     { form: complete,        use: "Was " + getEnglish(r).past + " — past",                       example: `${capitalize(complete)} niya. — He/she ${getEnglish(r).past} it.` },
@@ -418,7 +418,6 @@ function generateConjugations(root, allowedPatterns = []) {
       description: isMakaCommon
         ? `Focuses on the actor's ability or potential to do ${r}. Common in phrases like "Makakain ako" (I can/will be able to eat).`
         : `The maka- form of "${r}" is grammatically possible but rarely used in everyday Tagalog. For "I can / will be able to ${r}", speakers more commonly use the -um- root (e.g., "kayang ${r}-in") or "magagawa ko mag-${r}". This form is shown for reference only.`,
-      _commonness: isMakaCommon ? "common" : "uncommon",
       forms: {
         infinitive:   { form: makaForm,              use: makaUse,                example: makaExample },
         complete:     { form: makaCompleteForm,      use: isMakaCommon ? "Was able to / could (past)" : "Not used — see note above.", example: isMakaCommon ? `${capitalize(complete)} ako kagabi. — I was able to ${r} last night.` : "This form is rarely used in standard Tagalog." },
@@ -483,14 +482,12 @@ function generateConjugations(root, allowedPatterns = []) {
     // disclaim attested forms like manghuli / nanghuhuli.
     const mangPatternId = r.startsWith("h") ? "mangh" : "mang";
     const isMangCommon = patternIsAttested(r, mangPatternId, mangCommonRoots);
-    const mangTag = isMangCommon ? "less-common" : "uncommon";
     const mangDescription = isMangCommon
       ? `Focuses on the doer using the mang- prefix. Common for actions like shopping (bili → mamili), fishing (isda → mangisda), hunting (huli → manghuli), etc. Nasal assimilation may change the prefix spelling (m- before b, n- before d/t).`
       : `The mang- prefix is NOT commonly used with "${r}" in standard Tagalog. The mang- pattern is reserved for specific semantic categories: going around doing X (shopping, fishing, hunting, gathering). For "${r}", the actor-focus forms you'd actually use are listed in the Actor (-um-) and Actor (mag-) sections above. This form is shown for reference only — it is grammatically constructed but unattested.`;
     result[focusName] = {
       focus: "Actor Focus (mang- / mangh-)",
       description: mangDescription,
-      _commonness: mangTag,  // internal marker for badge styling
       forms: {
         infinitive:   { form: isMangCommon ? infinitive : `(${infinitive})`,     use: isMangCommon ? "To " + getEnglish(r).gerund + " (collective action, often plural)" : `Not used — mang- form of "${r}" is unattested.`,   example: isMangCommon ? `${capitalize(infinitive)} tayo. — Let's ${getEnglish(r).base} together.` : `This mang- form is not used in standard Tagalog. Use the mag- or -um- actor focus above instead.` },
         complete:     { form: isMangCommon ? complete : `(${complete})`,       use: isMangCommon ? "Went / did (past, often plural/collective action)" : `Not used — see note above.`,                  example: isMangCommon ? `${capitalize(complete)} sila. — They ${getEnglish(r).past} together.` : `This form is not used in standard Tagalog.` },
@@ -544,7 +541,6 @@ function generateConjugations(root, allowedPatterns = []) {
       description: isMagkaCommon
         ? `Focuses on having / getting / experiencing ${r}. "Magkaroon" = "to have / to come into being", "magkaisa" = "to unite / have unity". Common in existential statements.`
         : `The magka- form of "${r}" is grammatically constructed but semantically awkward — magka- works for roots meaning states or things that can be "had" (like "roon" → "magkaroon" = to have), not for action verbs like "${r}". Speakers would more naturally use "mag-${r}" or "nagkaroon ng ${r}" instead. This form is shown for reference only.`,
-      _commonness: isMagkaCommon ? "common" : "uncommon",
       forms: {
         infinitive:   { form: magkaForm,                       use: isMagkaCommon ? "To have / to get / to experience " + r : `Not used — "to have ${r}" is expressed differently.`, example: isMagkaCommon ? `${capitalize(infinitive)}. — To have / get ${r}.` : `This magka- form is rarely used for action verbs like "${r}".` },
         complete:     { form: isMagkaCommon ? complete : `(${complete})`,     use: isMagkaCommon ? "Got / had (past)" : "Not used — see note above.",         example: isMagkaCommon ? `${capitalize(complete)} siya ng ${r}. — He/she got / had ${r}.` : "This form is rarely used in standard Tagalog." },
@@ -643,64 +639,11 @@ function generateConjugations(root, allowedPatterns = []) {
       description: isReciprocalCommon
         ? `Focuses on the action being done to each other (mutually). "Mag-usapan" = "talk to each other", "magtulungan" = "help each other", "mag-awayan" = "fight each other". Common for relationships and group actions.`
         : `The reciprocal form of "${r}" (mutually doing it to each other) is grammatically possible but rarely used. The mag-...-an pattern works best for actions where mutual action is conceptually natural (talking, helping, fighting). For "${r}", speakers would more naturally just use the regular mag- forms in context. This form is shown for reference only.`,
-      _commonness: isReciprocalCommon ? "common" : "uncommon",
       forms: {
         infinitive:   { form: reciprocalForm,                  use: isReciprocalCommon ? "To " + getEnglish(r).base + " each other (infinitive)" : `Not commonly used for "${r}".`, example: isReciprocalCommon ? `${capitalize(infinitive)} tayo. — Let's ${getEnglish(r).base} each other.` : `This reciprocal form is rarely used for action verbs like "${r}".` },
         complete:     { form: isReciprocalCommon ? complete : `(${complete})`,         use: isReciprocalCommon ? "Did to each other (past)" : "Not used — see note above.",                example: isReciprocalCommon ? `${capitalize(complete)} sila. — They ${getEnglish(r).past} each other.` : "This form is rarely used in standard Tagalog." },
         progressive:  { form: isReciprocalCommon ? progressive : `(${progressive})`,  use: isReciprocalCommon ? "Doing to each other (ongoing)" : "Not used — see note above.",        example: isReciprocalCommon ? `${capitalize(progressive)} sila. — They are ${getEnglish(r).gerund} each other.` : "This form is rarely used in standard Tagalog." },
         contemplated: { form: isReciprocalCommon ? contemplated : `(${contemplated})`, use: isReciprocalCommon ? "Will do to each other" : "Not used — see note above.",                example: isReciprocalCommon ? `${capitalize(contemplated)} sila. — They will ${getEnglish(r).base} each other.` : "This form is rarely used in standard Tagalog." }
-      }
-    };
-  }
-
-  // ============== NEGATION — hindi- / huwag- (NOT doing) ==============
-  {
-    // Negation in Tagalog does NOT change the aspect: put "hindi" before the
-    // ordinary conjugated form.
-    //   kumain (ate)      → hindi kumain (did not eat)
-    //   kumakain (eating) → hindi kumakain (is not eating)
-    //   kakain (will eat) → hindi kakain (will not eat)
-    // For the negative imperative, use "huwag" + the infinitive form:
-    //   "Huwag kang kumain!" (Don't eat!) - Actor focus with um- infix
-    //   "Huwag mong kainin!" (Don't eat [it]!) - Object focus with -in
-    const umComplete = isVowelInitial ? `um${r}` : `${c1}um${r.slice(1)}`;
-    const umProgressive = isVowelInitial ? `um${redup}` : `${c1}um${redup.slice(1)}`;
-    const pastNegated = `hindi ${umComplete}`;
-    const presentNegated = `hindi ${umProgressive}`;
-    const futureNegated = `hindi ${redup}`;
-    const imperativeNegated = `huwag kang ${umComplete}`;
-    result["Negation (hindi-)"] = {
-      focus: "Negative / Negation",
-      description: `Negated forms of ${r}. Tagalog puts "hindi" (not) before the ordinary conjugated verb — the aspect does not change — and uses "huwag" (literally "don't") for the negative imperative: "hindi kumain" (did not eat), "hindi kumakain" (is not eating), "hindi kakain" (will not eat).`,
-      forms: {
-        infinitive:   { form: imperativeNegated, use: "Negative command: don't " + getEnglish(r).base,           example: `${capitalize(imperativeNegated)}. — Don't ${getEnglish(r).base}!` },
-        complete:     { form: pastNegated,    use: "Did not " + getEnglish(r).base + " (past negative)",  example: `${negatedClause(pastNegated, "siya", "kagabi")} — He/she did not ${getEnglish(r).base} last night.` },
-        progressive:  { form: presentNegated, use: "Is not " + getEnglish(r).gerund + " (present)",          example: `${negatedClause(presentNegated, "siya", "ngayon")} — He/she is not ${getEnglish(r).gerund} now.` },
-        contemplated: { form: futureNegated,      use: "Will not " + getEnglish(r).base + " (future negative)", example: `${negatedClause(futureNegated, "siya", "bukas")} — He/she will not ${getEnglish(r).base} tomorrow.` }
-      }
-    };
-  }
-
-  // ============== DISTRIBUTIVE — Per-person / Each-one ==============
-  {
-    // Distributive: doing the action TO EACH ONE (per person / per object).
-    // In Tagalog, true distributive focus is often expressed periphrastically:
-    //   "bigyan mo silang LAHAT" (give them all)
-    //   "ipamigay sa BAWAT isa" (distribute to each one)
-    //   "tig-isang bigay" (one-each giving)
-    // The closest verbal affix pattern is the "i-...-an" or "mag-...-an" with
-    // the periphrastic "sa bawat isa" or "tig-" particle.
-    // For Distributive, use the standard periphrastic form which works
-    // for any verb. This avoids auto-generating nonsense like "illutoan".
-    const distStandard = `Ipamigay sa bawat isa`;        // standard periphrastic
-    result["Distributive (per-person)"] = {
-      focus: "Distributive / Per-person",
-      description: `Doing the action to each person / each object. Tagalog usually expresses this periphrastically with "sa bawat isa" (to each one), "tig-" (one-each), or "lahat" (all). The closest verbal form is "i-...-an" (e.g., "ibigyan sa bawat isa" = "give to each one") or "mag-...-an" (e.g., "magbigayan" — distribute among each other).`,
-      forms: {
-        infinitive:   { form: distStandard,    use: "To " + getEnglish(r).base + " each one (periphrastic)", example: `${capitalize(distStandard)}. — ${capitalize(getEnglish(r).base)} each one.` },
-        complete:     { form: distStandard,    use: "Distributed — past (periphrastic)",                   example: `${capitalize(distStandard)} mo na. — You have already distributed it to each one.` },
-        progressive:  { form: distStandard,    use: "Distributing (ongoing)",                              example: `${capitalize(distStandard)} mo ngayon. — You are distributing to each one now.` },
-        contemplated: { form: distStandard,    use: "Will distribute",                                     example: `${capitalize(distStandard)} mo bukas. — You will distribute to each one tomorrow.` }
       }
     };
   }
@@ -1043,7 +986,6 @@ function deriveImperativeExample(infinitive, focus, root) {
   const isReciprocal = focus.startsWith("Reciprocal");
   const isObjectLike = focus.startsWith("Object") || focus.startsWith("Locative") ||
                         focus.startsWith("Benefactive") || focus.startsWith("Instrumental");
-  const isNegation = focus.startsWith("Negation");
   const isMa = focus === "Actor (ma-)";
   const isMagpa = focus === "Actor (magpa-)";
   const isIpang = focus === "Instrumental (ipang-)";
@@ -1058,9 +1000,7 @@ function deriveImperativeExample(infinitive, focus, root) {
   // Choose the right particle
   let particle = "mo";
   if (isReciprocal) particle = "tayo";
-  else if (!isObjectLike && !isNegation) particle = "ka";
-  // For negation, the form already contains "huwag kang ..." (don't ... you).
-  // Don't append another particle.
+  else if (!isObjectLike) particle = "ka";
   const capitalized = form.charAt(0).toUpperCase() + form.slice(1);
 
   // Helper: try to extract a clean English verb from the use text
@@ -1151,11 +1091,6 @@ function deriveImperativeExample(infinitive, focus, root) {
     const cap = verb.charAt(0).toUpperCase() + verb.slice(1);
     return `${capitalized} mo! — ${cap} at [the place]!`;
   }
-  // Detect distributive (periphrastic "Ipamigay sa bawat isa") - has no clean imperative
-  if (form === "Ipamigay sa bawat isa" || form.includes("Ipamigay")) {
-    return `${form} mo! — Give to each one! (periphrastic)`;
-  }
-
   // Extract a short English translation from the use text or example.
   const origUse = infinitive.use || "";
   const origExample = infinitive.example || "";
@@ -1218,7 +1153,7 @@ function buildNegationCard(root, conjugations) {
       complete: { form: `hindi ${forms.complete.form}`, use: `Did not ${english.base}`, example: `${negatedClause(`hindi ${forms.complete.form}`, "siya")} — He/she did not ${english.base}.` },
       progressive: { form: `hindi ${forms.progressive.form}`, use: `Is not ${english.gerund}`, example: `${negatedClause(`hindi ${forms.progressive.form}`, "siya")} — He/she is not ${english.gerund}.` },
       contemplated: { form: `hindi ${forms.contemplated.form}`, use: `Will not ${english.base}`, example: `${negatedClause(`hindi ${forms.contemplated.form}`, "siya")} — He/she will not ${english.base}.` },
-      imperative: { form: `huwag ${forms.infinitive.form}`, use: `Negative command: do not ${english.base}`, example: `${negatedClause(`huwag ${forms.infinitive.form}`, "kang")} — Don't ${english.base}.` }
+      imperative: { form: `huwag kang ${forms.infinitive.form}`, use: `Negative command: do not ${english.base}`, example: `Huwag kang ${forms.infinitive.form}. — Don't ${english.base}.` }
     }
   };
 }
@@ -1305,8 +1240,8 @@ function detectInput(raw) {
     { rx: /^ipinapa/, affix: "ipinapa-", restFrom: 8 },
     { rx: /^ipapa/, affix: "ipapa-", restFrom: 5 },
     // mag- / nag- / mang- / nang- / naka- / maka-
-    { rx: /^mag[a\-]/, affix: "mag-", restFrom: 3 },
-    { rx: /^nag[a\-]/, affix: "nag-", restFrom: 3 },
+    { rx: /^mag[a-]/, affix: "mag-", restFrom: 3 },
+    { rx: /^nag[a-]/, affix: "nag-", restFrom: 3 },
     { rx: /^mangh/, affix: "mangh-", restFrom: 5 },
     { rx: /^mang/, affix: "mang-", restFrom: 4 },
     { rx: /^nangh/, affix: "nangh-", restFrom: 5 },
@@ -1318,17 +1253,15 @@ function detectInput(raw) {
     { rx: /^magpa/, affix: "magpa-", restFrom: 5 },
     { rx: /^nagpa/, affix: "nagpa-", restFrom: 5 },
     // ma- / na- (stative)
-    { rx: /^ma[a\-]/, affix: "ma-", restFrom: 2 },
-    { rx: /^na[a\-]/, affix: "na-", restFrom: 2 },
+    { rx: /^ma[a-]/, affix: "ma-", restFrom: 2 },
+    { rx: /^na[a-]/, affix: "na-", restFrom: 2 },
     // ipang- / ipinang-
     { rx: /^ipangh/, affix: "ipangh-", restFrom: 6 },
     { rx: /^ipang/, affix: "ipang-", restFrom: 5 },
     // ipag- / ipinag- already above
     { rx: /^ipag/, affix: "ipag-", restFrom: 4 },
     // pa- (causative)
-    { rx: /^pa[a\-]/, affix: "pa-", restFrom: 2 },
-    // ka- (reciprocal)
-    { rx: /^magka/, affix: "magka-", restFrom: 5 },
+    { rx: /^pa[a-]/, affix: "pa-", restFrom: 2 },
     // C-um- (um- infix after consonant)
     { rx: /^([bcdfghjklmnpqrstvwxyz])um/, affix: "um-", restFrom: 0, umInfix: true },
     // hu- (variant for h-initial roots, e.g. humintay)
@@ -1347,7 +1280,6 @@ function detectInput(raw) {
 
   // Suffix-based detection (do these before prefix because they tend to be distinctive)
   const suffixPatterns = [
-    { rx: /hin$/, affix: "in", removeH: true },  // binigyan → bigyan (with h inserted for -an verbs)
     { rx: /han$/, affix: "an" },
     { rx: /in$/,  affix: "in" }
   ];
@@ -1356,10 +1288,7 @@ function detectInput(raw) {
   for (const p of suffixPatterns) {
     if (p.rx.test(input)) {
       let root = input.replace(p.rx, "");
-      if (p.removeH) {
-        // for -hin suffix on -an verbs, strip -hin → add -an
-        root = root + "an";
-      } else if (p.affix === "an") {
+      if (p.affix === "an") {
         // keep root, will use -an
       } else {
         // -in suffix
@@ -1411,9 +1340,9 @@ function resolveVerb(input) {
   const lexiconEntry = (typeof VERB_LEXICON !== "undefined") ? VERB_LEXICON[root] : null;
 
   let conjugations;
-  let isVerified = false;
-  let meaning = "";
-  let notes = "";
+  let isVerified;
+  let meaning;
+  let notes;
 
   if (lexiconEntry) {
     // Generate only approved patterns, then let curated cards override the
@@ -1506,7 +1435,6 @@ const FOCUS_ORDER = [
   "Locative (-an)",
   "Benefactive (i-)",
   "Benefactive (ipag-)",
-  "Distributive (per-person)",
   "Instrumental (ipang-)",
   // Not a focus: entries like umaga are nouns/time words kept in the lexicon
   // so a learner searching them gets the fixed expressions instead of an
@@ -1533,10 +1461,19 @@ const FOCUS_COLORS = {
   "Locative (-an)":                  "amber",
   "Benefactive (i-)":                "emerald",
   "Benefactive (ipag-)":             "emerald",
-  "Distributive (per-person)":      "violet",
   "Instrumental (ipang-)":           "violet",
   "Time expression (no aspect affixes)": "slate"
 };
+
+// Keep the canonical keys stable for the lexicon, lookup, and highlighting,
+// while giving learners a label that names the common -hin surface variant.
+const FOCUS_DISPLAY_NAMES = {
+  "Object (-in)": "Object (-in / -hin)"
+};
+
+function focusDisplayName(focus) {
+  return FOCUS_DISPLAY_NAMES[focus] || focus;
+}
 
 // Commonness / usage hints — shown as a small badge on each focus card
 // to help learners choose between um-/mag- (and other) variants at a glance.
@@ -1562,7 +1499,6 @@ const FOCUS_TIPS = {
   "Locative (-an)":             { tag: "info",        text: "Same as Locative/Benefactive (-an) — alternate key" },
   "Benefactive (i-)":           { tag: "common",      text: "Benefactive — 'for someone' (the recipient is the subject)" },
   "Benefactive (ipag-)":        { tag: "common",      text: "Benefactive with ipag- — 'do X for someone'" },
-  "Distributive (per-person)":  { tag: "less-common", text: "Per-person / each-one — often expressed periphrastically" },
   "Instrumental (ipang-)":      { tag: "less-common", text: "Use X as a tool (fork, spoon, money — instrument is the subject)" },
   "Time expression (no aspect affixes)": { tag: "info", text: "Not a verb — this word does not take aspect affixes; the fixed expressions are shown instead" }
 };
@@ -1584,7 +1520,6 @@ const PATTERN_DISPLAY = {
   magka:       { order: "Actor (magka-)",              color: "rose" },
   magpa:       { order: "Actor (magpa-)",              color: "rose" },
   reciprocal:  { order: "Reciprocal (mag-...-an)",     color: "rose" },
-  negation:    { order: "Negation (hindi-)",           color: "slate" },
   in:          { order: "Object (-in)",                color: "blue" },
   i:           { order: "Object (i-)",                 color: "blue" },
   mao:         { order: "Object (ma-)",                color: "blue" },
@@ -1592,7 +1527,6 @@ const PATTERN_DISPLAY = {
   ipag:        { order: "Benefactive (ipag-)",         color: "emerald" },
   ipa:         { order: "Benefactive (ipag-)",         color: "emerald",
                  tip: { tag: "less-common", text: "Causative — have someone do X, or have X done (ipa- + root)" } },
-  distributive:{ order: "Distributive (per-person)",   color: "violet" },
   ipang:       { order: "Instrumental (ipang-)",       color: "violet" },
   "ma-an":     { order: "Instrumental (ipang-)",       color: "blue",
                  tip: { tag: "common", text: "Stative/potential with ma-...-an — accidental or non-volitional (nakalimutan, naintindihan)" } },
@@ -1772,7 +1706,7 @@ function renderResult(result) {
 
     html += `<div class="focus-card focus-${color}${isHighlightedFocus ? ' highlighted' : ''}">`;
     html += `<div class="focus-header">`;
-    html += `<div class="focus-name">${escapeHtml(focus)}</div>`;
+    html += `<div class="focus-name">${escapeHtml(focusDisplayName(focus))}</div>`;
     html += `<div class="focus-type">${escapeHtml(c.focus)}</div>`;
     html += `</div>`;
     // Commonness / usage tip badge
@@ -1819,7 +1753,7 @@ function renderResult(result) {
       html += `<div class="aspect-content">`;
       html += `<div class="form-line">`;
       html += `<div class="form-value">${escapeHtml(f.form)}</div>`;
-      html += `<button class="copy-btn" data-form="${escapeHtml(f.form)}" title="Copy">📋</button>`;
+      html += `<button type="button" class="copy-btn" data-form="${escapeHtml(f.form)}" title="Copy form" aria-label="Copy ${escapeHtml(f.form)}">📋</button>`;
       html += `</div>`;
       html += `<div class="use-line">${escapeHtml(f.use)}</div>`;
       html += `<div class="example-line"><span class="example-tag">e.g.</span> ${escapeHtml(f.example)}</div>`;
@@ -1845,7 +1779,7 @@ function renderQuickReference(conjugations, focusList) {
   html += `<thead><tr><th>Focus</th><th>Infinitive</th><th>Complete (Past)</th><th>Progressive</th><th>Contemplated (Future)</th><th>Imperative</th></tr></thead><tbody>`;
   for (const focus of focusList) {
     const c = conjugations[focus];
-    html += `<tr><td class="focus-cell">${escapeHtml(focus)}</td>`;
+    html += `<tr><td class="focus-cell">${escapeHtml(focusDisplayName(focus))}</td>`;
     for (const aspect of ["infinitive", "complete", "progressive", "contemplated", "imperative"]) {
       const f = c.forms[aspect];
       html += `<td>${f ? escapeHtml(f.form) : "—"}</td>`;
@@ -1864,6 +1798,29 @@ function escapeHtml(s) {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
+}
+
+async function copyText(text) {
+  if (navigator.clipboard && window.isSecureContext) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch {
+      // A browser may expose Clipboard but still deny access; use the fallback.
+    }
+  }
+
+  const textarea = document.createElement("textarea");
+  textarea.value = text;
+  textarea.setAttribute("readonly", "");
+  textarea.style.position = "fixed";
+  textarea.style.opacity = "0";
+  document.body.appendChild(textarea);
+  textarea.select();
+  textarea.setSelectionRange(0, textarea.value.length);
+  const copied = document.execCommand("copy");
+  textarea.remove();
+  return copied;
 }
 
 // ----- Wire up the page -----
@@ -1890,16 +1847,25 @@ function initApp() {
 
     // Wire up copy buttons
     resultsEl.querySelectorAll(".copy-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
+      btn.addEventListener("click", async () => {
         const text = btn.getAttribute("data-form");
-        navigator.clipboard.writeText(text).then(() => {
-          const orig = btn.innerHTML;
+        const orig = btn.innerHTML;
+        const originalLabel = btn.getAttribute("aria-label");
+        if (await copyText(text)) {
           btn.innerHTML = "✓";
-          setTimeout(() => { btn.innerHTML = orig; }, 1000);
-        }).catch(() => {
+          btn.setAttribute("aria-label", `Copied ${text}`);
+          setTimeout(() => {
+            btn.innerHTML = orig;
+            btn.setAttribute("aria-label", originalLabel);
+          }, 1000);
+        } else {
           btn.innerHTML = "✗";
-          setTimeout(() => { btn.innerHTML = "📋"; }, 1000);
-        });
+          btn.setAttribute("aria-label", `Could not copy ${text}`);
+          setTimeout(() => {
+            btn.innerHTML = orig;
+            btn.setAttribute("aria-label", originalLabel);
+          }, 1000);
+        }
       });
     });
   }

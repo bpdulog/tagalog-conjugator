@@ -747,6 +747,7 @@ const TAGALOG_ENGLISH = {
   tulog: { base: "sleep",    gerund: "sleeping",   past: "slept",    state: "asleep" },
   takot: { base: "fear",     gerund: "fearing",    past: "feared",   state: "afraid" },
   galit: { base: "be angry", gerund: "being angry",past: "got angry", state: "angry" },
+  gulo: { base: "become confused/tangled", gerund: "becoming confused/tangled", past: "became confused/tangled", state: "confused/tangled" },
   gutom: { base: "be hungry",gerund: "being hungry",past: "got hungry",state: "hungry" },
   uhaw: { base: "be thirsty",gerund: "being thirsty",past: "got thirsty",state: "thirsty" },
   tuwa: { base: "be happy", gerund: "being happy", past: "was happy", state: "happy" },

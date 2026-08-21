@@ -25,6 +25,46 @@ function essentialCard(focus, description, forms) {
 }
 
 const CURATED_LEXICON_ENTRIES = Object.freeze({
+  gulo: {
+    root: "gulo",
+    meanings: ["to become confused or tangled", "to disturb or confuse something"],
+    allowedPatterns: ["um", "in"],
+    overrides: {
+      "Actor (-um-)": essentialCard(
+        "Actor Focus",
+        "Focuses on something becoming tangled, confused, or complicated.",
+        essentialForms(
+          ["gumulo", "gumulo", "gumugulo", "gugulo"],
+          "become tangled or confused",
+          [
+            "Gumulo ang sinulid. — The thread became tangled.",
+            "Gumulo ang usapan. — The conversation became confused.",
+            "Gumugulo ang sitwasyon. — The situation is getting complicated.",
+            "Gugulo ang plano kung walang usapan. — The plan will become complicated without discussion."
+          ]
+        )
+      ),
+      "Object (-in)": essentialCard(
+        "Object Focus",
+        "Focuses on a person, thing, or plan that is being disturbed, confused, or made messy.",
+        essentialForms(
+          ["guluhin", "ginulo", "ginugulo", "guguluhin"],
+          "disturb or confuse something",
+          [
+            "Huwag mong guluhin ang bata. — Don't disturb the child.",
+            "Ginulo niya ang mga papel. — He/she messed up the papers.",
+            "Ginugulo niya ang klase. — He/she is disturbing the class.",
+            "Guguluhin nila ang plano. — They will disrupt the plan."
+          ]
+        )
+      )
+    },
+    examples: [],
+    status: "curated",
+    sources: [],
+    notes: "Gulo is a noun for confusion or disorder. Gumulo means 'become tangled/confused'; guluhin means 'disturb, confuse, or make messy'."
+  },
+
   bili: {
     root: "bili",
     meanings: ["to buy", "to sell (depending on focus)"],

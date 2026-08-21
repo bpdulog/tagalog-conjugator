@@ -22,7 +22,7 @@ function evaluate(source) {
   return vm.runInContext(source, context);
 }
 
-assert.equal(evaluate("Object.keys(VERB_LEXICON).length"), 206);
+assert.equal(evaluate("Object.keys(VERB_LEXICON).length"), 207);
 assert.deepEqual(
   JSON.parse(evaluate("JSON.stringify(VERB_LEXICON.kain.meanings)")),
   ["to eat"]
@@ -152,6 +152,8 @@ assert.deepEqual(unknownResult.conjugations, {});
 // Essential verb expansion: generated, irregular, and stative forms all
 // render from the normalized entries and resolve back to their root.
 for (const [root, focus, aspect, expected] of [
+  ["gulo", "Actor (-um-)", "progressive", "gumugulo"],
+  ["gulo", "Object (-in)", "contemplated", "guguluhin"],
   ["gamit", "Actor (-um-)", "progressive", "gumagamit"],
   ["gamit", "Object (-in)", "contemplated", "gagamitin"],
   ["nood", "Object (-in)", "contemplated", "panonoorin"],
@@ -168,6 +170,14 @@ for (const [root, focus, aspect, expected] of [
 ]) {
   assert.equal(resolveForm(root, focus, aspect), expected, `${root} ${focus} ${aspect}`);
 }
+
+const guloResult = JSON.parse(evaluate('JSON.stringify(resolveVerb("gulo"))'));
+assert.equal(guloResult.meaning, "to become confused or tangled / to disturb or confuse something");
+assert.match(
+  guloResult.conjugations["Object (-in)"].forms.infinitive.example,
+  /Don't disturb the child/,
+  "gulo should use its curated meaning rather than the generic placeholder"
+);
 
 for (const [form, root] of [
   ["gagamitin", "gamit"], ["panonoorin", "nood"], ["titingnan", "tingin"],

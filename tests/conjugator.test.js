@@ -13,7 +13,7 @@ const context = vm.createContext({
   clearTimeout
 });
 
-for (const filename of ["verbs.js", "essential-verbs.js", "lexicon.js", "app.js"]) {
+for (const filename of ["attestation.js", "verbs.js", "essential-verbs.js", "lexicon.js", "app.js"]) {
   const source = fs.readFileSync(path.join(projectRoot, filename), "utf8");
   vm.runInContext(source, context, { filename });
 }
@@ -165,9 +165,15 @@ assert.equal(
   evaluate('resolveVerb("tulong").conjugations["Object (-an)"].forms.infinitive.form'),
   "tulungan"
 );
+// makalimutan is the ma-...-an stative, not an actor-focus form: the forgetter
+// is a ng-actor ("Nakalimutan ko"), so the card must not be filed under Actor.
 assert.equal(
-  evaluate('resolveVerb("limot").conjugations["Actor (ma-)"].forms.infinitive.form'),
+  evaluate('resolveVerb("limot").conjugations["Ability / Understand (ma-...-an)"].forms.infinitive.form'),
   "makalimutan"
+);
+assert.equal(
+  evaluate('resolveVerb("limot").conjugations["Actor (ma-)"]'),
+  undefined
 );
 assert.equal(
   evaluate('resolveVerb("ingat").conjugations["Actor (mag-)"].forms.infinitive.form'),
@@ -190,7 +196,7 @@ assert.equal(
 for (const [form, root, affix] of [
   ["sarahin", "sara", "in"],
   ["tulungan", "tulong", "an"],
-  ["nakalimutan", "limot", "ma"],
+  ["nakalimutan", "limot", "ma-an"],
   ["mag-ingat", "ingat", "mag"],
   ["nakita", "kita", "mao"]
 ]) {
@@ -204,4 +210,275 @@ for (const bad of ["sarhin", "sasarhin", "itulong", "itinulong", "umingat", "umi
   assert.equal(evaluate(`ACTIVE_CONJUGATED_LOOKUP["${bad}"]`), undefined, bad);
 }
 
-console.log("All conjugator regression checks passed.");
+// ============================================================
+// Invariants over the WHOLE lexicon.
+//
+// The checks above pin individual forms that were once wrong. These instead
+// assert properties that must hold for every rendered card, so a whole class
+// of error cannot come back through a new verb or a new template. Each one
+// corresponds to a bug that was actually shipped.
+// ============================================================
+
+const allCards = JSON.parse(evaluate(`JSON.stringify(
+  Object.keys(VERB_LEXICON).flatMap(root =>
+    Object.entries(resolveVerb(root).conjugations || {}).flatMap(([focus, card]) =>
+      Object.entries(card.forms || {}).map(([aspect, data]) => ({
+        root, focus, aspect, form: data.form, example: data.example
+      }))
+    )
+  )
+)`));
+assert.ok(allCards.length > 2000, "expected the full lexicon to render");
+
+const words = text => String(text || "")
+  .toLowerCase().replace(/[.,!?'’]/g, "").split(/\s+/).filter(Boolean);
+const tagalogHalf = example => String(example || "").split("—")[0];
+
+// 1. Enclitic pronoun placement. Tagalog enclitics attach to the first word of
+//    the predicate, so a negated clause is "Hindi siya kumain", never
+//    "Hindi kumain siya". A template once produced the latter for 169 roots.
+const ENCLITICS = [
+  "siya", "ako", "ka", "kang", "sila", "kami", "tayo", "ito",
+  "niya", "nila", "ko", "mo", "namin", "natin", "ninyo"
+];
+const misplacedEnclitics = allCards.filter(card => {
+  const w = words(tagalogHalf(card.example));
+  return /^(hindi|huwag)$/.test(w[0] || "") && w.length > 2 && ENCLITICS.includes(w[2]);
+});
+assert.deepEqual(misplacedEnclitics.map(c => `${c.root} ${c.aspect}`), [],
+  "enclitic pronoun must follow the negator, not the verb");
+
+// 2. Every example must actually demonstrate the form it illustrates. Multi-word
+//    forms ("hindi kumain") may be split by an enclitic, so match as a
+//    subsequence rather than a substring.
+const exampleMismatches = allCards.filter(card => {
+  const form = String(card.form || "").toLowerCase();
+  if (!form || form.startsWith("(")) return false;  // parenthesised = unattested
+  const want = words(form);
+  let i = 0;
+  for (const w of words(tagalogHalf(card.example))) if (w === want[i]) i++;
+  return i < want.length;
+});
+assert.deepEqual(exampleMismatches.map(c => `${c.root} ${c.focus} ${c.aspect}`), [],
+  "example sentence must contain the form it illustrates");
+
+// 3. Every root needs a real English gloss. Roots without one silently rendered
+//    as "He/she did not do it" via the generic placeholder.
+const ungloss = JSON.parse(evaluate(`JSON.stringify(
+  Object.keys(VERB_LEXICON).filter(root => !TAGALOG_ENGLISH[root])
+)`));
+assert.deepEqual(ungloss, [], "every lexicon root needs an explicit English gloss");
+
+// 4. No generated example may leak the generic placeholder into user-facing text.
+const placeholderLeaks = allCards.filter(card => /\b(do it|doing it|did it)\b/.test(card.example || ""));
+assert.deepEqual(placeholderLeaks.map(c => `${c.root} ${c.aspect}`), [],
+  "no example may fall back to the 'do it' placeholder");
+
+// 5. Focus keys are free text, so a new spelling must still resolve to a known
+//    pattern and pick up a sort position, a colour, and a usage badge.
+//    21 of 39 keys in use once resolved to none of the three.
+const unmappedFocuses = [...new Set(allCards.map(c => c.focus))].filter(focus => {
+  const rank = evaluate(`focusRank(${JSON.stringify(focus)})`);
+  const tip = evaluate(`focusTip(${JSON.stringify(focus)}) ? 1 : 0`);
+  return rank === -1 || !tip;
+});
+assert.deepEqual(unmappedFocuses, [],
+  "every focus key must resolve to a sort rank and a usage tip");
+
+// 6. The generator and the usage badge must agree about restricted patterns.
+//    They read the same constants now; before, two copies of each root list
+//    could drift so a card claimed "common" for a form the generator had
+//    already parenthesised as unattested.
+//    Scoped to GENERATED cards: a curated override supplies a hand-checked
+//    form and is never parenthesised, so it can legitimately carry a low
+//    badge (usap's curated "mag-usapan" is rare -- the common word for
+//    discussing something is pag-usapan, which the corpus confirms).
+const hasOverride = (root, focus) =>
+  evaluate(`Boolean((VERB_LEXICON[${JSON.stringify(root)}].overrides || {})[${JSON.stringify(focus)}])`);
+const badgeDisagreements = [];
+for (const [pattern, focus] of [
+  ["maka", "Actor (maka-)"],
+  ["magka", "Actor (magka-)"],
+  ["reciprocal", "Reciprocal (mag-...-an)"]
+]) {
+  for (const card of allCards.filter(c => c.focus === focus && !hasOverride(c.root, focus))) {
+    const unattested = String(card.form).startsWith("(");
+    const tag = evaluate(`(focusTip(${JSON.stringify(focus)}, ${JSON.stringify(card.root)}) || {}).tag`);
+    if (unattested !== (tag === "uncommon")) {
+      badgeDisagreements.push(`${card.root} ${pattern}: form=${card.form} badge=${tag}`);
+    }
+  }
+}
+assert.deepEqual(badgeDisagreements, [],
+  "usage badge must agree with whether the generator marked the form attested");
+
+// ============================================================
+// Corpus attestation layer (attestation.js)
+// ============================================================
+
+assert.ok(evaluate("Object.keys(CORPUS_ATTESTATION).length") > 150,
+  "attestation.js must be loaded before app.js");
+
+// Every suggested pattern must be one the generator actually understands, and
+// belong to a root that exists. A typo here would silently add nothing.
+const SUPPORTED = ["um","mag","ma","in","i","mao","an","maka","mang","mangh",
+  "magpa","magka","ipa","ipag","ipang","ma-an","pa-in","state","reciprocal",
+  "negation","distributive"];
+const badSuggestions = JSON.parse(evaluate(`JSON.stringify(
+  Object.entries(CORPUS_SUGGESTED_PATTERNS).flatMap(([root, pats]) =>
+    pats.filter(p => !${JSON.stringify(SUPPORTED)}.includes(p) || !VERB_LEXICON[root])
+        .map(p => root + ":" + p)
+  )
+)`));
+assert.deepEqual(badSuggestions, [], "suggested patterns must be valid and resolvable");
+
+// Suggested patterns must actually reach the rendered output.
+const unmerged = JSON.parse(evaluate(`JSON.stringify(
+  Object.entries(CORPUS_SUGGESTED_PATTERNS).flatMap(([root, pats]) =>
+    pats.filter(p => !VERB_LEXICON[root].allowedPatterns.includes(p))
+        .map(p => root + ":" + p)
+  )
+)`));
+assert.deepEqual(unmerged, [], "every suggested pattern must be merged into allowedPatterns");
+
+// The tiering must be monotonic: a pair with many occurrences across several
+// aspects cannot come back as unattested.
+const tierViolations = JSON.parse(evaluate(`JSON.stringify(
+  Object.entries(CORPUS_ATTESTATION).flatMap(([root, pats]) =>
+    Object.entries(pats)
+      .filter(([p, v]) => v[0] >= 100 && v[2] >= 2 && attestationTier(root, p) !== "common")
+      .map(([p]) => root + ":" + p)
+  )
+)`));
+assert.deepEqual(tierViolations, [], "well-attested pairs must tier as common");
+
+// The homograph guard must hold: a single attested surface form never counts
+// as a paradigm, however frequent it is (tindahan "store", masaya "happy").
+const homographLeaks = JSON.parse(evaluate(`JSON.stringify(
+  Object.entries(CORPUS_ATTESTATION).flatMap(([root, pats]) =>
+    Object.entries(pats)
+      .filter(([p, v]) => v[2] < 2 && attestationTier(root, p) !== "unattested")
+      .map(([p]) => root + ":" + p)
+  )
+)`));
+assert.deepEqual(homographLeaks, [], "a single attested form must not tier as a paradigm");
+
+// Card-level evidence must cover curated irregulars, whose forms never match
+// what the generator would have produced for their pattern. Before this, they
+// had no entry in the pattern table and scored as unattested.
+assert.ok(evaluate("Object.keys(CORPUS_FORM_HITS).length") > 1000,
+  "form-level corpus index must be present");
+for (const [root, focus] of [
+  ["kita", "Object (ma-)"],                          // makita / nakita
+  ["nood", "Object (-in)"],                          // panoorin, irregular
+  ["intindi", "Ability / Understand (ma-...-an)"],   // maintindihan
+  ["alaga", "Object / Benefactive (-an)"]            // alagaan
+]) {
+  const tier = evaluate(
+    `tierFromEvidence(cardEvidence(resolveVerb(${JSON.stringify(root)}).conjugations[${JSON.stringify(focus)}]))`);
+  assert.equal(tier, "common", `${root} ${focus} should score as common`);
+}
+// cardEvidence must deduplicate: -um- infinitive and complete are one string,
+// so a card must never be credited with more attested aspects than it has
+// distinct forms.
+const overCounted = JSON.parse(evaluate(`JSON.stringify(
+  Object.keys(VERB_LEXICON).flatMap(root =>
+    Object.entries(resolveVerb(root).conjugations || {}).flatMap(([focus, card]) => {
+      const ev = cardEvidence(card);
+      if (!ev) return [];
+      const distinct = new Set(Object.values(card.forms || {})
+        .map(d => String(d.form || "").toLowerCase().replace(/^\\(|\\)$/g, "").trim())
+        .filter(f => f && !f.includes(" "))).size;
+      return ev.aspects > distinct ? [root + " " + focus] : [];
+    })
+  )
+)`));
+assert.deepEqual(overCounted, [], "cardEvidence must not count a form twice");
+
+// Suffix selection for vowel-final roots. -in/-an follow a glottal stop and
+// -hin/-han follow a plain vowel, but the ASCII roots do not record glottal
+// stops, so the final letter cannot decide it: basa -> basahan yet alaga ->
+// alagaan. Measured per root; unmeasured roots keep the spelling heuristic.
+assert.ok(evaluate("Object.keys(CORPUS_SUFFIX).length") > 25,
+  "suffix preference table must be present");
+for (const [root, pattern, expected] of [
+  ["basa",  "in", "basahin"],
+  ["basa",  "an", "basahan"],
+  ["alaga", "an", "alagaan"],   // NOT alagahan, despite ending in -a
+  ["upo",   "an", "upuan"],
+  ["turo",  "an", "turuan"],
+  ["pili",  "in", "piliin"],    // NOT pilihin
+  ["sabi",  "in", "sabihin"],
+  // consonant-final roots are unaffected and never take the h-glide
+  ["kain",  "in", "kainin"],
+  ["sulat", "in", "sulatin"]
+]) {
+  const card = JSON.parse(evaluate(
+    `JSON.stringify(generateConjugations(${JSON.stringify(root)}, [${JSON.stringify(pattern)}]))`));
+  const focus = Object.keys(card)[0];
+  assert.equal(String(card[focus].forms.infinitive.form).replace(/^\(|\)$/g, ""),
+    expected, `${root} + -${pattern}`);
+}
+// The table must only ever name real suffixes.
+const badSuffixes = JSON.parse(evaluate(`JSON.stringify(
+  Object.entries(CORPUS_SUFFIX).flatMap(([root, kinds]) =>
+    Object.entries(kinds)
+      .filter(([kind, val]) =>
+        (kind === "in" && val !== "in" && val !== "hin") ||
+        (kind === "an" && val !== "an" && val !== "han"))
+      .map(([kind, val]) => root + ":" + kind + "=" + val))
+)`));
+assert.deepEqual(badSuffixes, [], "suffix table must contain only -in/-hin/-an/-han");
+
+// Nasal assimilation for the mang- family. A -ng prefix adapts to the root's
+// first sound and usually absorbs it; reduplication then copies a different
+// unit depending on whether that consonant survived. Every expected form here
+// occurs in the reference corpora, and the naive "mang- + root" spellings
+// (mangbili, mangkuha) occur zero times.
+for (const [root, pattern, expected] of [
+  // consonant dropped: nasal fills the onset, so the copy is nasal + vowel
+  ["bili",  "mang",  ["mamili", "namili", "namimili", "mamimili"]],
+  ["putol", "mang",  ["mamutol", "namutol", "namumutol", "mamumutol"]],
+  ["takot", "mang",  ["manakot", "nanakot", "nananakot", "mananakot"]],
+  // k is always dropped, and the prefix stays -ng
+  ["kuha",  "mang",  ["manguha", "nanguha", "nangunguha", "mangunguha"]],
+  // consonant retained: nasal closes the prefix, root's own onset is copied
+  ["huli",  "mangh", ["manghuli", "nanghuli", "nanghuhuli", "manghuhuli"]],
+  ["hingi", "mangh", ["manghingi", "nanghingi", "nanghihingi", "manghihingi"]]
+]) {
+  const card = JSON.parse(evaluate(
+    `JSON.stringify(generateConjugations(${JSON.stringify(root)}, [${JSON.stringify(pattern)}]))`));
+  const focus = Object.keys(card)[0];
+  const got = ["infinitive","complete","progressive","contemplated"]
+    .map(a => String(card[focus].forms[a].form).replace(/^\(|\)$/g, ""));
+  assert.deepEqual(got, expected, `${root} + ${pattern}-`);
+}
+// manunulat is the noun "writer", the only attested form of sulat's mang-
+// paradigm. One attested form is not a paradigm, so it must stay disclaimed.
+assert.equal(
+  evaluate('generateConjugations("sulat", ["mang"])["Actor (mang-)"].forms.infinitive.form'),
+  "(manulat)");
+
+// The morphophonemic d -> r rule before a vowel-initial suffix. Every one of
+// these r-spellings is the attested form; the d-spelling has zero corpus hits.
+for (const [root, pattern, aspect, expected] of [
+  ["bayad", "an", "infinitive", "bayaran"],
+  ["bayad", "an", "contemplated", "babayaran"],
+  ["bayad", "in", "infinitive", "bayarin"],
+  ["lakad", "an", "infinitive", "lakaran"],
+  ["tawad", "an", "infinitive", "tawaran"],
+  ["pagod", "in", "infinitive", "pagurin"],     // o->u applies before d->r
+  ["lipad", "in", "infinitive", "liparin"],
+  ["tawid", "an", "infinitive", "tawiran"]
+]) {
+  const got = evaluate(`generateConjugations(${JSON.stringify(root)}, [${JSON.stringify(pattern)}])` +
+    `[Object.keys(generateConjugations(${JSON.stringify(root)}, [${JSON.stringify(pattern)}]))[0]].forms.${aspect}.form`);
+  assert.equal(got, expected, `${root} + -${pattern} (${aspect})`);
+}
+// ...but a d that is not intervocalic, and a root with no final d, are untouched.
+assert.equal(evaluate('generateConjugations("luto", ["in"])["Object (-in)"].forms.infinitive.form'), "lutuin");
+assert.equal(evaluate('generateConjugations("kain", ["in"])["Object (-in)"].forms.infinitive.form'), "kainin");
+// The completed aspect takes no suffix, so the d survives there.
+assert.equal(evaluate('generateConjugations("bayad", ["in"])["Object (-in)"].forms.complete.form'), "binayad");
+
+console.log(`All conjugator regression checks passed (${allCards.length} forms checked).`);

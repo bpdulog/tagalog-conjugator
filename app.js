@@ -37,6 +37,103 @@ function reduplicate(root) {
   return fs + root;
 }
 
+// ----- Roots that commonly take an otherwise-restricted pattern -----
+// Read by the generator (to decide whether to mark a form as attested) AND by
+// focusTip (to decide which usage badge to show). They were previously
+// duplicated verbatim in both places, so an edit to one copy silently
+// contradicted the other -- the card could claim "common" while the generator
+// had already parenthesised the form as unattested.
+const MAKA_COMMON_ROOTS = [
+  "kain", "inom", "lakad", "takbo", "sulat", "basa", "tulog", "gawa", "aral",
+  "trabaho", "tulong", "harap", "tayo", "upo", "hinga",
+  // Perception/acquaintance roots whose maka- forms are everyday vocabulary
+  // ("nakakita ako", "nakilala ko siya"). The curated cards already treat
+  // these as attested, so the badge must not call them uncommon.
+  "kita", "kilala"
+];
+const MANG_COMMON_ROOTS = [
+  "bili", "isda", "huli", "sipa", "basa", "kuha", "gala", "saka", "ani",
+  "pitas", "bunot", "putol", "karga", "sundo", "hila", "takbo", "lakad",
+  "langoy", "kayod", "linis"
+];
+const MAGKA_COMMON_ROOTS = [
+  "roon", "isa", "dalawa", "tatlo", "kaibigan", "bahay", "trabaho", "asawa",
+  "buhay", "oras", "pera", "lugi", "tuwa", "galak", "takot", "sakit"
+];
+const RECIPROCAL_COMMON_ROOTS = [
+  "usap", "tulong", "away", "halik", "yakap", "suntok", "tama", "lakad",
+  "takbo", "hawak", "tingin", "kilala", "libot", "ikot",
+  // mag-asawa ("to marry / to be spouses") is curated and in everyday use.
+  "asawa"
+];
+
+// ----- Corpus attestation -----
+// attestation.js carries frequency evidence per (root, pattern). When it is
+// loaded it decides whether a form is presented as common, less common, or
+// unattested; the hand-written lists above remain only as a fallback for when
+// it is not, so the page still renders standalone.
+const ATTESTATION_COMMON_HITS = 100;   // conversational occurrences
+const ATTESTATION_PRESENT_HITS = 10;
+const ATTESTATION_MIN_ASPECTS = 2;     // guards against homographs
+
+function attestationFor(root, pattern) {
+  if (typeof CORPUS_ATTESTATION === "undefined") return null;
+  const entry = CORPUS_ATTESTATION[String(root || "").toLowerCase()];
+  const value = entry && entry[pattern];
+  if (!value) return { conv: 0, formal: 0, aspects: 0 };
+  return { conv: value[0], formal: value[1], aspects: value[2] };
+}
+
+// "common" | "less-common" | "unattested", or null when no corpus data exists.
+// A single attested surface form is not a paradigm: masaya ("happy") and
+// tindahan ("store") each spike in exactly one slot, so requiring two guards
+// against reading a noun or adjective as verb usage.
+function attestationTier(root, pattern) {
+  const a = attestationFor(root, pattern);
+  if (!a) return null;
+  if (a.aspects < ATTESTATION_MIN_ASPECTS) return "unattested";
+  if (a.conv >= ATTESTATION_COMMON_HITS) return "common";
+  if (a.conv >= ATTESTATION_PRESENT_HITS) return "less-common";
+  return "unattested";
+}
+
+// Is this root/pattern combination worth presenting as real usage? Falls back
+// to the curated allowlist when attestation.js is absent.
+function patternIsAttested(root, pattern, fallbackList) {
+  const tier = attestationTier(root, pattern);
+  if (tier === null) return fallbackList.includes(String(root || "").toLowerCase());
+  return tier !== "unattested";
+}
+
+// Evidence for the forms a card ACTUALLY shows. The pattern table is keyed on
+// what the generator produces, so a curated irregular (makita, panoorin,
+// sundan) has no entry there and would be misread as unattested. Scoring the
+// rendered forms directly covers curated and generated cards alike.
+function cardEvidence(card) {
+  if (typeof CORPUS_FORM_HITS === "undefined" || !card) return null;
+  const seen = new Set();
+  let conv = 0, aspects = 0, known = 0;
+  for (const data of Object.values(card.forms || {})) {
+    const form = String(data.form || "").toLowerCase().replace(/^\(|\)$/g, "").trim();
+    if (!form || form.includes(" ") || seen.has(form)) continue;
+    seen.add(form);
+    const hits = CORPUS_FORM_HITS[form];
+    if (typeof hits !== "number") continue;
+    known++;
+    conv += hits;
+    if (hits > 0) aspects++;
+  }
+  return known ? { conv, aspects } : null;
+}
+
+function tierFromEvidence(evidence) {
+  if (!evidence) return null;
+  if (evidence.aspects < ATTESTATION_MIN_ASPECTS) return "unattested";
+  if (evidence.conv >= ATTESTATION_COMMON_HITS) return "common";
+  if (evidence.conv >= ATTESTATION_PRESENT_HITS) return "less-common";
+  return "unattested";
+}
+
 // Build forms only for the patterns approved by the verb's lexicon entry.
 // Returns a structure compatible with curated overrides so the UI can render
 // both through the same path.
@@ -65,9 +162,19 @@ function generateConjugations(root, allowedPatterns = []) {
     }
     return -1;
   })();
-  const rAn = (lastVowelIdx >= 0 && r[lastVowelIdx] === "o")
+  // Root as it appears before a vowel-initial suffix (-in, -an).
+  // Two morphophonemic rules apply, in this order:
+  //   1. A final 'o' raises to 'u':            luto  → lutu-  (lutuin)
+  //   2. An intervocalic final 'd' becomes 'r': bayad → bayar- (bayaran)
+  // Order matters: pagod → pagud → pagur- ("pagurin"), which is the attested
+  // spelling; applying d→r first would strand the 'o'.
+  const rAnRaised = (lastVowelIdx >= 0 && r[lastVowelIdx] === "o")
     ? r.slice(0, lastVowelIdx) + "u" + r.slice(lastVowelIdx + 1)
     : r;
+  // Only intervocalic d shifts, so the segment before it must be a vowel.
+  const rAn = (rAnRaised.endsWith("d") && VOWELS.includes(rAnRaised.at(-2) || ""))
+    ? rAnRaised.slice(0, -1) + "r"
+    : rAnRaised;
 
   // Roots beginning with l, r, w or y take the prefix ni- instead of the -in- infix:
   //   luto → niluto (not "linuto"), linis → nilinis, lagay → nilagay/nilagyan
@@ -151,7 +258,7 @@ function generateConjugations(root, allowedPatterns = []) {
     // infinitive: root + -in. A final 'o' shifts to 'u' (luto → lutuin), and a
     // final 'a' takes the h-glide (sara → sarahin, basa → basahin). Other vowel
     // finals attach -in directly (pili → piliin, turo → turuin).
-    const inSuffix = /a$/.test(rAn) ? "hin" : "in";
+    const inSuffix = suffixFor(r, "in", /a$/.test(rAn) ? "hin" : "in");
     const infinitive = `${rAn}${inSuffix}`;
     // complete: C-in-V-rest (insert -in- after first consonant)
     //   e.g. kain → k + in + ain = "kinain"
@@ -233,7 +340,7 @@ function generateConjugations(root, allowedPatterns = []) {
     //   luto (o → u) → lutuan
     const endsInVowel = /[aeiou]$/.test(r);  // Use ORIGINAL root, not rAn
     const oShifted = rAn !== r;              // luto → lutu
-    const suffix = endsInVowel && !oShifted ? "han" : "an";
+    const suffix = suffixFor(r, "an", endsInVowel && !oShifted ? "han" : "an");
     // infinitive: root + -an/-han
     const infinitive = `${rAn}${suffix}`;
     // complete: C-in-V-rest-an/-han
@@ -294,8 +401,8 @@ function generateConjugations(root, allowedPatterns = []) {
     // For other verbs, "can do X" is more commonly expressed as "kayang X-in" or
     // "magagawa ko ang X". Many maka- forms (like makatapon) are grammatically
     // constructed but rarely used in everyday speech.
-    const makaCommonRoots = ["kain", "inom", "lakad", "takbo", "sulat", "basa", "tulog", "gawa", "aral", "trabaho", "tulong", "harap", "tayo", "upo", "hinga"];
-    const isMakaCommon = makaCommonRoots.includes(r.toLowerCase());
+    const makaCommonRoots = MAKA_COMMON_ROOTS;
+    const isMakaCommon = patternIsAttested(r, "maka", makaCommonRoots);
     const makaForm = isMakaCommon ? infinitive : `(${infinitive})`;
     const makaUse = isMakaCommon
       ? "To be able to / can " + r + " (infinitive)"
@@ -323,37 +430,59 @@ function generateConjugations(root, allowedPatterns = []) {
 
   // ============== ACTOR FOCUS — mang- (with assimilation) ==============
   {
-    // mang- + root, with nasal assimilation for some roots:
-    //   - h-initial: mangh- + root (e.g. huli → manghuli)
-    //   - b-initial: m-ang-b → m-amili (the n in mang- becomes m to match the b)
-    //     e.g. bili → mamili (mang-bili → m-amili)
-    //   - d-initial: n-ang-d → n-an... (n replaces n, no real change to spelling)
-    //     e.g. daan → mandaan (less common)
-    //   - other: mang- + root
-    //   - vowel-initial: mang- + root (e.g. aral → mang-aral, but rarely used)
-    // The generator uses a simplified rule: mangh- for h, plain mang- otherwise.
-    // The user should treat this as a starting point.
+    // Nasal assimilation. A prefix ending in -ng adapts to the root's first
+    // sound, and that sound is usually absorbed:
+    //   before p, b          → -m   (bili  → mamili,   putol → mamutol)
+    //   before d, l, r, s, t → -n   (sulat → manulat,  takot → manakot)
+    //   before k             → -ng, and the k is ALWAYS dropped (kuha → manguha)
+    //   otherwise            → -ng  (huli  → manghuli, isda  → mangisda)
+    //
+    // Reduplication depends on whether the root's consonant survived:
+    //   dropped/vowel-initial — the nasal fills the empty onset, so the copied
+    //     syllable is nasal + vowel:  bili → na·mi·mili, isda → na·ngi·ngisda
+    //   retained — the nasal closes the prefix and the root's own onset is
+    //     copied:                     huli → nang·hu·huli
+    // Every form below is attested in the reference corpora; the previous
+    // "mang- + root" shortcut produced mangbili / mangkuha, which are not.
     //
     // IMPORTANT: The mang- prefix is NOT used with every verb. It typically applies
     // only to specific semantic categories: going around doing X (shopping, fishing,
     // hunting, gathering). For most verbs (e.g. tapon = throw away), the mang- form
     // is unattested. We mark it as "uncommon" with a clear note.
-    let mangPrefix, nangPrefix;
-    if (r.startsWith("h")) {
-      mangPrefix = "mangh";
-      nangPrefix = "nangh";
+    const mangNasal = "pb".includes(r[0]) ? "m"
+      : "dlrst".includes(r[0]) ? "n"
+      : "ng";
+    const mangDropsConsonant = "pbdlrstk".includes(r[0]);
+    // Onset through the first vowel — the unit Tagalog copies for this prefix.
+    const throughFirstVowel = (word) => {
+      for (let i = 0; i < word.length; i++) {
+        if (VOWELS.includes(word[i])) return word.slice(0, i + 1);
+      }
+      return word;
+    };
+    let infinitive, complete, progressive, contemplated;
+    if (mangDropsConsonant || isVowelInitial) {
+      const stem = mangNasal + (mangDropsConsonant ? r.slice(1) : r);
+      const copy = throughFirstVowel(stem);
+      infinitive = `ma${stem}`;
+      complete = `na${stem}`;
+      progressive = `na${copy}${stem}`;
+      contemplated = `ma${copy}${stem}`;
     } else {
-      mangPrefix = "mang";
-      nangPrefix = "nang";
+      const copy = throughFirstVowel(r);
+      infinitive = `ma${mangNasal}${r}`;
+      complete = `na${mangNasal}${r}`;
+      progressive = `na${mangNasal}${copy}${r}`;
+      contemplated = `ma${mangNasal}${copy}${r}`;
     }
-    const infinitive = `${mangPrefix}${r}`;
-    const complete = `${nangPrefix}${r}`;
-    const progressive = `${nangPrefix}${fs}${r}`;
-    const contemplated = `${mangPrefix}${fs}${r}`;
     const focusName = r.startsWith("h") ? "Actor (mangh-)" : "Actor (mang-)";
     // Verbs that commonly take mang- (acquisition / hunting / gathering semantic class)
-    const mangCommonRoots = ["bili", "isda", "huli", "sipa", "basa", "kuha", "gala", "saka", "ani", "pitas", "bunot", "putol", "karga", "sundo", "hila", "takbo", "lakad", "langoy", "kayod", "linis"];
-    const isMangCommon = mangCommonRoots.includes(r.toLowerCase());
+    const mangCommonRoots = MANG_COMMON_ROOTS;
+    // h-initial roots are filed under the mangh- focus, so their evidence is
+    // stored under that pattern id. Looking up "mang" here would miss it and
+    // disclaim attested forms like manghuli / nanghuhuli.
+    const mangPatternId = r.startsWith("h") ? "mangh" : "mang";
+    const isMangCommon = patternIsAttested(r, mangPatternId, mangCommonRoots);
     const mangTag = isMangCommon ? "less-common" : "uncommon";
     const mangDescription = isMangCommon
       ? `Focuses on the doer using the mang- prefix. Common for actions like shopping (bili → mamili), fishing (isda → mangisda), hunting (huli → manghuli), etc. Nasal assimilation may change the prefix spelling (m- before b, n- before d/t).`
@@ -407,8 +536,8 @@ function generateConjugations(root, allowedPatterns = []) {
     // be "had" (roon → magkaroon, isa → magkaisa) but is awkward for action
     // verbs like "tapon". Forms like "magkatapon" are grammatically constructed
     // but semantically odd — you don't typically "have" tapon.
-    const magkaCommonRoots = ["roon", "isa", "dalawa", "tatlo", "kaibigan", "bahay", "trabaho", "asawa", "buhay", "oras", "pera", "lugi", "tuwa", "galak", "takot", "sakit"];
-    const isMagkaCommon = magkaCommonRoots.includes(r.toLowerCase());
+    const magkaCommonRoots = MAGKA_COMMON_ROOTS;
+    const isMagkaCommon = patternIsAttested(r, "magka", magkaCommonRoots);
     const magkaForm = isMagkaCommon ? infinitive : `(${infinitive})`;
     result["Actor (magka-)"] = {
       focus: "Actor Focus (Existential / Possessive)",
@@ -506,8 +635,8 @@ function generateConjugations(root, allowedPatterns = []) {
     // is conceptually natural (usap → mag-usapan = talk to each other,
     // tulong → magtulungan = help each other). For other verbs, the
     // reciprocal form may be grammatically constructed but rarely used.
-    const reciprocalCommonRoots = ["usap", "tulong", "away", "halik", "yakap", "suntok", "tama", "lakad", "takbo", "hawak", "tingin", "kilala", "libot", "ikot"];
-    const isReciprocalCommon = reciprocalCommonRoots.includes(r.toLowerCase());
+    const reciprocalCommonRoots = RECIPROCAL_COMMON_ROOTS;
+    const isReciprocalCommon = patternIsAttested(r, "reciprocal", reciprocalCommonRoots);
     const reciprocalForm = isReciprocalCommon ? infinitive : `(${infinitive})`;
     result["Reciprocal (mag-...-an)"] = {
       focus: "Reciprocal / Mutual Focus",
@@ -545,9 +674,9 @@ function generateConjugations(root, allowedPatterns = []) {
       description: `Negated forms of ${r}. Tagalog puts "hindi" (not) before the ordinary conjugated verb — the aspect does not change — and uses "huwag" (literally "don't") for the negative imperative: "hindi kumain" (did not eat), "hindi kumakain" (is not eating), "hindi kakain" (will not eat).`,
       forms: {
         infinitive:   { form: imperativeNegated, use: "Negative command: don't " + getEnglish(r).base,           example: `${capitalize(imperativeNegated)}. — Don't ${getEnglish(r).base}!` },
-        complete:     { form: pastNegated,    use: "Did not " + getEnglish(r).base + " (past negative)",  example: `${capitalize(pastNegated)} siya kagabi. — He/she did not ${getEnglish(r).base} last night.` },
-        progressive:  { form: presentNegated, use: "Is not " + getEnglish(r).gerund + " (present)",          example: `${capitalize(presentNegated)} siya ngayon. — He/she is not ${getEnglish(r).gerund} now.` },
-        contemplated: { form: futureNegated,      use: "Will not " + getEnglish(r).base + " (future negative)", example: `${capitalize(futureNegated)} siya bukas. — He/she will not ${getEnglish(r).base} tomorrow.` }
+        complete:     { form: pastNegated,    use: "Did not " + getEnglish(r).base + " (past negative)",  example: `${negatedClause(pastNegated, "siya", "kagabi")} — He/she did not ${getEnglish(r).base} last night.` },
+        progressive:  { form: presentNegated, use: "Is not " + getEnglish(r).gerund + " (present)",          example: `${negatedClause(presentNegated, "siya", "ngayon")} — He/she is not ${getEnglish(r).gerund} now.` },
+        contemplated: { form: futureNegated,      use: "Will not " + getEnglish(r).base + " (future negative)", example: `${negatedClause(futureNegated, "siya", "bukas")} — He/she will not ${getEnglish(r).base} tomorrow.` }
       }
     };
   }
@@ -587,8 +716,39 @@ function generateConjugations(root, allowedPatterns = []) {
   );
 }
 
+// Which suffix a vowel-final root takes before -in / -an. Tagalog attaches
+// -in/-an after a glottal stop and -hin/-han otherwise, but the ASCII roots do
+// not record glottal stops, so the choice cannot be read off the spelling:
+// basa takes basahin, yet pili takes piliin and alaga takes alagaan. Corpus
+// evidence decides where we have it; otherwise the caller's spelling
+// heuristic stands.
+function suffixFor(root, kind, fallback) {
+  if (typeof CORPUS_SUFFIX === "undefined") return fallback;
+  const entry = CORPUS_SUFFIX[String(root || "").toLowerCase()];
+  return (entry && entry[kind]) || fallback;
+}
+
 // ----- English translation helpers (best-effort, template-based) -----
 function capitalize(s) { return s ? s[0].toUpperCase() + s.slice(1) : s; }
+
+// Build a negated Tagalog clause with correct enclitic pronoun placement.
+//
+// Tagalog enclitic pronouns (siya, ako, ka, sila...) attach to the FIRST word
+// of the predicate, not to the verb. When a negator precedes the verb, the
+// pronoun goes between them:
+//   correct:   Hindi siya kumain kagabi.
+//   incorrect: Hindi kumain siya kagabi.
+// The negated forms in this file are stored as "hindi <verb>" / "huwag
+// <verb>", so the pronoun is inserted after that leading particle.
+function negatedClause(negatedForm, pronoun, tail) {
+  const words = String(negatedForm).trim().split(/\s+/);
+  const [particle, ...verb] = words;
+  const parts = [capitalize(particle)];
+  if (pronoun) parts.push(pronoun);
+  parts.push(...verb);
+  if (tail) parts.push(tail);
+  return parts.join(" ") + ".";
+}
 
 // Tagalog → English translation dictionary for common verbs.
 // Used by the pattern generator to produce natural English examples.
@@ -597,7 +757,7 @@ const TAGALOG_ENGLISH = {
   // Food & eating
   kain: { base: "eat",        gerund: "eating",     past: "ate",      state: "fed" },
   inom: { base: "drink",      gerund: "drinking",   past: "drank",    state: "drunk" },
-  luto_pasta: { base: "cook pasta", gerund: "cooking pasta", past: "cooked pasta", state: "cooked" },
+  luto: { base: "cook",       gerund: "cooking",    past: "cooked",   state: "cooked" },
   // Actions / movement
   lakad: { base: "walk",      gerund: "walking",    past: "walked",   state: "walked" },
   punta: { base: "go",        gerund: "going",      past: "went",     state: "gone" },
@@ -669,7 +829,6 @@ const TAGALOG_ENGLISH = {
   sara: { base: "close",     gerund: "closing",     past: "closed",   state: "closed" },
   bukas: { base: "open",      gerund: "opening",     past: "opened",   state: "open" },
   // Other common
-  tulug: { base: "sleep (variant)", gerund: "sleeping", past: "slept",  state: "asleep" },
   kanta: { base: "sing",      gerund: "singing",     past: "sang",     state: "sung" },
   takip: { base: "cover",     gerund: "covering",    past: "covered",  state: "covered" },
   // Newly added 20 verbs
@@ -694,7 +853,6 @@ const TAGALOG_ENGLISH = {
   tulak: { base: "push",      gerund: "pushing",     past: "pushed",   state: "pushed" },
   salpak: { base: "smash/throw", gerund: "smashing/throwing", past: "smashed/threw", state: "smashed/thrown" },
   // Other common (added in round 2)
-  sund: { base: "follow",     gerund: "following",    past: "followed",  state: "followed" },
   tawag: { base: "call",      gerund: "calling",      past: "called",    state: "called" },
   // 20 NEW VERBS (round 3)
   hatid: { base: "deliver/accompany home", gerund: "delivering/accompanying home", past: "delivered/accompanied home", state: "delivered" },
@@ -724,17 +882,147 @@ const TAGALOG_ENGLISH = {
   kape: { base: "drink coffee / have coffee", gerund: "drinking coffee", past: "drank coffee / had coffee", state: "had coffee" },
   tubig: { base: "water / pour water", gerund: "watering / pouring water", past: "watered / poured water", state: "watered" },
   dumi: { base: "dirt / get dirty", gerund: "getting dirty / making dirty", past: "got dirty / made dirty", state: "dirty" },
-  // (fallbacks for unlisted verbs — also useful for the database entries)
+
+  // ----- Perception & cognition -----
+  kita: { base: "see",         gerund: "seeing",         past: "saw",           state: "seen" },
+  rinig: { base: "hear",       gerund: "hearing",        past: "heard",         state: "heard" },
+  alam: { base: "know",        gerund: "knowing",        past: "knew",          state: "known" },
+  gusto: { base: "like",       gerund: "liking",         past: "liked",         state: "liked" },
+  alala: { base: "worry",      gerund: "worrying",       past: "worried",       state: "worried" },
+  limot: { base: "forget",     gerund: "forgetting",     past: "forgot",        state: "forgotten" },
+  asa: { base: "hope",         gerund: "hoping",         past: "hoped",         state: "hopeful" },
+  selos: { base: "be jealous", gerund: "being jealous",  past: "was jealous",   state: "jealous" },
+  sisi: { base: "blame",       gerund: "blaming",        past: "blamed",        state: "blamed" },
+  bigo: { base: "fail",        gerund: "failing",        past: "failed",        state: "disappointed" },
+  ingat: { base: "be careful", gerund: "being careful",  past: "was careful",   state: "careful" },
+
+  // ----- Speech & interaction -----
+  salita: { base: "speak",     gerund: "speaking",       past: "spoke",         state: "spoken" },
+  kwento: { base: "tell a story", gerund: "telling a story", past: "told a story", state: "told" },
+  turo: { base: "teach",       gerund: "teaching",       past: "taught",        state: "taught" },
+  tulong: { base: "help",      gerund: "helping",        past: "helped",        state: "helped" },
+  away: { base: "fight",       gerund: "fighting",       past: "fought",        state: "fought" },
+  amin: { base: "admit",       gerund: "admitting",      past: "admitted",      state: "admitted" },
+  hingi: { base: "ask for",    gerund: "asking for",     past: "asked for",     state: "asked for" },
+  paalam: { base: "say goodbye", gerund: "saying goodbye", past: "said goodbye", state: "bidden farewell" },
+  tawad: { base: "bargain",    gerund: "bargaining",     past: "bargained",     state: "bargained" },
+  ngiti: { base: "smile",      gerund: "smiling",        past: "smiled",        state: "smiled" },
+  asawa: { base: "marry",      gerund: "marrying",       past: "married",       state: "married" },
+
+  // ----- Movement & position -----
+  pasok: { base: "enter",      gerund: "entering",       past: "entered",       state: "entered" },
+  labas: { base: "go out",     gerund: "going out",      past: "went out",      state: "gone out" },
+  akyat: { base: "climb",      gerund: "climbing",       past: "climbed",       state: "climbed" },
+  baba: { base: "go down",     gerund: "going down",     past: "went down",     state: "gone down" },
+  taas: { base: "raise",       gerund: "raising",        past: "raised",        state: "raised" },
+  iwan: { base: "leave behind", gerund: "leaving behind", past: "left behind",  state: "left behind" },
+  sundo: { base: "fetch",      gerund: "fetching",       past: "fetched",       state: "fetched" },
+  huli: { base: "catch",       gerund: "catching",       past: "caught",        state: "caught" },
+  lagay: { base: "put",        gerund: "putting",        past: "put",           state: "put" },
+  jog: { base: "jog",          gerund: "jogging",        past: "jogged",        state: "jogged" },
+
+  // ----- Household & daily routine -----
+  hugas: { base: "wash",       gerund: "washing",        past: "washed",        state: "washed" },
+  hilamos: { base: "wash one's face", gerund: "washing one's face", past: "washed one's face", state: "washed" },
+  sipilyo: { base: "brush one's teeth", gerund: "brushing one's teeth", past: "brushed one's teeth", state: "brushed" },
+  ahit: { base: "shave",       gerund: "shaving",        past: "shaved",        state: "shaved" },
+  ayos: { base: "fix",         gerund: "fixing",         past: "fixed",         state: "fixed" },
+  plantsa: { base: "iron",     gerund: "ironing",        past: "ironed",        state: "ironed" },
+  tiklop: { base: "fold",      gerund: "folding",        past: "folded",        state: "folded" },
+  ihi: { base: "urinate",      gerund: "urinating",      past: "urinated",      state: "urinated" },
+  ubo: { base: "cough",        gerund: "coughing",       past: "coughed",       state: "coughed" },
+  hilik: { base: "snore",      gerund: "snoring",        past: "snored",        state: "snored" },
+  lagnat: { base: "have a fever", gerund: "having a fever", past: "had a fever", state: "feverish" },
+
+  // ----- Food preparation -----
+  prito: { base: "fry",        gerund: "frying",         past: "fried",         state: "fried" },
+  gisa: { base: "sauté",       gerund: "sautéing",       past: "sautéed",       state: "sautéed" },
+  boil: { base: "boil",        gerund: "boiling",        past: "boiled",        state: "boiled" },
+  grill: { base: "grill",      gerund: "grilling",       past: "grilled",       state: "grilled" },
+  bake: { base: "bake",        gerund: "baking",         past: "baked",         state: "baked" },
+  buhos: { base: "pour",       gerund: "pouring",        past: "poured",        state: "poured" },
+  almusal: { base: "eat breakfast", gerund: "eating breakfast", past: "ate breakfast", state: "had breakfast" },
+  hapunan: { base: "eat dinner", gerund: "eating dinner", past: "ate dinner",   state: "had dinner" },
+
+  // ----- Work, money & study -----
+  ipon: { base: "save up",     gerund: "saving up",      past: "saved up",      state: "saved up" },
+  utang: { base: "owe",        gerund: "owing",          past: "owed",          state: "indebted" },
+  hiram: { base: "borrow",     gerund: "borrowing",      past: "borrowed",      state: "borrowed" },
+  upa: { base: "rent",         gerund: "renting",        past: "rented",        state: "rented" },
+  negosyo: { base: "do business", gerund: "doing business", past: "did business", state: "in business" },
+  bilang: { base: "count",     gerund: "counting",       past: "counted",       state: "counted" },
+  umpisa: { base: "start",     gerund: "starting",       past: "started",       state: "started" },
+  resign: { base: "resign",    gerund: "resigning",      past: "resigned",      state: "resigned" },
+  withdraw: { base: "withdraw", gerund: "withdrawing",   past: "withdrew",      state: "withdrawn" },
+  maneho: { base: "drive",     gerund: "driving",        past: "drove",         state: "driven" },
+  bisikleta: { base: "bike",   gerund: "biking",         past: "biked",         state: "biked" },
+
+  // ----- Farming -----
+  tanim: { base: "plant",      gerund: "planting",       past: "planted",       state: "planted" },
+  ani: { base: "harvest",      gerund: "harvesting",     past: "harvested",     state: "harvested" },
+
+  // ----- Communication & tech -----
+  text: { base: "text",        gerund: "texting",        past: "texted",        state: "texted" },
+  email: { base: "email",      gerund: "emailing",       past: "emailed",       state: "emailed" },
+  chat: { base: "chat",        gerund: "chatting",       past: "chatted",       state: "chatted" },
+  type: { base: "type",        gerund: "typing",         past: "typed",         state: "typed" },
+  share: { base: "share",      gerund: "sharing",        past: "shared",        state: "shared" },
+
+  // ----- Leisure & religion -----
+  basketball: { base: "play basketball", gerund: "playing basketball", past: "played basketball", state: "played" },
+  badminton: { base: "play badminton", gerund: "playing badminton", past: "played badminton", state: "played" },
+  volleyball: { base: "play volleyball", gerund: "playing volleyball", past: "played volleyball", state: "played" },
+  karaoke: { base: "sing karaoke", gerund: "singing karaoke", past: "sang karaoke", state: "sung" },
+  bakasyon: { base: "go on vacation", gerund: "going on vacation", past: "went on vacation", state: "on vacation" },
+  dasal: { base: "pray",       gerund: "praying",        past: "prayed",        state: "prayed" },
+  simba: { base: "go to church", gerund: "going to church", past: "went to church", state: "gone to church" },
+
+  // ----- Weather & change-of-state adjectival roots -----
+  ulan: { base: "rain",        gerund: "raining",        past: "rained",        state: "rainy" },
+  lamig: { base: "get cold",   gerund: "getting cold",   past: "got cold",      state: "cold" },
+  init: { base: "get hot",     gerund: "getting hot",    past: "got hot",       state: "hot" },
+  bigat: { base: "get heavier", gerund: "getting heavier", past: "got heavier", state: "heavy" },
+  gaan: { base: "get lighter", gerund: "getting lighter", past: "got lighter",  state: "light" },
+  haba: { base: "get longer",  gerund: "getting longer", past: "got longer",    state: "long" },
+  ikli: { base: "get shorter", gerund: "getting shorter", past: "got shorter",  state: "short" },
+  bilis: { base: "speed up",   gerund: "speeding up",    past: "sped up",       state: "fast" },
+  bagal: { base: "slow down",  gerund: "slowing down",   past: "slowed down",   state: "slow" },
+  mura: { base: "get cheaper", gerund: "getting cheaper", past: "got cheaper",  state: "cheap" },
+  laki: { base: "grow bigger", gerund: "growing bigger", past: "grew bigger",   state: "big" },
+  liit: { base: "get smaller", gerund: "getting smaller", past: "got smaller",  state: "small" },
+  ganda: { base: "become more beautiful", gerund: "becoming more beautiful", past: "became more beautiful", state: "beautiful" },
+  pangit: { base: "become uglier", gerund: "becoming uglier", past: "became uglier", state: "ugly" },
+  bago: { base: "become new",  gerund: "becoming new",   past: "became new",    state: "new" },
+  luma: { base: "become old",  gerund: "becoming old",   past: "became old",    state: "old" },
+
+  // ----- Roots previously mis-resolved by substring matching -----
+  // walis ("sweep") must not fall through to alis ("leave"), and the pa-
+  // roots below are lexicalised: pahinga is "rest", not "breathe" (hinga),
+  // and padala is "send", not "carry" (dala).
+  walis: { base: "sweep",      gerund: "sweeping",       past: "swept",         state: "swept" },
+  pahinga: { base: "rest",     gerund: "resting",        past: "rested",        state: "rested" },
+  padala: { base: "send",      gerund: "sending",        past: "sent",          state: "sent" },
+
+  // ----- Existential / copular -----
+  maging: { base: "become",    gerund: "becoming",       past: "became",        state: "become" },
+  // roon is the bound root behind magkaroon ("to have / to come to have").
+  roon: { base: "have",        gerund: "having",         past: "had",           state: "had" },
+  // umaga / gabi are time-of-day roots used verbally ("to be overtaken by
+  // morning / nightfall"), most often in the mag- and ma- families.
+  umaga: { base: "stay until morning", gerund: "staying until morning", past: "stayed until morning", state: "overtaken by morning" },
+  gabi: { base: "stay until night", gerund: "staying until night", past: "stayed until night", state: "overtaken by night" },
 };
 
 // Get the English base/gerund/past for a Tagalog root.
 // Falls back to a generic pattern if the root isn't in the dictionary.
 function getEnglish(root) {
   if (TAGALOG_ENGLISH[root]) return TAGALOG_ENGLISH[root];
-  // Try a few suffix variations (e.g., aral, aralan, mag-aral)
-  for (const key of Object.keys(TAGALOG_ENGLISH)) {
-    if (root.endsWith(key) || key.startsWith(root)) return TAGALOG_ENGLISH[key];
-  }
+  // No substring fallback. Matching on endsWith/startsWith silently produced
+  // wrong glosses for unrelated roots that merely share letters — walis
+  // ("sweep") resolved to alis ("leave"), pahinga ("rest") to hinga
+  // ("breathe"), padala ("send") to dala ("carry"). A generic placeholder is
+  // wrong in an obvious way; a confident mistranslation is not.
+  //
   // Fallback: return generic placeholders so the example doesn't say "-ing"
   // a Tagalog root (which produces nonsense like "takiping" or "sayawing").
   return {
@@ -926,11 +1214,11 @@ function buildNegationCard(root, conjugations) {
     focus: "Negative / Negation",
     description: `Negation keeps the same approved ${actorFocus} form: put hindi before a completed, ongoing, or future form. For a negative command, use huwag before the infinitive form.`,
     forms: {
-      infinitive: { form: `huwag ${forms.infinitive.form}`, use: `Negative command: do not ${english.base}`, example: `Huwag ${forms.infinitive.form}. - Do not ${english.base}.` },
-      complete: { form: `hindi ${forms.complete.form}`, use: `Did not ${english.base}`, example: `Hindi ${forms.complete.form} siya. - He/she did not ${english.base}.` },
-      progressive: { form: `hindi ${forms.progressive.form}`, use: `Is not ${english.gerund}`, example: `Hindi ${forms.progressive.form} siya. - He/she is not ${english.gerund}.` },
-      contemplated: { form: `hindi ${forms.contemplated.form}`, use: `Will not ${english.base}`, example: `Hindi ${forms.contemplated.form} siya. - He/she will not ${english.base}.` },
-      imperative: { form: `huwag ${forms.infinitive.form}`, use: `Negative command: do not ${english.base}`, example: `Huwag ${forms.infinitive.form}. - Do not ${english.base}.` }
+      infinitive: { form: `huwag ${forms.infinitive.form}`, use: `Negative command: do not ${english.base}`, example: `${negatedClause(`huwag ${forms.infinitive.form}`, "kang")} — Don't ${english.base}.` },
+      complete: { form: `hindi ${forms.complete.form}`, use: `Did not ${english.base}`, example: `${negatedClause(`hindi ${forms.complete.form}`, "siya")} — He/she did not ${english.base}.` },
+      progressive: { form: `hindi ${forms.progressive.form}`, use: `Is not ${english.gerund}`, example: `${negatedClause(`hindi ${forms.progressive.form}`, "siya")} — He/she is not ${english.gerund}.` },
+      contemplated: { form: `hindi ${forms.contemplated.form}`, use: `Will not ${english.base}`, example: `${negatedClause(`hindi ${forms.contemplated.form}`, "siya")} — He/she will not ${english.base}.` },
+      imperative: { form: `huwag ${forms.infinitive.form}`, use: `Negative command: do not ${english.base}`, example: `${negatedClause(`huwag ${forms.infinitive.form}`, "kang")} — Don't ${english.base}.` }
     }
   };
 }
@@ -1219,7 +1507,11 @@ const FOCUS_ORDER = [
   "Benefactive (i-)",
   "Benefactive (ipag-)",
   "Distributive (per-person)",
-  "Instrumental (ipang-)"
+  "Instrumental (ipang-)",
+  // Not a focus: entries like umaga are nouns/time words kept in the lexicon
+  // so a learner searching them gets the fixed expressions instead of an
+  // invented conjugation.
+  "Time expression (no aspect affixes)"
 ];
 
 const FOCUS_COLORS = {
@@ -1242,7 +1534,8 @@ const FOCUS_COLORS = {
   "Benefactive (i-)":                "emerald",
   "Benefactive (ipag-)":             "emerald",
   "Distributive (per-person)":      "violet",
-  "Instrumental (ipang-)":           "violet"
+  "Instrumental (ipang-)":           "violet",
+  "Time expression (no aspect affixes)": "slate"
 };
 
 // Commonness / usage hints — shown as a small badge on each focus card
@@ -1270,34 +1563,119 @@ const FOCUS_TIPS = {
   "Benefactive (i-)":           { tag: "common",      text: "Benefactive — 'for someone' (the recipient is the subject)" },
   "Benefactive (ipag-)":        { tag: "common",      text: "Benefactive with ipag- — 'do X for someone'" },
   "Distributive (per-person)":  { tag: "less-common", text: "Per-person / each-one — often expressed periphrastically" },
-  "Instrumental (ipang-)":      { tag: "less-common", text: "Use X as a tool (fork, spoon, money — instrument is the subject)" }
+  "Instrumental (ipang-)":      { tag: "less-common", text: "Use X as a tool (fork, spoon, money — instrument is the subject)" },
+  "Time expression (no aspect affixes)": { tag: "info", text: "Not a verb — this word does not take aspect affixes; the fixed expressions are shown instead" }
 };
 
-function focusColor(focus) {
-  return FOCUS_COLORS[focus] || "slate";
+// Focus keys in the curated data are free text, so the same pattern appears
+// under several spellings ("Actor (um-)" vs "Actor (-um-)") and some cards
+// carry per-verb annotations ("Object (-in) — root 'dinig'"). Rather than
+// enumerate every variant in the three tables above, fall back to the pattern
+// id that lexicon.js already derives from the key, and look the display data
+// up by that. Keeps a new curated spelling from silently rendering with no
+// colour, no usage badge, and an arbitrary sort position.
+const PATTERN_DISPLAY = {
+  um:          { order: "Actor (-um-)",                color: "rose" },
+  mag:         { order: "Actor (mag-)",                color: "rose" },
+  mang:        { order: "Actor (mang-)",               color: "rose" },
+  mangh:       { order: "Actor (mangh-)",              color: "rose" },
+  ma:          { order: "Actor (ma-)",                 color: "rose" },
+  maka:        { order: "Actor (maka-)",               color: "rose" },
+  magka:       { order: "Actor (magka-)",              color: "rose" },
+  magpa:       { order: "Actor (magpa-)",              color: "rose" },
+  reciprocal:  { order: "Reciprocal (mag-...-an)",     color: "rose" },
+  negation:    { order: "Negation (hindi-)",           color: "slate" },
+  in:          { order: "Object (-in)",                color: "blue" },
+  i:           { order: "Object (i-)",                 color: "blue" },
+  mao:         { order: "Object (ma-)",                color: "blue" },
+  an:          { order: "Locative/Benefactive (-an)",  color: "amber" },
+  ipag:        { order: "Benefactive (ipag-)",         color: "emerald" },
+  ipa:         { order: "Benefactive (ipag-)",         color: "emerald",
+                 tip: { tag: "less-common", text: "Causative — have someone do X, or have X done (ipa- + root)" } },
+  distributive:{ order: "Distributive (per-person)",   color: "violet" },
+  ipang:       { order: "Instrumental (ipang-)",       color: "violet" },
+  "ma-an":     { order: "Instrumental (ipang-)",       color: "blue",
+                 tip: { tag: "common", text: "Stative/potential with ma-...-an — accidental or non-volitional (nakalimutan, naintindihan)" } },
+  "pa-in":     { order: "Actor (magpa-)",              color: "emerald",
+                 tip: { tag: "less-common", text: "Causative object focus — make someone do X (pa- + root + -in)" } },
+  state:       { order: "Negation (hindi-)",           color: "slate",
+                 tip: { tag: "info", text: "State or need — behaves like a verb but describes a condition" } }
+};
+
+// Resolve a free-text focus key to its canonical pattern display entry.
+function patternDisplay(focus) {
+  if (typeof patternIdForFocus !== "function") return null;
+  const id = patternIdForFocus(focus);
+  return (id && PATTERN_DISPLAY[id]) || null;
 }
 
-function focusTip(focus, root) {
-  const baseTip = FOCUS_TIPS[focus];
+function focusColor(focus) {
+  if (FOCUS_COLORS[focus]) return FOCUS_COLORS[focus];
+  const display = patternDisplay(focus);
+  return (display && display.color) || "slate";
+}
+
+// Sort position for a focus card. Unlisted spellings inherit the position of
+// the canonical key for their pattern, so they sort next to their own family
+// rather than being dumped at the end in insertion order.
+function focusRank(focus) {
+  const direct = FOCUS_ORDER.indexOf(focus);
+  if (direct !== -1) return direct;
+  const display = patternDisplay(focus);
+  const inherited = display ? FOCUS_ORDER.indexOf(display.order) : -1;
+  // Nudge inherited positions just after their canonical sibling so the
+  // canonical spelling still leads its family.
+  return inherited === -1 ? -1 : inherited + 0.5;
+}
+
+function focusTip(focus, root, card) {
+  const display = patternDisplay(focus);
+  // An unlisted spelling inherits the usage badge of the canonical key for its
+  // pattern ("Actor (um-)" gets what "Actor (-um-)" says), unless the pattern
+  // defines its own tip.
+  const baseTip = FOCUS_TIPS[focus]
+    || (display && (display.tip || FOCUS_TIPS[display.order]));
   if (!baseTip) return null;
   if (!root) return baseTip;
   // Override commonness for auto-generated focuses based on whether the verb
-  // commonly takes that focus (the list is also checked in the generator).
+  // commonly takes that focus. These lists are the single source of truth --
+  // the generator checks the same constants when it builds the card, so the
+  // badge shown here can no longer disagree with the form that was generated.
   const r = root.toLowerCase();
-  if (focus === "Actor (maka-)" && !["kain", "inom", "lakad", "takbo", "sulat", "basa", "tulog", "gawa", "aral", "trabaho", "tulong", "harap", "tayo", "upo", "hinga"].includes(r)) {
-    return { tag: "uncommon", text: "Less commonly used for this verb — 'can do X' is usually expressed differently" };
+  const pattern = typeof patternIdForFocus === "function" ? patternIdForFocus(focus) : null;
+  if (!pattern) return baseTip;
+
+  // Corpus evidence, where we have it, outranks the generic per-pattern blurb:
+  // it is a claim about this verb rather than about the affix in general.
+  // Prefer evidence for the forms this card actually shows; fall back to the
+  // pattern-level table when the card's forms are not in the corpus index.
+  const cardEv = cardEvidence(card);
+  const tier = tierFromEvidence(cardEv) || attestationTier(r, pattern);
+  const evidence = cardEv || attestationFor(r, pattern);
+  if (tier && evidence) {
+    if (tier === "common") {
+      return { tag: "common", text: `${baseTip.text} — well attested for this verb (${evidence.conv.toLocaleString()} uses in the reference corpora)` };
+    }
+    if (tier === "less-common") {
+      return { tag: "less-common", text: `Valid but uncommon for this verb — only ${evidence.conv} uses in the reference corpora` };
+    }
+    return { tag: "uncommon", text: UNATTESTED_TEXT[pattern] || "Not found in the reference corpora for this verb — prefer the focuses above" };
   }
-  if (focus === "Actor (magka-)" && !["roon", "isa", "dalawa", "tatlo", "kaibigan", "bahay", "trabaho", "asawa", "buhay", "oras", "pera", "lugi", "tuwa", "galak", "takot", "sakit"].includes(r)) {
-    return { tag: "uncommon", text: "Less commonly used for this verb — 'have/get' typically uses other forms" };
-  }
-  if (focus === "Reciprocal (mag-...-an)" && !["usap", "tulong", "away", "halik", "yakap", "suntok", "tama", "lakad", "takbo", "hawak", "tingin", "kilala", "libot", "ikot"].includes(r)) {
-    return { tag: "uncommon", text: "Less commonly used for this verb — 'each other' is usually expressed with other forms" };
-  }
-  if (focus === "Actor (mang-)" && !r.startsWith("h") && !["bili", "isda", "huli", "sipa", "basa", "kuha", "gala", "saka", "ani", "pitas", "bunot", "putol", "karga", "sundo", "hila", "takbo", "lakad", "langoy", "kayod", "linis"].includes(r)) {
-    return { tag: "uncommon", text: "Less commonly used for this verb — mang- pattern is for specific action categories" };
-  }
+
+  // No corpus data: fall back to the curated lists.
+  if (pattern === "maka" && !MAKA_COMMON_ROOTS.includes(r)) return { tag: "uncommon", text: UNATTESTED_TEXT.maka };
+  if (pattern === "magka" && !MAGKA_COMMON_ROOTS.includes(r)) return { tag: "uncommon", text: UNATTESTED_TEXT.magka };
+  if (pattern === "reciprocal" && !RECIPROCAL_COMMON_ROOTS.includes(r)) return { tag: "uncommon", text: UNATTESTED_TEXT.reciprocal };
+  if ((pattern === "mang" || pattern === "mangh") && !MANG_COMMON_ROOTS.includes(r)) return { tag: "uncommon", text: UNATTESTED_TEXT.mang };
   return baseTip;
 }
+
+const UNATTESTED_TEXT = {
+  maka: "Less commonly used for this verb — 'can do X' is usually expressed differently",
+  magka: "Less commonly used for this verb — 'have/get' typically uses other forms",
+  reciprocal: "Less commonly used for this verb — 'each other' is usually expressed with other forms",
+  mang: "Less commonly used for this verb — mang- pattern is for specific action categories"
+};
 
 function renderResult(result) {
   const root = result.root;
@@ -1367,8 +1745,8 @@ function renderResult(result) {
 
   // Conjugation grid: one card per focus
   const focusList = Object.keys(result.conjugations).sort((a, b) => {
-    const ia = FOCUS_ORDER.indexOf(a);
-    const ib = FOCUS_ORDER.indexOf(b);
+    const ia = focusRank(a);
+    const ib = focusRank(b);
     if (ia === -1 && ib === -1) return 0;
     if (ia === -1) return 1;
     if (ib === -1) return -1;
@@ -1398,7 +1776,7 @@ function renderResult(result) {
     html += `<div class="focus-type">${escapeHtml(c.focus)}</div>`;
     html += `</div>`;
     // Commonness / usage tip badge
-    const tip = focusTip(focus, root);
+    const tip = focusTip(focus, root, c);
     if (tip) {
       const tagClass = `focus-tip tag-${tip.tag}`;
       const star = tip.tag === "common" ? "★ " : tip.tag === "less-common" ? "· " : tip.tag === "uncommon" ? "△ " : "";

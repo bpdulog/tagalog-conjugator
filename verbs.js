@@ -3703,13 +3703,13 @@ const VERB_DATABASE = {
   limot: {
     root: "limot",
     meaning: "to forget",
-    notes: "Stative ma-…-an circumfix: makalimutan / nakalimutan / nakakalimutan / makakalimutan.",
+    notes: "Stative ma-…-an circumfix: makalimutan / nakalimutan / nakakalimutan / makakalimutan. Filed under ma-…-an, not Actor focus: the forgetter is a ng-actor (nakalimutan KO), and the thing forgotten is the subject.",
     conjugations: {
-      "Actor (ma-)": {
-        focus: "Actor Focus (Stative — forgetting)",
-        description: "The person in the state of forgetting. Uses the ma-…-an circumfix (makalimutan), not plain ma-.",
+      "Ability / Understand (ma-...-an)": {
+        focus: "Stative / Non-volitional Object Focus",
+        description: "The thing forgotten is the subject; the person forgetting is marked with ng (ko, niya, nila). Uses the ma-…-an circumfix (makalimutan), not plain ma-.",
         forms: {
-          infinitive:   { form: "makalimutan",   use: "To forget",                                   example: "Huwag kalimutan ang susi. — Don't forget the key." },
+          infinitive:   { form: "makalimutan",   use: "To forget",                                   example: "Baka makalimutan mo ang susi. — You might forget the key." },
           complete:     { form: "nakalimutan",   use: "Forgot — past",                              example: "Nakalimutan ko ang pangalan niya. — I forgot his/her name." },
           progressive:  { form: "nakakalimutan", use: "Forgetting (ongoing)",                       example: "Nakakalimutan ko na ito. — I'm forgetting it now." },
           contemplated: { form: "makakalimutan", use: "Will forget",                                example: "Makakalimutan niya bukas. — He/she will forget tomorrow." }
@@ -5344,8 +5344,8 @@ const CONJUGATED_LOOKUP = {
   "maalala":       { root: "alala", affix: "ma",  aspect: "infinitive" },
   "naalala":       { root: "alala", affix: "ma",  aspect: "complete" },
   "naaalala":      { root: "alala", affix: "ma",  aspect: "progressive" },
-  "makalimutan":     { root: "limot", affix: "ma",  aspect: "infinitive" },
-  "nakalimutan":     { root: "limot", affix: "ma",  aspect: "complete" },
+  "makalimutan":     { root: "limot", affix: "ma-an", aspect: "infinitive" },
+  "nakalimutan":     { root: "limot", affix: "ma-an", aspect: "complete" },
   "magsisi":       { root: "sisi", affix: "mag", aspect: "infinitive" },
   "nagsisi":       { root: "sisi", affix: "mag", aspect: "complete" },
   "nagsisisi":     { root: "sisi", affix: "mag", aspect: "progressive" },

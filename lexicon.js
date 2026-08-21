@@ -147,6 +147,30 @@ const FORM_SEARCH_ALIASES = typeof CURATED_FORM_ALIASES === "undefined"
   ? {}
   : CURATED_FORM_ALIASES;
 
+// Patterns that corpus evidence says a verb needs but the curated data omits.
+// See attestation.js: each was absent from everything the app rendered while
+// occurring frequently, in a full paradigm, in the reference corpora. Merged
+// last so curated decisions still win on everything they do specify.
+const SUGGESTED_PATTERNS = typeof CORPUS_SUGGESTED_PATTERNS === "undefined"
+  ? {}
+  : CORPUS_SUGGESTED_PATTERNS;
+
+function withSuggestedPatterns(root, entry) {
+  const suggested = SUGGESTED_PATTERNS[root];
+  if (!entry || !suggested || !suggested.length) return entry;
+  const patterns = new Set(entry.allowedPatterns);
+  const added = suggested.filter(p => !patterns.has(p));
+  if (!added.length) return entry;
+  for (const p of added) patterns.add(p);
+  return Object.freeze({
+    ...entry,
+    allowedPatterns: [...patterns],
+    // Record why the entry gained a pattern, so a reviewer can tell a
+    // corpus-derived card from a hand-checked one.
+    corpusAdded: Object.freeze(added)
+  });
+}
+
 const VERB_LEXICON = Object.freeze(Object.fromEntries(
   [...new Set([
     ...Object.keys(LEGACY_VERB_LEXICON),
@@ -157,9 +181,10 @@ const VERB_LEXICON = Object.freeze(Object.fromEntries(
     const entry = CURATED_ENTRIES[root]
       ? mergeLexiconEntry(legacy, CURATED_ENTRIES[root])
       : legacy;
-    return [root, CURATED_UPDATES[root]
+    const merged = CURATED_UPDATES[root]
       ? mergeLexiconEntry(entry, CURATED_UPDATES[root])
-      : entry];
+      : entry;
+    return [root, withSuggestedPatterns(root, merged)];
   })
 ));
 

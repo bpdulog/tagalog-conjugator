@@ -25,6 +25,7 @@ const PATTERN_FOCUS_KEYS = Object.freeze({
   ma: "Actor (ma-)",
   in: "Object (-in)",
   i: "Object (i-)",
+  mao: "Object (ma-)",
   an: "Locative/Benefactive (-an)",
   maka: "Actor (maka-)",
   mang: "Actor (mang-)",
@@ -34,6 +35,9 @@ const PATTERN_FOCUS_KEYS = Object.freeze({
   ipa: "Causative (ipa-)",
   ipag: "Benefactive (ipag-)",
   ipang: "Instrumental (ipang-)",
+  "ma-an": "Ability / Understand (ma-...-an)",
+  "pa-in": "Causative (pa-...-in)",
+  state: "State / Need",
   reciprocal: "Reciprocal (mag-...-an)",
   negation: "Negation (hindi-)",
   distributive: "Distributive (per-person)"
@@ -60,8 +64,13 @@ function patternIdForFocus(focusName) {
   if (focus.includes("mangh-")) return "mangh";
   if (focus.includes("mang-")) return "mang";
   if (focus.includes("ipa-")) return "ipa";
+  if (focus.includes("ma-...-an")) return "ma-an";
+  if (focus.includes("pa-...-in")) return "pa-in";
+  if (focus.includes("state / need")) return "state";
 
   if (focus.includes("change of state")) return "ma";
+  // Stative/potential object focus (makita, marinig) before the generic checks.
+  if (focus.includes("object") && focus.includes("(ma-)")) return "mao";
   if (focus.includes("actor") && /\(\-?um\-?\)/.test(focus)) return "um";
   if (focus.includes("actor") && focus.includes("(ma-)")) return "ma";
   if (focus.includes("actor") && focus.includes("(mag-)")) return "mag";
@@ -100,10 +109,58 @@ function normalizeLegacyVerb(root, entry) {
   });
 }
 
-const VERB_LEXICON = Object.freeze(Object.fromEntries(
+const LEGACY_VERB_LEXICON = Object.fromEntries(
   Object.entries(VERB_DATABASE)
     .filter(([root]) => !VERB_ALIASES[root])
     .map(([root, entry]) => [root, normalizeLegacyVerb(root, entry)])
+);
+
+function mergeLexiconEntry(base, update) {
+  const baseOverrides = { ...(base ? base.overrides : {}) };
+  for (const focus of update.removeFocuses || []) delete baseOverrides[focus];
+  const allowedPatterns = new Set(base ? base.allowedPatterns : []);
+  for (const pattern of update.removePatterns || []) allowedPatterns.delete(pattern);
+  for (const pattern of update.allowedPatterns || []) allowedPatterns.add(pattern);
+
+  return Object.freeze({
+    root: update.root || (base && base.root),
+    meanings: update.meanings || (base ? base.meanings : []),
+    allowedPatterns: [...allowedPatterns],
+    overrides: { ...baseOverrides, ...(update.overrides || {}) },
+    examples: [...(base ? base.examples : []), ...(update.examples || [])],
+    status: update.status || (base ? base.status : "curated"),
+    sources: [...(base ? base.sources : []), ...(update.sources || [])],
+    notes: update.notes || (base ? base.notes : "")
+  });
+}
+
+const CURATED_ENTRIES = typeof CURATED_LEXICON_ENTRIES === "undefined"
+  ? {}
+  : CURATED_LEXICON_ENTRIES;
+const CURATED_UPDATES = typeof CURATED_LEXICON_UPDATES === "undefined"
+  ? {}
+  : CURATED_LEXICON_UPDATES;
+const ROOT_SEARCH_ALIASES = typeof CURATED_ROOT_ALIASES === "undefined"
+  ? {}
+  : CURATED_ROOT_ALIASES;
+const FORM_SEARCH_ALIASES = typeof CURATED_FORM_ALIASES === "undefined"
+  ? {}
+  : CURATED_FORM_ALIASES;
+
+const VERB_LEXICON = Object.freeze(Object.fromEntries(
+  [...new Set([
+    ...Object.keys(LEGACY_VERB_LEXICON),
+    ...Object.keys(CURATED_ENTRIES),
+    ...Object.keys(CURATED_UPDATES)
+  ])].map(root => {
+    const legacy = LEGACY_VERB_LEXICON[root];
+    const entry = CURATED_ENTRIES[root]
+      ? mergeLexiconEntry(legacy, CURATED_ENTRIES[root])
+      : legacy;
+    return [root, CURATED_UPDATES[root]
+      ? mergeLexiconEntry(entry, CURATED_UPDATES[root])
+      : entry];
+  })
 ));
 
 function cleanLookupForm(value) {
@@ -139,10 +196,14 @@ function buildConjugatedLookup(lexicon, legacyLookup = {}) {
 
 const LEXICON_CONJUGATED_LOOKUP = buildConjugatedLookup(
   VERB_LEXICON,
-  typeof CONJUGATED_LOOKUP === "undefined" ? {} : CONJUGATED_LOOKUP
+  {
+    ...(typeof CONJUGATED_LOOKUP === "undefined" ? {} : CONJUGATED_LOOKUP),
+    ...FORM_SEARCH_ALIASES
+  }
 );
 
 if (typeof window !== "undefined") {
   window.VERB_LEXICON = VERB_LEXICON;
   window.LEXICON_CONJUGATED_LOOKUP = LEXICON_CONJUGATED_LOOKUP;
+  window.ROOT_SEARCH_ALIASES = ROOT_SEARCH_ALIASES;
 }

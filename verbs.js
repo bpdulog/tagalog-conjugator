@@ -824,7 +824,7 @@ const VERB_DATABASE = {
         forms: {
           infinitive:   { form: "tumakbo",    use: "To run",                                     example: "Tumakbo ka sa park. — Run in the park." },
           complete:     { form: "tumakbo",    use: "Ran — past",                                  example: "Tumakbo siya papunta. — He ran over there." },
-          progressive:  { form: "tumutakbo",  use: "Currently running",                          example: "Tumutakbo siya ngayon. — He is running now." },
+          progressive:  { form: "tumatakbo",  use: "Currently running",                          example: "Tumatakbo siya ngayon. — He is running now." },
           contemplated: { form: "tatakbo",    use: "Will run",                                    example: "Tatakbo ako sa marathon. — I will run in the marathon." }
         }
       },
@@ -932,7 +932,7 @@ const VERB_DATABASE = {
   sara: {
     root: "sara",
     meaning: "to close",
-    notes: "Takes both um- and mag- actor focus",
+    notes: "Takes um- actor focus and -in object focus (sarahin — the h-glide appears because the root ends in a vowel).",
     conjugations: {
       "Actor (-um-)": {
         focus: "Actor Focus",
@@ -948,10 +948,10 @@ const VERB_DATABASE = {
         focus: "Object Focus",
         description: "Focus on what is being closed.",
         forms: {
-          infinitive:   { form: "sarhin",     use: "To close (something specific)",            example: "Sarhin mo ang bintana. — Close the window." },
+          infinitive:   { form: "sarahin",   use: "To close (something specific)",            example: "Sarahin mo ang bintana. — Close the window." },
           complete:     { form: "sinara",     use: "Closed (something) — past",                 example: "Sinara niya ang libro. — She closed the book." },
           progressive:  { form: "sinasara",   use: "Closing (something) — ongoing",             example: "Sinasara niya ang pinto. — He is closing the door." },
-          contemplated: { form: "sasarhin",   use: "Will close (something)",                    example: "Sasarhin niya ang tindahan. — He will close the store." }
+          contemplated: { form: "sasarahin", use: "Will close (something)",                    example: "Sasarahin niya ang tindahan. — He will close the store." }
         }
       }
     }
@@ -1048,7 +1048,7 @@ const VERB_DATABASE = {
   tulong: {
     root: "tulong",
     meaning: "to help",
-    notes: "Takes both um- and mag- actor focus",
+    notes: "Takes um-/mag- actor focus; 'tulungan' (object focus) is the everyday way to say 'help someone'.",
     conjugations: {
       "Actor (-um-)": {
         focus: "Actor Focus",
@@ -1070,14 +1070,14 @@ const VERB_DATABASE = {
           contemplated: { form: "magtutulong",   use: "Will help",                               example: "Magtutulong ako sa party. — I will help at the party." }
         }
       },
-      "Benefactive (i-)": {
-        focus: "Benefactive Focus",
-        description: "Helping someone — focusing on the beneficiary.",
+      "Object (-an)": {
+        focus: "Object Focus",
+        description: "Focus on the person being helped — the everyday way to say 'help someone'.",
         forms: {
-          infinitive:   { form: "itulong",      use: "To offer / contribute (something) as help",        example: "Itulong mo ang pera mo sa kanila. — Contribute your money to help them." },
-          complete:     { form: "itinulong",    use: "Contributed as help — past",                       example: "Itinulong niya ang kanyang ipon. — He gave his savings to help." },
-          progressive:  { form: "itinutulong",  use: "Contributing as help — ongoing",                   example: "Itinutulong niya ang kanyang oras. — He is giving his time to help." },
-          contemplated: { form: "itutulong",    use: "Will contribute as help",                          example: "Itutulong niya ang kanyang kotse. — He will lend his car to help." }
+          infinitive:   { form: "tulungan",    use: "To help (someone)",                         example: "Tulungan mo ang lola. — Help grandma." },
+          complete:     { form: "tinulungan",  use: "Helped (someone) — past",                   example: "Tinulungan niya ang bata. — He/she helped the child." },
+          progressive:  { form: "tinutulungan", use: "Helping (someone) — ongoing",              example: "Tinutulungan niya ang kapitbahay. — He/she is helping the neighbor." },
+          contemplated: { form: "tutulungan",  use: "Will help (someone)",                       example: "Tutulungan kita bukas. — I will help you tomorrow." }
         }
       }
     }
@@ -1174,7 +1174,7 @@ const VERB_DATABASE = {
   alis: {
     root: "alis",
     meaning: "to leave / to remove",
-    notes: "Vowel-initial root",
+    notes: "Vowel-initial root. um- = to leave; mag- / -in = to remove, take away.",
     conjugations: {
       "Actor (-um-)": {
         focus: "Actor Focus",
@@ -1184,6 +1184,16 @@ const VERB_DATABASE = {
           complete:     { form: "umalis",    use: "Left — past",                              example: "Umalis siya kagabi. — He left last night." },
           progressive:  { form: "umaalis",   use: "Currently leaving",                        example: "Umaalis siya ngayon. — He is leaving now." },
           contemplated: { form: "aalis",     use: "Will leave",                               example: "Aalis siya bukas. — She will leave tomorrow." }
+        }
+      },
+      "Actor (mag-)": {
+        focus: "Actor Focus",
+        description: "Removing / taking away — the one removing is the focus.",
+        forms: {
+          infinitive:   { form: "mag-alis",  use: "To remove / to take away",                 example: "Mag-alis ka ng kalat. — Remove the clutter." },
+          complete:     { form: "nag-alis",  use: "Removed / took away — past",               example: "Nag-alis siya ng dumi kagabi. — He removed the dirt last night." },
+          progressive:  { form: "nag-aalis", use: "Currently removing",                       example: "Nag-aalis siya ngayon ng mga lumang gamit. — He is removing old things now." },
+          contemplated: { form: "mag-aalis", use: "Will remove / take away",                  example: "Mag-aalis siya bukas ng mantsa. — He will remove the stain tomorrow." }
         }
       },
       "Object (-in)": {
@@ -2185,17 +2195,17 @@ const VERB_DATABASE = {
 
   ingat: {
     root: "ingat",
-    meaning: "to be careful / to remember",
-    notes: "Takes -um- and mag-",
+    meaning: "to be careful / to take care",
+    notes: "Vowel-initial root — mag- takes a hyphen: mag-ingat. Also the everyday parting phrase 'Ingat!' (Take care!).",
     conjugations: {
-      "Actor (um-)": {
+      "Actor (mag-)": {
         focus: "Actor Focus",
-        description: "The careful person is the focus.",
+        description: "The careful person is the focus. The standard verb is mag-ingat (not 'umingat').",
         forms: {
-          infinitive:   { form: "umingat",    use: "To be careful / to watch out",                 example: "Umingat ka sa daan. — Be careful on the road." },
-          complete:     { form: "umingat",    use: "Was careful — past",                            example: "Umingat siya sa daan. — He was careful on the road." },
-          progressive:  { form: "umiingat",   use: "Being careful (ongoing)",                        example: "Umiingat siya ngayon. — He is being careful now." },
-          contemplated: { form: "iingat",     use: "Will be careful",                               example: "Iingat siya bukas. — He will be careful tomorrow." }
+          infinitive:   { form: "mag-ingat",  use: "To be careful / to take care",              example: "Mag-ingat ka sa daan. — Take care on the road." },
+          complete:     { form: "nag-ingat",  use: "Was careful — past",                        example: "Nag-ingat siya sa buong biyahe. — He/she was careful the whole trip." },
+          progressive:  { form: "nag-iingat", use: "Being careful (ongoing)",                   example: "Nag-iingat siya sa kanyang kalusugan. — He/she is taking care of his/her health." },
+          contemplated: { form: "mag-iingat", use: "Will be careful",                           example: "Mag-iingat kami bukas. — We will take care tomorrow." }
         }
       }
     }
@@ -2579,8 +2589,8 @@ const VERB_DATABASE = {
         forms: {
           infinitive:   { form: "magbiyahe",     use: "To travel",                                example: "Magbiyahe tayo sa Baguio. — Let's travel to Baguio." },
           complete:     { form: "nagbiyahe",     use: "Traveled — past",                          example: "Nagbiyahe siya kagabi. — He traveled last night." },
-          progressive:  { form: "nagbabiyahe",   use: "Currently traveling",                       example: "Nagbabiyahe siya ngayon. — He is traveling now." },
-          contemplated: { form: "magbabiyahe",   use: "Will travel",                              example: "Magbabiyahe siya bukas. — He will travel tomorrow." }
+          progressive:  { form: "nagbibiyahe",   use: "Currently traveling",                       example: "Nagbibiyahe siya ngayon. — He is traveling now." },
+          contemplated: { form: "magbibiyahe",   use: "Will travel",                              example: "Magbibiyahe siya bukas. — He will travel tomorrow." }
         }
       }
     }
@@ -3693,16 +3703,16 @@ const VERB_DATABASE = {
   limot: {
     root: "limot",
     meaning: "to forget",
-    notes: "Stative (ma-) focus for the state. Mag- for the action.",
+    notes: "Stative ma-…-an circumfix: makalimutan / nakalimutan / nakakalimutan / makakalimutan.",
     conjugations: {
       "Actor (ma-)": {
         focus: "Actor Focus (Stative — forgetting)",
-        description: "The person in the state of forgetting.",
+        description: "The person in the state of forgetting. Uses the ma-…-an circumfix (makalimutan), not plain ma-.",
         forms: {
-          infinitive:   { form: "makalimot",   use: "To forget",                                      example: "Baka makalimot ka. — You might forget." },
-          complete:     { form: "nakalimot",  use: "Forgot — past",                              example: "Nakalimot siya. — He forgot." },
-          progressive:  { form: "nakakalimot", use: "Forgetting (ongoing)",                       example: "Nakakalimot siya. — He is forgetting." },
-          contemplated: { form: "makakalimot", use: "Will forget",                                example: "Makakalimot siya bukas. — He will forget." }
+          infinitive:   { form: "makalimutan",   use: "To forget",                                   example: "Huwag kalimutan ang susi. — Don't forget the key." },
+          complete:     { form: "nakalimutan",   use: "Forgot — past",                              example: "Nakalimutan ko ang pangalan niya. — I forgot his/her name." },
+          progressive:  { form: "nakakalimutan", use: "Forgetting (ongoing)",                       example: "Nakakalimutan ko na ito. — I'm forgetting it now." },
+          contemplated: { form: "makakalimutan", use: "Will forget",                                example: "Makakalimutan niya bukas. — He/she will forget tomorrow." }
         }
       }
     }
@@ -4013,6 +4023,16 @@ const VERB_DATABASE = {
     meaning: "to receive / to accept",
     notes: "Takes both -um- and mag- forms.",
     conjugations: {
+      "Actor (-um-)": {
+        focus: "Actor Focus",
+        description: "Receiving / accepting — the most common form for getting something.",
+        forms: {
+          infinitive:   { form: "tumanggap",   use: "To receive / to accept",                     example: "Tumanggap ka ng regalo. — Accept the gift." },
+          complete:     { form: "tumanggap",   use: "Received / accepted — past",                 example: "Tumanggap siya ng award. — He/she received an award." },
+          progressive:  { form: "tumatanggap", use: "Currently receiving",                        example: "Tumatanggap siya ng bisita ngayon. — He/she is receiving visitors now." },
+          contemplated: { form: "tatanggap",   use: "Will receive",                               example: "Tatanggap siya ng sulat bukas. — He/she will receive a letter tomorrow." }
+        }
+      },
       "Actor (mag-)": {
         focus: "Actor Focus",
         description: "Focuses on the one receiving. Common for gifts, news, requests.",
@@ -4789,7 +4809,7 @@ const CONJUGATED_LOOKUP = {
   "maririnig":   { root: "rinig", affix: "ma",  aspect: "contemplated" },
   // takbo
   "tumakbo":     { root: "takbo", affix: "um",  aspect: "complete" },
-  "tumutakbo":   { root: "takbo", affix: "um",  aspect: "progressive" },
+  "tumatakbo":   { root: "takbo", affix: "um",  aspect: "progressive" },
   "tatakbo":     { root: "takbo", affix: "um",  aspect: "contemplated" },
   "magtakbo":    { root: "takbo", affix: "mag", aspect: "infinitive" },
   "nagtakbo":    { root: "takbo", affix: "mag", aspect: "complete" },
@@ -4824,10 +4844,10 @@ const CONJUGATED_LOOKUP = {
   "sumara":      { root: "sara", affix: "um",  aspect: "complete" },
   "sumasara":    { root: "sara", affix: "um",  aspect: "progressive" },
   "sasara":      { root: "sara", affix: "um",  aspect: "contemplated" },
-  "sarhin":      { root: "sara", affix: "in",  aspect: "infinitive" },
+  "sarahin":     { root: "sara", affix: "in",  aspect: "infinitive" },
   "sinara":      { root: "sara", affix: "in",  aspect: "complete" },
   "sinasara":    { root: "sara", affix: "in",  aspect: "progressive" },
-  "sasarhin":    { root: "sara", affix: "in",  aspect: "contemplated" },
+  "sasarahin":   { root: "sara", affix: "in",  aspect: "contemplated" },
   // laro
   "maglaro":     { root: "laro", affix: "mag", aspect: "infinitive" },
   "naglaro":     { root: "laro", affix: "mag", aspect: "complete" },
@@ -4861,10 +4881,10 @@ const CONJUGATED_LOOKUP = {
   "nagtulong":   { root: "tulong", affix: "mag", aspect: "complete" },
   "nagtutulong": { root: "tulong", affix: "mag", aspect: "progressive" },
   "magtutulong": { root: "tulong", affix: "mag", aspect: "contemplated" },
-  "itulong":     { root: "tulong", affix: "i",   aspect: "infinitive" },
-  "itinulong":   { root: "tulong", affix: "i",   aspect: "complete" },
-  "itinutulong": { root: "tulong", affix: "i",   aspect: "progressive" },
-  "itutulong":   { root: "tulong", affix: "i",   aspect: "contemplated" },
+  "tulungan":    { root: "tulong", affix: "an",  aspect: "infinitive" },
+  "tinulungan":  { root: "tulong", affix: "an",  aspect: "complete" },
+  "tinutulungan": { root: "tulong", affix: "an",  aspect: "progressive" },
+  "tutulungan":  { root: "tulong", affix: "an",  aspect: "contemplated" },
   // huli
   "humuli":      { root: "huli", affix: "um",  aspect: "complete" },
   "humuhuli":    { root: "huli", affix: "um",  aspect: "progressive" },
@@ -5088,8 +5108,9 @@ const CONJUGATED_LOOKUP = {
   "maglipat":      { root: "lipat", affix: "mag", aspect: "infinitive" },
   "naglipat":      { root: "lipat", affix: "mag", aspect: "complete" },
   // ingat
-  "umingat":       { root: "ingat", affix: "um",  aspect: "complete" },
-  "umiingat":      { root: "ingat", affix: "um",  aspect: "progressive" },
+  "mag-ingat":     { root: "ingat", affix: "mag", aspect: "infinitive" },
+  "nag-ingat":     { root: "ingat", affix: "mag", aspect: "complete" },
+  "nag-iingat":    { root: "ingat", affix: "mag", aspect: "progressive" },
   // ayus
   "mag-ayos":      { root: "ayos", affix: "mag", aspect: "infinitive" },
   "nag-ayos":      { root: "ayos", affix: "mag", aspect: "complete" },
@@ -5323,8 +5344,8 @@ const CONJUGATED_LOOKUP = {
   "maalala":       { root: "alala", affix: "ma",  aspect: "infinitive" },
   "naalala":       { root: "alala", affix: "ma",  aspect: "complete" },
   "naaalala":      { root: "alala", affix: "ma",  aspect: "progressive" },
-  "makalimot":     { root: "limot", affix: "ma",  aspect: "infinitive" },
-  "nakalimot":     { root: "limot", affix: "ma",  aspect: "complete" },
+  "makalimutan":     { root: "limot", affix: "ma",  aspect: "infinitive" },
+  "nakalimutan":     { root: "limot", affix: "ma",  aspect: "complete" },
   "magsisi":       { root: "sisi", affix: "mag", aspect: "infinitive" },
   "nagsisi":       { root: "sisi", affix: "mag", aspect: "complete" },
   "nagsisisi":     { root: "sisi", affix: "mag", aspect: "progressive" },
@@ -5452,11 +5473,10 @@ const CONJUGATED_LOOKUP = {
   "inalis":     { root: "alis", affix: "in",  aspect: "complete" },
   "inaalis":    { root: "alis", affix: "in",  aspect: "progressive" },
   "aalisin":    { root: "alis", affix: "in",  aspect: "contemplated" },
-  // dating
-  "magdating":  { root: "dating", affix: "mag", aspect: "infinitive" },
-  "nagdating":  { root: "dating", affix: "mag", aspect: "complete" },
-  "nagdadating":{ root: "dating", affix: "mag", aspect: "progressive" },
-  "magdadating":{ root: "dating", affix: "mag", aspect: "contemplated" },
+  // dating (magdating etc. are not real forms — the verb is umalis-class dumating)
+  "dumating":   { root: "dating", affix: "um",  aspect: "complete" },
+  "dumarating": { root: "dating", affix: "um",  aspect: "progressive" },
+  "darating":   { root: "dating", affix: "um",  aspect: "contemplated" },
   // kuha
   "kumuha":     { root: "kuha", affix: "um",  aspect: "complete" },
   "kumukuha":   { root: "kuha", affix: "um",  aspect: "progressive" },

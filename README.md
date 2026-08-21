@@ -5,7 +5,8 @@ generated only from affix patterns explicitly approved for that root.
 
 ## Verb schema
 
-Add new verbs to `VERB_DATABASE` in `verbs.js` using the normalized shape:
+Add new verbs to `essential-verbs.js` using the normalized shape. Legacy
+records remain in `verbs.js` and are adapted at runtime.
 
 ```js
 usisa: {
@@ -26,13 +27,15 @@ usisa: {
 }
 ```
 
-Supported pattern IDs are `um`, `mag`, `ma`, `in`, `i`, `an`, `maka`,
-`mang`, `mangh`, `magpa`, `magka`, `ipa`, `ipag`, `ipang`, `reciprocal`,
-`negation`, and `distributive`.
+Supported pattern IDs are `um`, `mag`, `ma`, `in`, `i`, `mao` (stative/potential
+object focus, e.g. `makita`), `an`, `maka`, `mang`, `mangh`, `magpa`, `magka`,
+`ipa`, `ipag`, `ipang`, `ma-an`, `pa-in`, `state`, `reciprocal`, `negation`,
+and `distributive`.
 
 Use `overrides` only when a generated card or form needs curated data. During
 the ongoing migration, older entries may still contain complete focus cards;
-`lexicon.js` adapts both formats to the same runtime schema.
+`lexicon.js` adapts both formats and merges corrections into the same runtime
+schema.
 
 Each source should eventually contain enough information to audit the entry,
 for example:

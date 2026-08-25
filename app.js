@@ -393,10 +393,24 @@ function generateConjugations(root, allowedPatterns = []) {
     //   e.g. kain: naka + ka + kain = "nakakakain"
     //   maka- + reduplicated (contemplated) — "will be able to..."
     //   e.g. kain: maka + ka + kain = "makakakain"
-    const infinitive = `maka${r}`;
-    const complete = `naka${r}`;
-    const progressive = `naka${fs}${r}`;
-    const contemplated = `maka${fs}${r}`;
+    // Verb class decides the prefix. Ramos & Bautista pair -um- verbs with
+    // maka- (makabasa, makakain, makasulat) and mag- verbs with makapag-
+    // (makapaglinis, makapagluto, makapaghugas). Roots that take both actor
+    // affixes are listed with the pag optional — maka(pag)sayaw — so when um
+    // is also allowed the shorter -um- reading is the safe default.
+    const usesMakapag = allowedPatterns.includes("mag") && !allowedPatterns.includes("um");
+    const makaStem = usesMakapag ? "makapag" : "maka";
+    const nakaStem = usesMakapag ? "nakapag" : "naka";
+    const infinitive = `${makaStem}${r}`;
+    const complete = `${nakaStem}${r}`;
+    // Both aspects have an attested doublet: the copy can fall on the root
+    // (nakasusulat) or on the prefix (nakakasulat). The root-copy spelling is
+    // the one the corpus tables are keyed on, so it stays canonical here and
+    // the prefix-copy variant is named in the usage line instead.
+    const progressive = `${nakaStem}${fs}${r}`;
+    const contemplated = `${makaStem}${fs}${r}`;
+    const makaAltProgressive = `${nakaStem}ka${r}`;
+    const makaAltContemplated = `${makaStem}ka${r}`;
     // maka- is productively used for "can do X" with -um- type verbs (kain → makakain).
     // For other verbs, "can do X" is more commonly expressed as "kayang X-in" or
     // "magagawa ko ang X". Many maka- forms (like makatapon) are grammatically
@@ -421,8 +435,8 @@ function generateConjugations(root, allowedPatterns = []) {
       forms: {
         infinitive:   { form: makaForm,              use: makaUse,                example: makaExample },
         complete:     { form: makaCompleteForm,      use: isMakaCommon ? "Was able to / could (past)" : "Not used — see note above.", example: isMakaCommon ? `${capitalize(complete)} ako kagabi. — I was able to ${r} last night.` : "This form is rarely used in standard Tagalog." },
-        progressive:  { form: makaProgressiveForm,   use: isMakaCommon ? "Being able to (ongoing)" : "Not used — see note above.",   example: isMakaCommon ? `${capitalize(progressive)} siya. — He/she is able to ${r}.` : "This form is rarely used in standard Tagalog." },
-        contemplated: { form: makaContemplatedForm,  use: isMakaCommon ? "Will be able to (future)" : "Not used — see note above.",  example: isMakaCommon ? `${capitalize(contemplated)} siya bukas. — He/she will be able to ${r} tomorrow.` : "This form is rarely used in standard Tagalog." }
+        progressive:  { form: makaProgressiveForm,   use: isMakaCommon ? `Being able to (ongoing) — also said ${makaAltProgressive}` : "Not used — see note above.",   example: isMakaCommon ? `${capitalize(progressive)} siya. — He/she is able to ${r}.` : "This form is rarely used in standard Tagalog." },
+        contemplated: { form: makaContemplatedForm,  use: isMakaCommon ? `Will be able to (future) — also said ${makaAltContemplated}` : "Not used — see note above.",  example: isMakaCommon ? `${capitalize(contemplated)} siya bukas. — He/she will be able to ${r} tomorrow.` : "This form is rarely used in standard Tagalog." }
       }
     };
   }
@@ -580,14 +594,19 @@ function generateConjugations(root, allowedPatterns = []) {
     //   ipinang- + root (complete)
     //   ipinapang- + reduplicated / ipinang- + reduplicated (progressive)
     //   ipapang- + reduplicated / ipang- + reduplicated (contemplated)
-    let ipangPrefix, ipinangPrefix;
-    if (r.startsWith("h")) {
-      ipangPrefix = "ipangh";
-      ipinangPrefix = "ipinangh";
-    } else {
-      ipangPrefix = "ipang";
-      ipinangPrefix = "ipinang";
-    }
+    // Nasal assimilation applies here too, but on narrower terms than the
+    // mang- family. The prefix-final -ng adapts to a following p or b, and the
+    // root's own consonant is RETAINED, where mang- would absorb it:
+    //   bili  → ipambili    (mang- gives mamili, with the b gone)
+    //   punas → ipampunas
+    // Before every other consonant the prefix stays -ng and nothing is dropped:
+    //   linis → ipanglinis,  sugal → ipangsugal,  gamot → ipanggamot
+    //   hila  → ipanghila    (the previous "ipangh" branch produced the
+    //                         impossible double-h spelling "ipanghhila")
+    // Ramos & Bautista record no ipan- allomorph: d/l/r/s/t roots keep ipang-.
+    const ipangAssimilates = "pb".includes(c1);
+    const ipangPrefix = ipangAssimilates ? "ipam" : "ipang";
+    const ipinangPrefix = ipangAssimilates ? "ipinam" : "ipinang";
     const infinitive = `${ipangPrefix}${r}`;
     const complete = `${ipinangPrefix}${r}`;
     const progressive = `ipina${ipangPrefix.slice(1)}${r}`;   // kain → ipinapangkain
@@ -646,6 +665,161 @@ function generateConjugations(root, allowedPatterns = []) {
         contemplated: { form: isReciprocalCommon ? contemplated : `(${contemplated})`, use: isReciprocalCommon ? "Will do to each other" : "Not used — see note above.",                example: isReciprocalCommon ? `${capitalize(contemplated)} sila. — They will ${getEnglish(r).base} each other.` : "This form is rarely used in standard Tagalog." }
       }
     };
+  }
+
+
+  // ============== ASSOCIATIVE — maki- / makipag- (join in) ==============
+  {
+    // maki- asks to share in an action someone else is already doing:
+    //   sakay → makisakay "ride along",  usap → makipag-usap "talk with"
+    // The verb class picks the stem exactly as it does in the aptative:
+    // mag- verbs take makipag-, -um- verbs take plain maki-.
+    // Reduplication copies the prefix syllable "ki", never the root:
+    //   nakikisakay / makikisakay,  nakikipag-usap / makikipag-usap
+    const usesMakipag = allowedPatterns.includes("mag") && !allowedPatterns.includes("um");
+    const makiStem = usesMakipag ? (isVowelInitial ? `pag-${r}` : `pag${r}`) : r;
+    const infinitive = `maki${makiStem}`;
+    const complete = `naki${makiStem}`;
+    const progressive = `nakiki${makiStem}`;
+    const contemplated = `makiki${makiStem}`;
+    result["Actor (maki-)"] = {
+      focus: "Associative Focus",
+      description: `Focuses on the doer joining an action already under way — asking to share in it rather than starting it. "Makisakay" = "ride along with", "makipag-usap" = "get into conversation with".`,
+      forms: {
+        infinitive:   { form: infinitive,   use: "To join in " + getEnglish(r).gerund,  example: `${capitalize(infinitive)} ako sa inyo. — Let me join you in ${getEnglish(r).gerund}.` },
+        complete:     { form: complete,     use: "Joined in — past",                    example: `${capitalize(complete)} siya sa amin. — He/she joined us in ${getEnglish(r).gerund}.` },
+        progressive:  { form: progressive,  use: "Joining in — ongoing",                example: `${capitalize(progressive)} siya sa amin. — He/she is joining us in ${getEnglish(r).gerund}.` },
+        contemplated: { form: contemplated, use: "Will join in",                        example: `${capitalize(contemplated)} siya bukas. — He/she will join in ${getEnglish(r).gerund} tomorrow.` }
+      }
+    };
+  }
+
+  // ============== INVOLUNTARY — mapa- (did it without meaning to) ==============
+  {
+    // mapa- marks an action that escaped the actor rather than being chosen:
+    //   tingin → napatingin "found herself looking", iyak → napaiyak "burst into tears"
+    // The copied syllable is the prefix "pa", not the root: napapatingin.
+    const infinitive = `mapa${r}`;
+    const complete = `napa${r}`;
+    const progressive = `napapa${r}`;
+    const contemplated = `mapapa${r}`;
+    result["Actor (mapa-)"] = {
+      focus: "Actor Focus (Involuntary)",
+      description: `Focuses on an action the doer did not intend — it happened to them. "Napatingin siya" = "he/she found himself looking", "napaiyak" = "burst into tears".`,
+      forms: {
+        infinitive:   { form: infinitive,   use: "To " + getEnglish(r).base + " involuntarily", example: `Baka ${infinitive} ka. — You might ${getEnglish(r).base} without meaning to.` },
+        complete:     { form: complete,     use: "Did it involuntarily — past",                 example: `${capitalize(complete)} siya. — He/she ${getEnglish(r).past} without meaning to.` },
+        progressive:  { form: progressive,  use: "Keeps doing it involuntarily",                example: `${capitalize(progressive)} siya. — He/she keeps ${getEnglish(r).gerund} without meaning to.` },
+        contemplated: { form: contemplated, use: "Will do it involuntarily",                    example: `${capitalize(contemplated)} siya. — He/she will ${getEnglish(r).base} without meaning to.` }
+      }
+    };
+  }
+
+  // ============== REASON FOCUS — ika- (the cause) ==============
+  {
+    // ika- puts the CAUSE of a state in focus: "Ikinagalit niya ang sinabi ko"
+    // = "what I said was what made him angry". The -in- infix lands inside the
+    // prefix (ika- → ikina-), and the copied syllable is the prefix "ka".
+    const infinitive = `ika${r}`;
+    const complete = `ikina${r}`;
+    const progressive = `ikinaka${r}`;
+    const contemplated = `ikaka${r}`;
+    result["Reason (ika-)"] = {
+      focus: "Reason Focus",
+      description: `Focuses on the reason or cause behind a state — the thing that brought it about. "Ikinagalit" = "was the cause of [someone's] anger".`,
+      forms: {
+        infinitive:   { form: infinitive,   use: "To be the cause of becoming " + getEnglish(r).state, example: `${capitalize(infinitive)} ang balita. — The news is what causes it.` },
+        complete:     { form: complete,     use: "Was the cause — past",                               example: `${capitalize(complete)} niya ang balita. — The news was what made him/her ${getEnglish(r).state}.` },
+        progressive:  { form: progressive,  use: "Is the cause — ongoing",                             example: `${capitalize(progressive)} niya ang balita. — The news is what is making him/her ${getEnglish(r).state}.` },
+        contemplated: { form: contemplated, use: "Will be the cause",                                  example: `${capitalize(contemplated)} niya ang balita. — The news will be what makes him/her ${getEnglish(r).state}.` }
+      }
+    };
+  }
+
+  // ============== DIRECTIONAL — ka-...-an (object of a feeling) ==============
+  {
+    // A small closed class of psych and perception roots takes ka-...-an rather
+    // than plain -an for the thing the feeling is directed at:
+    //   takot → katakutan "be afraid of X",  galit → kagalitan "scold X"
+    // The o → u and d → r adjustments apply before the suffix, so the shared
+    // rAn stem is reused here.
+    const infinitive = `ka${rAn}an`;
+    const complete = `kina${rAn}an`;
+    const progressive = `kinaka${rAn}an`;
+    const contemplated = `kaka${rAn}an`;
+    result["Directional (ka-...-an)"] = {
+      focus: "Directional Focus",
+      description: `Focuses on what a feeling or reaction is aimed at. "Katakutan" = "the thing feared", "kagalitan" = "the one scolded". Used with a small set of emotion and perception roots.`,
+      forms: {
+        infinitive:   { form: infinitive,   use: "To direct it at [someone]", example: `${capitalize(infinitive)} mo siya. — Direct it at him/her.` },
+        complete:     { form: complete,     use: "Directed at — past",        example: `${capitalize(complete)} niya ako. — He/she directed it at me.` },
+        progressive:  { form: progressive,  use: "Directing at — ongoing",    example: `${capitalize(progressive)} niya ako. — He/she is directing it at me.` },
+        contemplated: { form: contemplated, use: "Will direct at",            example: `${capitalize(contemplated)} niya ako. — He/she will direct it at me.` }
+      }
+    };
+  }
+
+  // ============== ACTOR FOCUS — magpaka- (do it to the full) ==============
+  {
+    // magpaka- turns the causative on the actor themselves, with an intensive
+    // reading: busog → magpakabusog "eat one's fill". Like magpa-, the copied
+    // syllable is the prefix "pa": nagpapakabusog.
+    const infinitive = `magpaka${r}`;
+    const complete = `nagpaka${r}`;
+    const progressive = `nagpapaka${r}`;
+    const contemplated = `magpapaka${r}`;
+    result["Actor (magpaka-)"] = {
+      focus: "Actor Focus (Intensive Causative)",
+      description: `Focuses on the doer bringing a state fully upon themselves. "Magpakabusog" = "eat one's fill", "magpakabuti" = "make oneself thoroughly good".`,
+      forms: {
+        infinitive:   { form: infinitive,   use: "To make oneself thoroughly " + getEnglish(r).state, example: `${capitalize(infinitive)} ka. — Make yourself thoroughly ${getEnglish(r).state}.` },
+        complete:     { form: complete,     use: "Did so fully — past",                               example: `${capitalize(complete)} siya. — He/she became fully ${getEnglish(r).state}.` },
+        progressive:  { form: progressive,  use: "Doing so fully — ongoing",                          example: `${capitalize(progressive)} siya. — He/she is making himself/herself fully ${getEnglish(r).state}.` },
+        contemplated: { form: contemplated, use: "Will do so fully",                                  example: `${capitalize(contemplated)} siya. — He/she will become fully ${getEnglish(r).state}.` }
+      }
+    };
+  }
+
+  // ============== LOCATIVE — pag-...-an (place / sustained object) ==============
+  {
+    // pag-...-an is a distinct paradigm from plain -an, not a spelling of it:
+    //   aral → pag-aralan "study X",  laro → paglaruan "play with X"
+    // Ramos & Bautista show no -han variant in this set (paghandaan, not
+    // paghandahan), so the suffix is a plain -an on the o->u / d->r stem.
+    const pagPrefix = isVowelInitial ? "pag-" : "pag";
+    const pinagPrefix = isVowelInitial ? "pinag-" : "pinag";
+    const rAnPagRedup = firstSyllable(rAn) + rAn;
+    const infinitive = `${pagPrefix}${rAn}an`;
+    const complete = `${pinagPrefix}${rAn}an`;
+    const progressive = `${pinagPrefix}${rAnPagRedup}an`;
+    const contemplated = `${pagPrefix}${rAnPagRedup}an`;
+    result["Locative (pag-...-an)"] = {
+      focus: "Locative Focus",
+      description: `Focuses on the place of the action, or on an object engaged with over time. "Pag-aralan" = "study [a subject]", "paglaruan" = "play with [a thing]".`,
+      forms: {
+        infinitive:   { form: infinitive,   use: "To " + getEnglish(r).base + " it / at it", example: `${capitalize(infinitive)} mo ito. — ${capitalize(getEnglish(r).base)} this.` },
+        complete:     { form: complete,     use: "Did to / at — past",                       example: `${capitalize(complete)} niya ito. — He/she ${getEnglish(r).past} this.` },
+        progressive:  { form: progressive,  use: "Doing to / at — ongoing",                  example: `${capitalize(progressive)} niya ito. — He/she is ${getEnglish(r).gerund} this.` },
+        contemplated: { form: contemplated, use: "Will do to / at",                          example: `${capitalize(contemplated)} niya ito bukas. — He/she will ${getEnglish(r).base} this tomorrow.` }
+      }
+    };
+  }
+
+  // ============== RECENT PERFECTIVE — ka- + CV (just did it) ==============
+  // ka- plus the reduplicated first syllable marks an action finished a moment
+  // ago: kakakain "just ate", kasusulat "just wrote", kalilinis "just cleaned".
+  // Ramos & Bautista list it once per entry, against the actor-focus paradigm,
+  // so it is attached to the actor cards rather than given a card of its own.
+  {
+    const recentForm = `ka${redup}`;
+    for (const key of ["Actor (-um-)", "Actor (mag-)", "Actor (ma-)"]) {
+      if (!result[key]) continue;
+      result[key].forms.recent = {
+        form: recentForm,
+        use: "Just " + getEnglish(r).past + " a moment ago",
+        example: `${capitalize(recentForm)} lang siya. — He/she just ${getEnglish(r).past}.`
+      };
+    }
   }
 
   const allowed = new Set(allowedPatterns);
@@ -1440,6 +1614,7 @@ const ASPECT_META = {
   complete:     { label: "Complete (Past)",     tag: "Naganap",    color: "amber",  desc: "Action already finished" },
   progressive:  { label: "Progressive (Present)", tag: "Nagaganap", color: "sky",    desc: "Action ongoing or habitual" },
   contemplated: { label: "Contemplated (Future)", tag: "Magaganap", color: "emerald", desc: "Action not yet started" },
+  recent:       { label: "Recent Perfective",   tag: "Katatapos", color: "violet", desc: "Just finished a moment ago" },
   imperative:   { label: "Imperative (Command)",  tag: "Pautos",    color: "rose",   desc: "Command — telling someone to do it" }
 };
 
@@ -1452,6 +1627,9 @@ const FOCUS_ORDER = [
   "Actor (maka-)",
   "Actor (magka-)",
   "Actor (magpa-)",
+  "Actor (magpaka-)",
+  "Actor (maki-)",
+  "Actor (mapa-)",
   "Reciprocal (mag-...-an)",
   "Negation (hindi-)",
   "Object (-in)",
@@ -1460,9 +1638,12 @@ const FOCUS_ORDER = [
   "Object (-an)",
   "Locative/Benefactive (-an)",
   "Locative (-an)",
+  "Locative (pag-...-an)",
+  "Directional (ka-...-an)",
   "Benefactive (i-)",
   "Benefactive (ipag-)",
   "Instrumental (ipang-)",
+  "Reason (ika-)",
   // Not a focus: entries like umaga are nouns/time words kept in the lexicon
   // so a learner searching them gets the fixed expressions instead of an
   // invented conjugation.
@@ -1478,6 +1659,9 @@ const FOCUS_COLORS = {
   "Actor (maka-)":                   "rose",
   "Actor (magka-)":                  "rose",
   "Actor (magpa-)":                  "rose",
+  "Actor (magpaka-)":                "rose",
+  "Actor (maki-)":                   "rose",
+  "Actor (mapa-)":                   "rose",
   "Reciprocal (mag-...-an)":         "rose",
   "Negation (hindi-)":               "slate",
   "Object (-in)":                    "blue",
@@ -1486,6 +1670,9 @@ const FOCUS_COLORS = {
   "Object (-an)":                    "blue",
   "Locative/Benefactive (-an)":      "amber",
   "Locative (-an)":                  "amber",
+  "Locative (pag-...-an)":           "amber",
+  "Directional (ka-...-an)":         "amber",
+  "Reason (ika-)":                   "sky",
   "Benefactive (i-)":                "emerald",
   "Benefactive (ipag-)":             "emerald",
   "Instrumental (ipang-)":           "violet",
@@ -1516,7 +1703,13 @@ const FOCUS_TIPS = {
   "Actor (maka-)":              { tag: "common",      text: "Potential / 'can' (e.g., makakain = can eat)" },
   "Actor (magka-)":             { tag: "less-common", text: "Existential / possessive (e.g., magkaroon = to have / to exist)" },
   "Actor (magpa-)":             { tag: "less-common", text: "Causative — 'make someone do it' (e.g., magpatulog = put to sleep)" },
+  "Actor (magpaka-)":           { tag: "less-common", text: "Intensive — bring the state fully on yourself (magpakabusog)" },
+  "Actor (maki-)":              { tag: "common",      text: "Join in what someone else is doing (makisakay, makipag-usap)" },
+  "Actor (mapa-)":              { tag: "common",      text: "Involuntary — it happened without your meaning it (napaiyak, napatingin)" },
   "Reciprocal (mag-...-an)":    { tag: "common",      text: "Each other / mutual (talk to each other, help each other)" },
+  "Locative (pag-...-an)":      { tag: "common",      text: "Place, or an object engaged with over time (pag-aralan, paglaruan)" },
+  "Directional (ka-...-an)":    { tag: "less-common", text: "What a feeling is aimed at — a small closed class (katakutan, kagalitan)" },
+  "Reason (ika-)":              { tag: "less-common", text: "The cause of a state (ikinagalit = what made them angry)" },
   "Negation (hindi-)":          { tag: "info",        text: "hindi + the ordinary form (hindi kumain / kumakain / kakain); huwag + infinitive for commands" },
   "Object (-in)":               { tag: "common",      text: "Most common — general 'do [something]'" },
   "Object (i-)":                { tag: "common",      text: "For transferring / moving something to a place" },
@@ -1547,6 +1740,12 @@ const PATTERN_DISPLAY = {
   magka:       { order: "Actor (magka-)",              color: "rose" },
   magpa:       { order: "Actor (magpa-)",              color: "rose" },
   reciprocal:  { order: "Reciprocal (mag-...-an)",     color: "rose" },
+  maki:        { order: "Actor (maki-)",               color: "rose" },
+  mapa:        { order: "Actor (mapa-)",               color: "rose" },
+  magpaka:     { order: "Actor (magpaka-)",            color: "rose" },
+  ika:         { order: "Reason (ika-)",               color: "sky" },
+  "ka-an":     { order: "Directional (ka-...-an)",     color: "amber" },
+  "pag-an":    { order: "Locative (pag-...-an)",       color: "amber" },
   in:          { order: "Object (-in)",                color: "blue" },
   i:           { order: "Object (i-)",                 color: "blue" },
   mao:         { order: "Object (ma-)",                color: "blue" },
@@ -1746,7 +1945,7 @@ function renderResult(result) {
     html += `<div class="focus-description">${escapeHtml(c.description)}</div>`;
 
     html += `<div class="aspect-list">`;
-    for (const aspectKey of ["infinitive", "progressive", "complete", "contemplated", "imperative"]) {
+    for (const aspectKey of ["infinitive", "progressive", "complete", "recent", "contemplated", "imperative"]) {
       let f = c.forms[aspectKey];
       // Imperative: if not specified, default to the infinitive form
       // (the form is the same; only the sentence-final particle changes: "ka!" / "mo!" / etc.)
@@ -1803,11 +2002,11 @@ function renderQuickReference(conjugations, focusList) {
   let html = `<div class="quick-ref">`;
   html += `<h2>Quick Reference Table</h2>`;
   html += `<div class="quick-table-wrap"><table class="quick-table">`;
-  html += `<thead><tr><th>Focus</th><th>Infinitive</th><th>Complete (Past)</th><th>Progressive</th><th>Contemplated (Future)</th><th>Imperative</th></tr></thead><tbody>`;
+  html += `<thead><tr><th>Focus</th><th>Infinitive</th><th>Complete (Past)</th><th>Progressive</th><th>Recent Perf.</th><th>Contemplated (Future)</th><th>Imperative</th></tr></thead><tbody>`;
   for (const focus of focusList) {
     const c = conjugations[focus];
     html += `<tr><td class="focus-cell">${escapeHtml(focusDisplayName(focus))}</td>`;
-    for (const aspect of ["infinitive", "complete", "progressive", "contemplated", "imperative"]) {
+    for (const aspect of ["infinitive", "complete", "progressive", "recent", "contemplated", "imperative"]) {
       const f = c.forms[aspect];
       html += `<td>${f ? escapeHtml(f.form) : "—"}</td>`;
     }

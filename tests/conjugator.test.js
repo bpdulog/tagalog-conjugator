@@ -592,4 +592,125 @@ assert.equal(evaluate('generateConjugations("kain", ["in"])["Object (-in)"].form
 // The completed aspect takes no suffix, so the d survives there.
 assert.equal(evaluate('generateConjugations("bayad", ["in"])["Object (-in)"].forms.complete.form'), "binayad");
 
+// ---------------------------------------------------------------------------
+// Affix sets and morphophonemics from Ramos & Bautista, "Handbook of Tagalog
+// Verbs" (1986). Every expected string below is the form the handbook prints.
+// ---------------------------------------------------------------------------
+
+function formsOf(root, patterns, focus) {
+  const card = JSON.parse(evaluate(
+    `JSON.stringify(generateConjugations(${JSON.stringify(root)}, ${JSON.stringify(patterns)}))`));
+  assert.ok(card[focus], `${root} should generate a "${focus}" card`);
+  return ["infinitive", "complete", "progressive", "contemplated"]
+    .map(a => String(card[focus].forms[a].form).replace(/^\(|\)$/g, ""));
+}
+
+// ipang- assimilates its nasal to a following p or b but KEEPS the root
+// consonant, unlike mang- which absorbs it (bili -> mamili but ipambili).
+// Before any other consonant the prefix stays -ng. The h-initial case once
+// produced the impossible double-h spelling "ipanghhila".
+for (const [root, expected] of [
+  ["bili",  ["ipambili", "ipinambili", "ipinapambili", "ipapambili"]],
+  ["punas", ["ipampunas", "ipinampunas", "ipinapampunas", "ipapampunas"]],
+  ["buhat", ["ipambuhat", "ipinambuhat", "ipinapambuhat", "ipapambuhat"]],
+  ["linis", ["ipanglinis", "ipinanglinis", "ipinapanglinis", "ipapanglinis"]],
+  ["sugal", ["ipangsugal", "ipinangsugal", "ipinapangsugal", "ipapangsugal"]],
+  ["hila",  ["ipanghila", "ipinanghila", "ipinapanghila", "ipapanghila"]]
+]) {
+  assert.deepEqual(formsOf(root, ["ipang"], "Instrumental (ipang-)"), expected, `${root} + ipang-`);
+}
+
+// The aptative prefix follows the verb class: -um- verbs take maka-, mag- verbs
+// take makapag-. A root that allows both actor affixes keeps the shorter one.
+assert.deepEqual(formsOf("sulat", ["um", "maka"], "Actor (maka-)"),
+  ["makasulat", "nakasulat", "nakasusulat", "makasusulat"]);
+assert.deepEqual(formsOf("linis", ["mag", "maka"], "Actor (maka-)"),
+  ["makapaglinis", "nakapaglinis", "nakapaglilinis", "makapaglilinis"]);
+assert.deepEqual(formsOf("sayaw", ["um", "mag", "maka"], "Actor (maka-)"),
+  ["makasayaw", "nakasayaw", "nakasasayaw", "makasasayaw"]);
+// The prefix-copy doublet (nakakasulat) is named in the usage line rather than
+// replacing the root-copy spelling the corpus tables are keyed on.
+assert.match(
+  evaluate('generateConjugations("sulat", ["um", "maka"])["Actor (maka-)"].forms.progressive.use'),
+  /nakakasulat/);
+
+// Associative maki- / makipag-, with the prefix syllable "ki" reduplicated.
+assert.deepEqual(formsOf("sakay", ["um", "maki"], "Actor (maki-)"),
+  ["makisakay", "nakisakay", "nakikisakay", "makikisakay"]);
+assert.deepEqual(formsOf("usap", ["mag", "maki"], "Actor (maki-)"),
+  ["makipag-usap", "nakipag-usap", "nakikipag-usap", "makikipag-usap"]);
+assert.deepEqual(formsOf("laro", ["mag", "maki"], "Actor (maki-)"),
+  ["makipaglaro", "nakipaglaro", "nakikipaglaro", "makikipaglaro"]);
+
+// Involuntary mapa-, copying the prefix syllable "pa".
+assert.deepEqual(formsOf("tingin", ["um", "mapa"], "Actor (mapa-)"),
+  ["mapatingin", "napatingin", "napapatingin", "mapapatingin"]);
+assert.deepEqual(formsOf("iyak", ["um", "mapa"], "Actor (mapa-)"),
+  ["mapaiyak", "napaiyak", "napapaiyak", "mapapaiyak"]);
+
+// Reason focus ika-, with -in- landing inside the prefix (ika- -> ikina-).
+assert.deepEqual(formsOf("galit", ["ika"], "Reason (ika-)"),
+  ["ikagalit", "ikinagalit", "ikinakagalit", "ikakagalit"]);
+
+// Directional ka-...-an. The o -> u raising applies before the suffix.
+assert.deepEqual(formsOf("takot", ["ka-an"], "Directional (ka-...-an)"),
+  ["katakutan", "kinatakutan", "kinakatakutan", "kakatakutan"]);
+assert.deepEqual(formsOf("limot", ["ka-an"], "Directional (ka-...-an)"),
+  ["kalimutan", "kinalimutan", "kinakalimutan", "kakalimutan"]);
+assert.deepEqual(formsOf("galit", ["ka-an"], "Directional (ka-...-an)"),
+  ["kagalitan", "kinagalitan", "kinakagalitan", "kakagalitan"]);
+
+// Intensive causative magpaka-, copying the prefix syllable "pa".
+assert.deepEqual(formsOf("busog", ["magpaka"], "Actor (magpaka-)"),
+  ["magpakabusog", "nagpakabusog", "nagpapakabusog", "magpapakabusog"]);
+
+// Locative pag-...-an: a separate paradigm from plain -an, hyphenated before a
+// vowel-initial root, and taking a plain -an with no -han variant.
+assert.deepEqual(formsOf("aral", ["mag", "pag-an"], "Locative (pag-...-an)"),
+  ["pag-aralan", "pinag-aralan", "pinag-aaralan", "pag-aaralan"]);
+assert.deepEqual(formsOf("laro", ["mag", "pag-an"], "Locative (pag-...-an)"),
+  ["paglaruan", "pinaglaruan", "pinaglalaruan", "paglalaruan"]);
+assert.deepEqual(formsOf("isip", ["mag", "pag-an"], "Locative (pag-...-an)"),
+  ["pag-isipan", "pinag-isipan", "pinag-iisipan", "pag-iisipan"]);
+// pag-...-an must not collapse into the plain -an id: they are distinct
+// paradigms with distinct corpus frequencies.
+assert.equal(evaluate('patternIdForFocus("Locative (pag-...-an)")'), "pag-an");
+assert.equal(evaluate('patternIdForFocus("Directional (ka-...-an)")'), "ka-an");
+assert.equal(evaluate('patternIdForFocus("Locative/Benefactive (-an)")'), "an");
+// magpaka- must be resolved before magpa- claims it.
+assert.equal(evaluate('patternIdForFocus("Actor (magpaka-)")'), "magpaka");
+assert.equal(evaluate('patternIdForFocus("Actor (magpa-)")'), "magpa");
+
+// Recent perfective: ka- plus the reduplicated first syllable, on actor cards.
+for (const [root, pattern, focus, expected] of [
+  ["sulat", "um",  "Actor (-um-)", "kasusulat"],
+  ["kain",  "um",  "Actor (-um-)", "kakakain"],
+  ["abot",  "um",  "Actor (-um-)", "kaaabot"],   // vowel-initial copies the vowel
+  ["linis", "mag", "Actor (mag-)", "kalilinis"],
+  ["tulog", "ma",  "Actor (ma-)",  "katutulog"]
+]) {
+  assert.equal(
+    evaluate(`generateConjugations(${JSON.stringify(root)}, [${JSON.stringify(pattern)}])` +
+      `[${JSON.stringify(focus)}].forms.recent.form`),
+    expected, `${root} recent perfective`);
+}
+// Object and locative cards take no recent perfective; the handbook lists it
+// once per entry, against the actor paradigm.
+assert.equal(
+  evaluate('generateConjugations("sulat", ["in"])["Object (-in)"].forms.recent'),
+  undefined);
+
+// Syncope before a vowel-initial suffix: the regular spellings sakitan and
+// datingan are not the attested forms, so these are curated outright.
+assert.equal(evaluate('VERB_LEXICON.sakit.overrides["Directional (-an)"].forms.infinitive.form'), "saktan");
+assert.equal(evaluate('VERB_LEXICON.dating.overrides["Directional (-an)"].forms.infinitive.form'), "datnan");
+assert.equal(evaluate('VERB_LEXICON.dating.overrides["Directional (-an)"].forms.progressive.form'), "dinaratnan");
+
+// Handbook-sourced patterns must be marked, so a reviewer can tell them from
+// hand-checked and corpus-derived cards.
+assert.deepEqual(JSON.parse(evaluate('JSON.stringify(VERB_LEXICON.sakay.handbookAdded)')), ["maki"]);
+assert.ok(evaluate('VERB_LEXICON.aral.allowedPatterns.includes("pag-an")'));
+assert.ok(evaluate('VERB_LEXICON.takot.allowedPatterns.includes("ika")'));
+assert.ok(evaluate('VERB_LEXICON.takot.allowedPatterns.includes("ka-an")'));
+
 console.log(`All conjugator regression checks passed (${allCards.length} forms checked).`);

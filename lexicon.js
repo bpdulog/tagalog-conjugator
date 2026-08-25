@@ -56,8 +56,12 @@ function patternIdForFocus(focusName) {
 
   // Check compound affixes before their shorter prefixes.
   if (focus.includes("reciprocal")) return "reciprocal";
+  if (focus.includes("maki-")) return "maki";
+  if (focus.includes("mapa-")) return "mapa";
+  if (focus.includes("ika-")) return "ika";
   if (focus.includes("instrumental") || focus.includes("ipang-")) return "ipang";
   if (focus.includes("ipag-")) return "ipag";
+  if (focus.includes("magpaka-")) return "magpaka";
   if (focus.includes("magpa-")) return "magpa";
   if (focus.includes("magka-")) return "magka";
   if (focus.includes("maka-")) return "maka";
@@ -76,6 +80,8 @@ function patternIdForFocus(focusName) {
   if (focus.includes("actor") && focus.includes("(mag-)")) return "mag";
   if (focus.includes("object") && focus.includes("(-in)")) return "in";
   if ((focus.includes("object") || focus.includes("benefactive")) && focus.includes("(i-)")) return "i";
+  if (focus.includes("pag-...-an")) return "pag-an";
+  if (focus.includes("ka-...-an")) return "ka-an";
   if (focus.includes("(-an)") || focus.includes("...-an)")) return "an";
 
   return null;
@@ -171,6 +177,56 @@ function withSuggestedPatterns(root, entry) {
   });
 }
 
+// Affix sets documented for these roots in Ramos & Bautista, "Handbook of
+// Tagalog Verbs" (1986), which the generator can build but the curated data had
+// no entry for. Kept in its own table, parallel to CORPUS_SUGGESTED_PATTERNS
+// above, so a reviewer can tell a handbook-sourced card from a hand-checked or
+// corpus-derived one.
+//
+// These carry no corpus frequency yet: attestation.js was generated before
+// these pattern ids existed, so it has no counts under them and every form
+// here would tier as unattested if it were gated. Each root below is one the
+// handbook itself lists for that affix, which is the strongest evidence
+// available until build-attestation.js is re-run over the corpora.
+const HANDBOOK_PATTERNS = Object.freeze({
+  // Associative maki- / makipag-: joining an action already under way.
+  sakay: ["maki"], usap: ["maki", "pag-an"], laro: ["maki", "pag-an"],
+  kain: ["maki"], tulong: ["maki"],
+
+  // Involuntary mapa-: the action escaped the actor.
+  tingin: ["mapa"], iyak: ["mapa"], upo: ["mapa"], tawa: ["mapa"],
+  sagot: ["mapa"], punta: ["mapa"], tigil: ["mapa"], kanta: ["mapa"],
+  ngiti: ["mapa"], sama: ["mapa"],
+
+  // Reason focus ika-: the cause behind a state.
+  galit: ["ika", "ka-an"], takot: ["ika", "ka-an"], saya: ["ika"],
+  ganda: ["ika"], laki: ["ika"], lamig: ["ika"], init: ["ika"],
+  gising: ["ika"], gutom: ["ika"], pagod: ["ika"], hiya: ["ika", "mapa"],
+  linis: ["ika"], sara: ["ika"], haba: ["ika"], gulo: ["ika"], tuwa: ["ika"],
+
+  // Directional ka-...-an: what a feeling is aimed at.
+  limot: ["ka-an"],
+
+  // Locative pag-...-an: place, or an object engaged with over time.
+  aral: ["pag-an"], lagay: ["pag-an"], isip: ["pag-an"], luto: ["pag-an"],
+  handa: ["pag-an"], tago: ["pag-an"], bili: ["pag-an"], gamit: ["pag-an"],
+  pili: ["pag-an"], hugas: ["pag-an"], tanong: ["pag-an"]
+});
+
+function withHandbookPatterns(root, entry) {
+  const handbook = HANDBOOK_PATTERNS[root];
+  if (!entry || !handbook || !handbook.length) return entry;
+  const patterns = new Set(entry.allowedPatterns);
+  const added = handbook.filter(p => !patterns.has(p));
+  if (!added.length) return entry;
+  for (const p of added) patterns.add(p);
+  return Object.freeze({
+    ...entry,
+    allowedPatterns: [...patterns],
+    handbookAdded: Object.freeze(added)
+  });
+}
+
 const VERB_LEXICON = Object.freeze(Object.fromEntries(
   [...new Set([
     ...Object.keys(LEGACY_VERB_LEXICON),
@@ -184,7 +240,7 @@ const VERB_LEXICON = Object.freeze(Object.fromEntries(
     const merged = CURATED_UPDATES[root]
       ? mergeLexiconEntry(entry, CURATED_UPDATES[root])
       : entry;
-    return [root, withSuggestedPatterns(root, merged)];
+    return [root, withHandbookPatterns(root, withSuggestedPatterns(root, merged))];
   })
 ));
 

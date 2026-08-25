@@ -822,6 +822,30 @@ const CURATED_LEXICON_ENTRIES = Object.freeze({
 });
 
 const CURATED_LEXICON_UPDATES = Object.freeze({
+  // Syncope before a vowel-initial suffix. The root loses its final vowel, so
+  // the generator's regular output (sakitan, datingan) is not the attested
+  // form and these paradigms have to be supplied outright.
+  // Ramos & Bautista: SAKIT -an "hurt"; DATING -an "arrive at".
+  dating: {
+    allowedPatterns: ["an"],
+    overrides: {
+      "Directional (-an)": essentialCard(
+        "Directional Focus",
+        "Focuses on what was found on arriving. The root syncopates (dating + -an becomes datnan) and the d becomes r in the reduplicated forms.",
+        essentialForms(
+          ["datnan", "dinatnan", "dinaratnan", "daratnan"],
+          "arrive to find something",
+          [
+            "Baka datnan mo siyang wala. — You might arrive to find him/her gone.",
+            "Dinatnan niya akong natutulog. — He/she arrived to find me asleep.",
+            "Dinaratnan niya akong nagluluto. — He/she keeps arriving to find me cooking.",
+            "Daratnan mo siya bukas. — You will arrive to find him/her tomorrow."
+          ]
+        )
+      )
+    },
+    examples: [{ pattern: "an", aspect: "infinitive", text: "Baka datnan mo siyang wala. — You might arrive to find him/her gone." }]
+  },
   kita: {
     allowedPatterns: ["ipa"],
     overrides: {
@@ -921,10 +945,28 @@ const CURATED_LEXICON_UPDATES = Object.freeze({
   },
   sakit: {
     meanings: ["to hurt", "to be sick", "to become ill"],
-    allowedPatterns: ["magka"],
-    overrides: {},
+    allowedPatterns: ["magka", "an"],
+    overrides: {
+      // Syncope before a vowel-initial suffix: the root loses its final vowel,
+      // so the generator's regular sakitan is not the attested form.
+      // Ramos & Bautista: SAKIT -an "hurt".
+      "Directional (-an)": essentialCard(
+        "Directional Focus",
+        "Focuses on the one hurt. The root syncopates before the suffix: sakit + -an gives saktan, not sakitan.",
+        essentialForms(
+          ["saktan", "sinaktan", "sinasaktan", "sasaktan"],
+          "hurt someone",
+          [
+            "Huwag mo siyang saktan. — Do not hurt him/her.",
+            "Sinaktan niya ang damdamin ko. — He/she hurt my feelings.",
+            "Sinasaktan siya ng balita. — The news is hurting him/her.",
+            "Sasaktan ka nito. — This will hurt you."
+          ]
+        )
+      )
+    },
     examples: [{ pattern: "magka", aspect: "infinitive", text: "Ayokong magkasakit. — I do not want to get sick." }],
-    notes: "Masakit is an adjective ('painful'); sumakit means 'started to hurt'; magkasakit means 'become ill'."
+    notes: "Masakit is an adjective ('painful'); sumakit means 'started to hurt'; magkasakit means 'become ill'. The -an paradigm syncopates to saktan."
   }
 });
 

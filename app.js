@@ -1157,10 +1157,28 @@ const TAGALOG_ENGLISH = {
   download: { base: "download", gerund: "downloading", past: "downloaded", state: "downloaded" },
 };
 
-// Get the English base/gerund/past for a Tagalog root.
-// Falls back to a generic pattern if the root isn't in the dictionary.
+// Get the English base/gerund/past for a Tagalog root. Detailed legacy
+// entries use the hand-written table; extended catalog entries supply a
+// normalized meaning from which we derive a conservative display gloss.
 function getEnglish(root) {
   if (TAGALOG_ENGLISH[root]) return TAGALOG_ENGLISH[root];
+  const entry = typeof VERB_LEXICON === "undefined" ? null : VERB_LEXICON[root];
+  const meaning = (entry && entry.meanings || []).find(value => /^to\s+/i.test(value || ""));
+  if (meaning) {
+    const base = meaning.replace(/^to\s+/i, "").trim();
+    const words = base.split(/\s+/);
+    const verb = words.shift();
+    const tail = words.length ? ` ${words.join(" ")}` : "";
+    const gerundVerb = /ie$/i.test(verb)
+      ? `${verb.slice(0, -2)}ying`
+      : /e$/i.test(verb) && !/(ee|ye)$/i.test(verb)
+        ? `${verb.slice(0, -1)}ing`
+        : `${verb}ing`;
+    const pastVerb = /e$/i.test(verb) ? `${verb}d` : `${verb}ed`;
+    const gloss = { base, gerund: `${gerundVerb}${tail}`, past: `${pastVerb}${tail}`, state: base };
+    TAGALOG_ENGLISH[root] = gloss;
+    return gloss;
+  }
   // No substring fallback. Matching on endsWith/startsWith silently produced
   // wrong glosses for unrelated roots that merely share letters — walis
   // ("sweep") resolved to alis ("leave"), pahinga ("rest") to hinga

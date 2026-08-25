@@ -17,7 +17,7 @@ const projectRoot = path.resolve(__dirname, "..");
 const candidatesPath = path.join(__dirname, "common-verb-candidates.json");
 const candidates = JSON.parse(fs.readFileSync(candidatesPath, "utf8"));
 const strict = process.argv.includes("--strict");
-const CORE_TARGET_SIZE = 200;
+const CORE_TARGET_SIZE = candidates.totalTargetRoots || 500;
 
 function loadApp() {
   const context = vm.createContext({
@@ -29,7 +29,7 @@ function loadApp() {
     clearTimeout
   });
 
-  for (const filename of ["attestation.js", "verbs.js", "essential-verbs.js", "lexicon.js", "app.js"]) {
+  for (const filename of ["attestation.js", "verbs.js", "essential-verbs.js", "everyday-verbs.js", "lexicon.js", "app.js"]) {
     vm.runInContext(fs.readFileSync(path.join(projectRoot, filename), "utf8"), context, { filename });
   }
   return context;
@@ -78,13 +78,15 @@ const uncoveredReview = review.filter(item => item.status !== "covered");
 const duplicateRoots = candidates.requiredRoots.filter(
   (root, index, roots) => roots.indexOf(root) !== index
 );
-const targetSizeMatches = candidates.requiredRoots.length === CORE_TARGET_SIZE;
+const totalLexiconRoots = Object.keys(vm.runInContext("VERB_LEXICON", context)).length;
+const targetSizeMatches = totalLexiconRoots === CORE_TARGET_SIZE;
 
-console.log(`Required core verbs: ${required.length - gaps.length}/${required.length} covered`);
+console.log(`Required source-backed core verbs: ${required.length - gaps.length}/${required.length} covered`);
+console.log(`Total learner catalog: ${totalLexiconRoots}/${CORE_TARGET_SIZE} roots`);
 console.log(`Corpus-form hits across required roots: ${required.reduce((sum, item) => sum + item.hits, 0)}`);
 
 if (!targetSizeMatches) {
-  console.log(`\nCore target size: ${candidates.requiredRoots.length}/${CORE_TARGET_SIZE}`);
+  console.log(`\nLearner catalog size: ${totalLexiconRoots}/${CORE_TARGET_SIZE}`);
 }
 
 if (duplicateRoots.length) {
@@ -105,7 +107,7 @@ for (const item of review) {
 }
 
 if (strict && (gaps.length || !targetSizeMatches || duplicateRoots.length)) {
-  console.error("\nCoverage target is incomplete or malformed. Curate each required root and keep the core target at 200 unique roots.");
+  console.error("\nCoverage target is incomplete or malformed. Curate each required root and keep the learner catalog at 500 roots.");
   process.exitCode = 1;
 }
 

@@ -83,12 +83,14 @@ verb or a new template:
 
 ### Core-verb coverage
 
-`npm run audit:coverage` checks the reviewed 200-root learner-core target in
-[`tools/common-verb-candidates.json`](tools/common-verb-candidates.json). Every
+`npm run audit:coverage` checks the 500-root learner catalog. It requires all
+200 source-backed core roots in
+[`tools/common-verb-candidates.json`](tools/common-verb-candidates.json), and
+also checks that the full runtime lexicon remains exactly 500 roots. Every
 required root must have a curated lexicon entry that renders at least one form;
 the command fails otherwise, so CI protects the target.
 
-The list is seeded from [Pinhok's basic Tagalog verbs](https://www.pinhok.com/kb/tagalog/301/tagalog-verbs/)
+The source-backed core is seeded from [Pinhok's basic Tagalog verbs](https://www.pinhok.com/kb/tagalog/301/tagalog-verbs/)
 and the [Learning Tagalog Course Book 1 sample](https://learningtagalog.com/downloads/learning_tagalog_course_book_1_color_sample.pdf),
 then reviewed for the root forms this app supports. The audit also reports
 corpus-form hits from `attestation.js`. Its review queue highlights likely

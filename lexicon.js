@@ -142,7 +142,10 @@ function mergeLexiconEntry(base, update) {
 
 const CURATED_ENTRIES = typeof CURATED_LEXICON_ENTRIES === "undefined"
   ? {}
-  : CURATED_LEXICON_ENTRIES;
+  : {
+      ...CURATED_LEXICON_ENTRIES,
+      ...(typeof EXPANDED_EVERYDAY_ENTRIES === "undefined" ? {} : EXPANDED_EVERYDAY_ENTRIES)
+    };
 const CURATED_UPDATES = typeof CURATED_LEXICON_UPDATES === "undefined"
   ? {}
   : CURATED_LEXICON_UPDATES;

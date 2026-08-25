@@ -14,7 +14,7 @@ const context = vm.createContext({
   clearTimeout
 });
 
-for (const filename of ["attestation.js", "verbs.js", "essential-verbs.js", "lexicon.js", "app.js"]) {
+for (const filename of ["attestation.js", "verbs.js", "essential-verbs.js", "everyday-verbs.js", "lexicon.js", "app.js"]) {
   const source = fs.readFileSync(path.join(projectRoot, filename), "utf8");
   vm.runInContext(source, context, { filename });
 }
@@ -23,7 +23,12 @@ function evaluate(source) {
   return vm.runInContext(source, context);
 }
 
-assert.equal(evaluate("Object.keys(VERB_LEXICON).length"), 231);
+assert.equal(evaluate("Object.keys(VERB_LEXICON).length"), 500);
+assert.equal(coreVerbCandidates.totalTargetRoots, 500,
+  "the learner catalog target must stay at 500 roots");
+assert.ok(evaluate("VERB_LEXICON.bihis"), "bihis must be included in the extended learner catalog");
+assert.equal(evaluate("EVERYDAY_VERB_EXPANSION.length"), 269,
+  "the extension must supply all 269 roots needed to reach the 500-root target");
 assert.deepEqual(
   JSON.parse(evaluate("JSON.stringify(VERB_LEXICON.kain.meanings)")),
   ["to eat"]
@@ -37,7 +42,7 @@ const missingCoreRoots = coreVerbCandidates.requiredRoots.filter(
   root => !evaluate("Boolean(VERB_LEXICON[" + JSON.stringify(root) + "])")
 );
 assert.equal(coreVerbCandidates.requiredRoots.length, 200,
-  "the everyday core-verb target must contain 200 roots");
+  "the source-backed core target must contain 200 roots");
 assert.equal(new Set(coreVerbCandidates.requiredRoots).size, 200,
   "the everyday core-verb target must not contain duplicate roots");
 assert.deepEqual(missingCoreRoots, [],
@@ -162,6 +167,9 @@ assert.deepEqual(unknownResult.conjugations, {});
 // Essential verb expansion: generated, irregular, and stative forms all
 // render from the normalized entries and resolve back to their root.
 for (const [root, focus, aspect, expected] of [
+  ["bihis", "Actor (mag-)", "infinitive", "magbihis"],
+  ["bihis", "Actor (mag-)", "progressive", "nagbibihis"],
+  ["bihis", "Actor (mag-)", "contemplated", "magbibihis"],
   ["kinig", "Actor (ma-)", "progressive", "nakikinig"],
   ["talo", "Actor (ma-)", "contemplated", "matatalo"],
   ["panalo", "Actor (ma-)", "complete", "nanalo"],
@@ -203,6 +211,8 @@ for (const [form, root] of [
 }
 assert.equal(evaluate('resolveVerb("kelangan").root'), "kailangan");
 assert.equal(evaluate('resolveVerb("tignan").root'), "tingin");
+assert.equal(evaluate('resolveVerb("nagbihis").root'), "bihis",
+  "expanded roots must be discoverable from their generated forms");
 
 for (const [form, root] of [
   ["ipakita", "kita"], ["tatawagan", "tawag"], ["ipasok", "pasok"],

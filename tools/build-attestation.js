@@ -59,7 +59,7 @@ async function tally(file) {
   // app.js reads CORPUS_ATTESTATION; stub it so regeneration never feeds on
   // its own previous output.
   vm.runInContext("var CORPUS_ATTESTATION = {}, CORPUS_SUGGESTED_PATTERNS = {};", ctx);
-  for (const f of ["verbs.js","essential-verbs.js","everyday-verbs.js","lexicon.js","app.js"])
+  for (const f of ["verbs.js","essential-verbs.js","everyday-verbs.js","wiktionary-verbs.js","lexicon.js","app.js"])
     vm.runInContext(fs.readFileSync(path.join(root, f), "utf8"), ctx, { filename: f });
   const LEX = vm.runInContext("VERB_LEXICON", ctx);
   const gen = vm.runInContext("generateConjugations", ctx);

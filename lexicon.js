@@ -56,6 +56,7 @@ function patternIdForFocus(focusName) {
 
   // Check compound affixes before their shorter prefixes.
   if (focus.includes("reciprocal")) return "reciprocal";
+  if (focus.includes("dictionary lemma")) return "dictionary";
   if (focus.includes("maki-")) return "maki";
   if (focus.includes("mapa-")) return "mapa";
   if (focus.includes("ika-")) return "ika";
@@ -144,7 +145,8 @@ const CURATED_ENTRIES = typeof CURATED_LEXICON_ENTRIES === "undefined"
   ? {}
   : {
       ...CURATED_LEXICON_ENTRIES,
-      ...(typeof EXPANDED_EVERYDAY_ENTRIES === "undefined" ? {} : EXPANDED_EVERYDAY_ENTRIES)
+      ...(typeof EXPANDED_EVERYDAY_ENTRIES === "undefined" ? {} : EXPANDED_EVERYDAY_ENTRIES),
+      ...(typeof WIKTIONARY_VERB_LEMMA_EXPANSION === "undefined" ? {} : WIKTIONARY_VERB_LEMMA_EXPANSION)
     };
 const CURATED_UPDATES = typeof CURATED_LEXICON_UPDATES === "undefined"
   ? {}

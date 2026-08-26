@@ -3,7 +3,7 @@ import globals from "globals";
 
 export default [
   {
-    ignores: ["attestation.js", "verbs.js"]
+    ignores: ["attestation.js", "verbs.js", "tools/build-wiktionary-verb-expansion.js"]
   },
   {
     files: ["app.js", "lexicon.js", "essential-verbs.js", "tests/**/*.js", "tools/**/*.js"],

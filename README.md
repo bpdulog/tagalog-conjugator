@@ -83,10 +83,10 @@ verb or a new template:
 
 ### Core-verb coverage
 
-`npm run audit:coverage` checks the 1,000-root learner catalog. It requires all
+`npm run audit:coverage` checks the 2,000-root learner catalog. It requires all
 200 source-backed core roots in
 [`tools/common-verb-candidates.json`](tools/common-verb-candidates.json), and
-also checks that the full runtime lexicon remains exactly 1,000 roots. Every
+also checks that the full runtime lexicon remains exactly 2,000 roots. Every
 required root must have a curated lexicon entry that renders at least one form;
 the command fails otherwise, so CI protects the target.
 
@@ -96,6 +96,14 @@ then reviewed for the root forms this app supports. The audit also reports
 corpus-form hits from `attestation.js`. Its review queue highlights likely
 additions, but does not generate forms automatically: roots can also function
 as nouns or adjectives, and irregular paradigms need curation.
+
+The 2,000-root catalog also includes 1,000 searchable, source-listed verb
+lemmas from [Wiktionary's Tagalog-verb category](https://en.wiktionary.org/wiki/Category:Tagalog_verbs).
+They render as a **Dictionary lemma** card rather than a guessed paradigm;
+their individual focus and aspect forms remain explicitly pending curation.
+`tools/build-wiktionary-verb-expansion.js` reproduces the static snapshot and
+filters any entry that conflicts with an existing curated root or conjugated
+lookup form.
 
 Focus keys are free text, so the same pattern appears under several spellings
 (`Actor (um-)` vs `Actor (-um-)`). Display data is looked up by the pattern id

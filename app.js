@@ -1637,6 +1637,7 @@ const ASPECT_META = {
 };
 
 const FOCUS_ORDER = [
+  "Dictionary lemma",
   "Actor (-um-)",
   "Actor (mag-)",
   "Actor (mang-)",
@@ -1669,6 +1670,7 @@ const FOCUS_ORDER = [
 ];
 
 const FOCUS_COLORS = {
+  "Dictionary lemma":                "slate",
   "Actor (-um-)":                    "rose",
   "Actor (mag-)":                    "rose",
   "Actor (mang-)":                   "rose",
@@ -1713,6 +1715,7 @@ function focusDisplayName(focus) {
 //   "info"       → just context (not a "commonness" claim)
 //   "less-common" → ★ less common / more specialized
 const FOCUS_TIPS = {
+  "Dictionary lemma":          { tag: "info",        text: "Source-listed verb lemma — its focus and aspect paradigm still needs review" },
   "Actor (-um-)":               { tag: "common",      text: "Most common — basic, everyday actions (eat, drink, go, see)" },
   "Actor (mag-)":               { tag: "common",      text: "Most common — intentional activities (cook, study, work, play)" },
   "Actor (mang-)":              { tag: "less-common", text: "For specific actions: shopping, fishing, gathering" },
@@ -1749,6 +1752,8 @@ const FOCUS_TIPS = {
 // up by that. Keeps a new curated spelling from silently rendering with no
 // colour, no usage badge, and an arbitrary sort position.
 const PATTERN_DISPLAY = {
+  dictionary:  { order: "Dictionary lemma",            color: "slate",
+                 tip: { tag: "info", text: "Source-listed verb lemma — its focus and aspect paradigm still needs review" } },
   um:          { order: "Actor (-um-)",                color: "rose" },
   mag:         { order: "Actor (mag-)",                color: "rose" },
   mang:        { order: "Actor (mang-)",               color: "rose" },

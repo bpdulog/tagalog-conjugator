@@ -14,7 +14,7 @@ const context = vm.createContext({
   clearTimeout
 });
 
-for (const filename of ["attestation.js", "verbs.js", "essential-verbs.js", "everyday-verbs.js", "lexicon.js", "app.js"]) {
+for (const filename of ["attestation.js", "verbs.js", "essential-verbs.js", "everyday-verbs.js", "wiktionary-verbs.js", "lexicon.js", "app.js"]) {
   const source = fs.readFileSync(path.join(projectRoot, filename), "utf8");
   vm.runInContext(source, context, { filename });
 }
@@ -23,15 +23,20 @@ function evaluate(source) {
   return vm.runInContext(source, context);
 }
 
-assert.equal(evaluate("Object.keys(VERB_LEXICON).length"), 1000);
-assert.equal(coreVerbCandidates.totalTargetRoots, 1000,
-  "the learner catalog target must stay at 1,000 roots");
+assert.equal(evaluate("Object.keys(VERB_LEXICON).length"), 2000);
+assert.equal(coreVerbCandidates.totalTargetRoots, 2000,
+  "the learner catalog target must stay at 2,000 roots");
 assert.ok(evaluate("VERB_LEXICON.bihis"), "bihis must be included in the extended learner catalog");
-assert.ok(evaluate("VERB_LEXICON.abala"), "abala must be included in the 1,000-root expansion");
+assert.ok(evaluate("VERB_LEXICON.abala"), "abala must be included in the curated expansion");
 assert.equal(evaluate("EVERYDAY_VERB_EXPANSION.length"), 269,
   "the original extension must retain its 269 reviewed roots");
 assert.equal(evaluate("ADDITIONAL_EVERYDAY_VERB_EXPANSION.length"), 500,
   "the second extension must supply 500 unique roots");
+assert.equal(evaluate("Object.keys(WIKTIONARY_VERB_LEMMA_EXPANSION).length"), 1000,
+  "the source-listed extension must supply 1,000 unique verb lemmas");
+assert.ok(evaluate("VERB_LEXICON.aaban"), "aaban must be included in the source-listed expansion");
+assert.equal(evaluate('resolveVerb("aaban").conjugations["Dictionary lemma"].forms.infinitive.form'), "aaban",
+  "a source-listed lemma must render its exact dictionary form without an inferred paradigm");
 assert.equal(evaluate("new Set(ALL_EVERYDAY_VERB_EXPANSIONS.map(([root]) => root)).size"), 769,
   "the everyday extensions must not duplicate a root");
 assert.deepEqual(
@@ -367,12 +372,15 @@ const exampleMismatches = allCards.filter(card => {
 assert.deepEqual(exampleMismatches.map(c => `${c.root} ${c.focus} ${c.aspect}`), [],
   "example sentence must contain the form it illustrates");
 
-// 3. Every root needs a real English gloss. Roots without one silently rendered
-//    as "He/she did not do it" via the generic placeholder.
+// 3. Every root needs either a generated English gloss or an explicit source
+//    lemma label. The latter is used for source-listed verbs whose full
+//    paradigm has intentionally not been inferred.
 const ungloss = JSON.parse(evaluate(`JSON.stringify(
-  Object.keys(VERB_LEXICON).filter(root => !TAGALOG_ENGLISH[root])
+  Object.entries(VERB_LEXICON).filter(([root, entry]) =>
+    !TAGALOG_ENGLISH[root] && !(entry.meanings || []).some(value => /^(to\\s+|tagalog verb lemma:)/i.test(value || ""))
+  ).map(([root]) => root)
 )`));
-assert.deepEqual(ungloss, [], "every lexicon root needs an explicit English gloss");
+assert.deepEqual(ungloss, [], "every lexicon root needs an explicit English gloss or source lemma label");
 
 // 4. No generated example may leak the generic placeholder into user-facing text.
 const placeholderLeaks = allCards.filter(card => /\b(do it|doing it|did it)\b/.test(card.example || ""));

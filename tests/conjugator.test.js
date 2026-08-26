@@ -23,12 +23,17 @@ function evaluate(source) {
   return vm.runInContext(source, context);
 }
 
-assert.equal(evaluate("Object.keys(VERB_LEXICON).length"), 500);
-assert.equal(coreVerbCandidates.totalTargetRoots, 500,
-  "the learner catalog target must stay at 500 roots");
+assert.equal(evaluate("Object.keys(VERB_LEXICON).length"), 1000);
+assert.equal(coreVerbCandidates.totalTargetRoots, 1000,
+  "the learner catalog target must stay at 1,000 roots");
 assert.ok(evaluate("VERB_LEXICON.bihis"), "bihis must be included in the extended learner catalog");
+assert.ok(evaluate("VERB_LEXICON.abala"), "abala must be included in the 1,000-root expansion");
 assert.equal(evaluate("EVERYDAY_VERB_EXPANSION.length"), 269,
-  "the extension must supply all 269 roots needed to reach the 500-root target");
+  "the original extension must retain its 269 reviewed roots");
+assert.equal(evaluate("ADDITIONAL_EVERYDAY_VERB_EXPANSION.length"), 500,
+  "the second extension must supply 500 unique roots");
+assert.equal(evaluate("new Set(ALL_EVERYDAY_VERB_EXPANSIONS.map(([root]) => root)).size"), 769,
+  "the everyday extensions must not duplicate a root");
 assert.deepEqual(
   JSON.parse(evaluate("JSON.stringify(VERB_LEXICON.kain.meanings)")),
   ["to eat"]

@@ -83,10 +83,10 @@ verb or a new template:
 
 ### Core-verb coverage
 
-`npm run audit:coverage` checks the 500-root learner catalog. It requires all
+`npm run audit:coverage` checks the 1,000-root learner catalog. It requires all
 200 source-backed core roots in
 [`tools/common-verb-candidates.json`](tools/common-verb-candidates.json), and
-also checks that the full runtime lexicon remains exactly 500 roots. Every
+also checks that the full runtime lexicon remains exactly 1,000 roots. Every
 required root must have a curated lexicon entry that renders at least one form;
 the command fails otherwise, so CI protects the target.
 

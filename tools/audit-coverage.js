@@ -17,7 +17,7 @@ const projectRoot = path.resolve(__dirname, "..");
 const candidatesPath = path.join(__dirname, "common-verb-candidates.json");
 const candidates = JSON.parse(fs.readFileSync(candidatesPath, "utf8"));
 const strict = process.argv.includes("--strict");
-const CORE_TARGET_SIZE = candidates.totalTargetRoots || 500;
+const CORE_TARGET_SIZE = candidates.totalTargetRoots || 1000;
 
 function loadApp() {
   const context = vm.createContext({
@@ -107,7 +107,7 @@ for (const item of review) {
 }
 
 if (strict && (gaps.length || !targetSizeMatches || duplicateRoots.length)) {
-  console.error("\nCoverage target is incomplete or malformed. Curate each required root and keep the learner catalog at 500 roots.");
+  console.error("\nCoverage target is incomplete or malformed. Curate each required root and keep the learner catalog at 1,000 roots.");
   process.exitCode = 1;
 }
 

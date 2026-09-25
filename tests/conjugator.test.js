@@ -736,4 +736,90 @@ assert.ok(evaluate('VERB_LEXICON.aral.allowedPatterns.includes("pag-an")'));
 assert.ok(evaluate('VERB_LEXICON.takot.allowedPatterns.includes("ika")'));
 assert.ok(evaluate('VERB_LEXICON.takot.allowedPatterns.includes("ka-an")'));
 
+// ---------------------------------------------------------------------------
+// Random verb picker
+//
+// The draw must never open an empty page: every root it can return has to
+// resolve to a real card, and the pick must be able to land on ANY such root
+// rather than on a fixed favourite.
+// ---------------------------------------------------------------------------
+
+const randomPool = JSON.parse(evaluate("JSON.stringify(randomVerbPool())"));
+assert.ok(randomPool.length > 500, `the random pool should be substantial, got ${randomPool.length}`);
+assert.equal(new Set(randomPool).size, randomPool.length, "the random pool must not repeat a root");
+// Every draw must resolve: a stale root in the pool would render nothing.
+const unresolvable = randomPool.filter(root => !evaluate(
+  `Boolean(resolveVerb(${JSON.stringify(root)}) &&
+    Object.keys(resolveVerb(${JSON.stringify(root)}).conjugations).length)`
+));
+assert.deepEqual(unresolvable, [], "every random-pool root must resolve to at least one card");
+// Source-listed lemmas have a lookup entry but no reviewed paradigm, so drawing
+// one would show "This root needs review" instead of a conjugation.
+assert.ok(!randomPool.includes("aaban"), "a source-listed lemma must not be drawn");
+assert.ok(
+  randomPool.every(root => evaluate(`VERB_LEXICON[${JSON.stringify(root)}].status !== "reference"`)),
+  "reference-status roots must not be drawn"
+);
+// The pool is cached: the second call must not rebuild it.
+assert.equal(evaluate("randomVerbPool() === randomVerbPool()"), true,
+  "the random pool must be built once and reused");
+
+// A real draw: repeated picks must stay inside the pool and produce renderable
+// results, and at least one of them must highlight a card.
+const draws = JSON.parse(evaluate(`JSON.stringify(
+  Array.from({ length: 50 }, () => {
+    const picked = pickRandomVerbResult();
+    return picked && {
+      root: picked.root,
+      isRandom: picked.isRandom === true,
+      focus: picked.randomFocus,
+      hasCard: Boolean(picked.randomFocus && picked.conjugations[picked.randomFocus]),
+      cards: Object.keys(picked.conjugations).length
+    };
+  })
+)`));
+assert.equal(draws.length, 50, "pickRandomVerbResult must always return a result");
+assert.ok(draws.every(d => randomPool.includes(d.root)), "a draw must come from the pool");
+assert.ok(draws.every(d => d.isRandom && d.hasCard), "a draw must mark itself and highlight a card");
+assert.ok(new Set(draws.map(d => d.root)).size > 1, "the draw must not always return the same verb");
+
+// The highlighted card is a strongly attested one whenever the verb has one, so
+// a draw does not land on an unattested pattern when a solid card exists.
+const weakFocusPicks = [];
+for (const root of randomPool.slice(0, 200)) {
+  const cards = JSON.parse(evaluate(`JSON.stringify(Object.keys(resolveVerb(${JSON.stringify(root)}).conjugations))`));
+  const strong = cards.filter(focus => {
+    const pattern = evaluate(`patternIdForFocus(${JSON.stringify(focus)})`);
+    const evidence = pattern && JSON.parse(evaluate(
+      `JSON.stringify(attestationFor(${JSON.stringify(root)}, ${JSON.stringify(pattern)}))`));
+    return evidence && evidence.conv >= 100 && evidence.aspects >= 2;
+  });
+  if (!strong.length) continue;
+  const picked = evaluate(`randomFocusFor(${JSON.stringify(cards)}, ${JSON.stringify(root)})`);
+  if (!strong.includes(picked)) weakFocusPicks.push(`${root}: ${picked}`);
+}
+assert.deepEqual(weakFocusPicks, [],
+  "a draw must prefer a strongly attested card when the verb has one");
+
+// "Negation (hindi-)" is attached to almost every verb by the resolver, so
+// drawing it would open most verbs on a "huwag ..." command instead of on one
+// of the verb's own focuses.
+assert.deepEqual(
+  randomPool.filter(root => evaluate(
+    `randomFocusFor(Object.keys(resolveVerb(${JSON.stringify(root)}).conjugations), ${JSON.stringify(root)})`
+  ) === "Negation (hindi-)"),
+  [],
+  "a draw must not feature the supplementary negation card");
+for (const root of ["boil", "timpla", "panaginip"]) {
+  assert.notEqual(
+    evaluate(`randomFocusFor(Object.keys(resolveVerb(${JSON.stringify(root)}).conjugations), ${JSON.stringify(root)})`),
+    "Negation (hindi-)",
+    `${root} must not be featured on its negation card`);
+}
+
+// The rendered page must label a draw as such and expose the drawn focus.
+const randomHtml = evaluate("renderResult(pickRandomVerbResult())");
+assert.match(randomHtml, /Random pick/, "a random draw must be labelled in the header");
+assert.match(randomHtml, /focus-card focus-\w+ highlighted/, "a random draw must highlight a card");
+
 console.log(`All conjugator regression checks passed (${allCards.length} forms checked).`);

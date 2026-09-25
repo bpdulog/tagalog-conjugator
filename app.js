@@ -1627,6 +1627,89 @@ function resolveVerb(input) {
 // UI Rendering
 // ============================================================
 
+// ----- Random verb picker -----
+// A learner who does not have a verb in mind can ask for a random one. Picking
+// by index would be uniform over the LIST, not over the verbs a learner can
+// actually study: half of the lexicon is source-listed lemmas with no approved
+// paradigm (status "reference"), and every paradigm the generator builds from a
+// curated root is a hand-checked one, so only those are offered.
+//
+// The pool is derived from the loaded lexicon rather than hard-coded, so it can
+// never name a root the app cannot resolve, and it stays correct as the
+// lexicon grows. It is built once and cached: resolving 1,000 roots takes about
+// 75ms, which is too slow to repeat per click.
+let RANDOM_VERB_POOL = null;
+
+function randomVerbPool() {
+  if (RANDOM_VERB_POOL) return RANDOM_VERB_POOL;
+  if (typeof VERB_LEXICON === "undefined") return [];
+
+  const candidates = [];
+  for (const [root, entry] of Object.entries(VERB_LEXICON)) {
+    // A source-listed lemma (aaban, abahin) is indexed for lookup but has no
+    // reviewed affixes; drawing it would open an empty page.
+    if (!entry || entry.status === "reference") continue;
+    if (!entry.allowedPatterns || !entry.allowedPatterns.length) continue;
+    // "Dictionary lemma" is the placeholder the resolver gives a root it
+    // recognises but cannot conjugate, so a root carrying only that card is
+    // not drawable either.
+    const cards = Object.keys(resolveVerb(root).conjugations || {});
+    if (!cards.length) continue;
+    if (cards.length === 1 && cards[0] === "Dictionary lemma") continue;
+    candidates.push(root);
+  }
+
+  RANDOM_VERB_POOL = Object.freeze(candidates);
+  return RANDOM_VERB_POOL;
+}
+
+// Which focus the random draw lands on. The full paradigm can run to a dozen
+// cards and an unattested pattern renders as a parenthesised candidate, so a
+// draw prefers a strongly attested one; a verb with no clear favourite still
+// gets a card instead of nothing.
+//
+// "Negation (hindi-)" is skipped: it is a supplementary card the resolver
+// attaches to every verb rather than one of the verb's own focuses, so opening
+// a drawn verb on "huwag magboil" would teach a command rather than a paradigm.
+const RANDOM_FOCUS_EXCLUDED = new Set(["Negation (hindi-)"]);
+
+function randomFocusFor(cardList, root) {
+  const drawable = cardList.filter(focus => !RANDOM_FOCUS_EXCLUDED.has(focus));
+  const pool = drawable.length ? drawable : cardList;
+  if (!pool.length) return null;
+  const best = pool.filter(focus => {
+    const pattern = typeof patternIdForFocus === "function" ? patternIdForFocus(focus) : null;
+    const evidence = pattern ? attestationFor(root, pattern) : null;
+    return !!evidence && evidence.conv >= ATTESTATION_COMMON_HITS &&
+      evidence.aspects >= ATTESTATION_MIN_ASPECTS;
+  });
+  const candidates = best.length ? best : pool;
+  return candidates[Math.floor(Math.random() * candidates.length)];
+}
+
+// Exposed for the UI (and asserted by the regression tests), so the button
+// cannot drift from what the page is able to render.
+function pickRandomVerb() {
+  const pool = randomVerbPool();
+  if (!pool.length) return null;
+  return pool[Math.floor(Math.random() * pool.length)];
+}
+
+// Draw a verb, then resolve it down to a single highlighted card. Returns a
+// result shaped exactly like resolveVerb's, so the existing renderer handles a
+// draw with no special casing beyond the two random-pick fields.
+function pickRandomVerbResult() {
+  const root = pickRandomVerb();
+  if (!root) return null;
+  const result = resolveVerb(root);
+  if (!result) return null;
+  return {
+    ...result,
+    isRandom: true,
+    randomFocus: randomFocusFor(Object.keys(result.conjugations), root)
+  };
+}
+
 const ASPECT_META = {
   infinitive:   { label: "Infinitive",          tag: "Pawatas",    color: "slate",  desc: "Base / to-verb form" },
   complete:     { label: "Complete (Past)",     tag: "Naganap",    color: "amber",  desc: "Action already finished" },
@@ -1866,6 +1949,14 @@ function renderResult(result) {
 
   // Detect which focus/aspect to highlight (when input was a conjugated form)
   const highlight = {};
+  if (result.randomFocus && result.conjugations[result.randomFocus]) {
+    // A random draw names the card it drew, so the learner is not left hunting
+    // through the whole paradigm for the form they asked to see.
+    const firstForm = result.conjugations[result.randomFocus].forms || {};
+    const firstAspect = ["infinitive", "progressive", "complete", "contemplated"]
+      .find(a => firstForm[a]) || Object.keys(firstForm)[0];
+    if (firstAspect) highlight[result.randomFocus] = firstAspect;
+  }
   if (result.isConjugated && result.detectedAffix) {
     // Map the affix we detected to the focus name
     const affixToFocus = {
@@ -1911,9 +2002,11 @@ function renderResult(result) {
       </div>
       <div class="header-right">
         <div class="input-echo">
-          <div class="input-echo-label">You searched for</div>
+          <div class="input-echo-label">${result.isRandom ? "Random pick" : "You searched for"}</div>
           <div class="input-echo-value">${escapeHtml(result.input)}</div>
-          ${result.isConjugated ? `<div class="badge badge-conjugated">Conjugated form</div>` : `<div class="badge badge-base">Base form</div>`}
+          ${result.randomFocus
+            ? `<div class="badge badge-base">${escapeHtml(focusDisplayName(result.randomFocus))}</div>`
+            : result.isConjugated ? `<div class="badge badge-conjugated">Conjugated form</div>` : `<div class="badge badge-base">Base form</div>`}
         </div>
         ${result.isVerified
           ? `<div class="badge badge-verified">✓ Curated lexicon</div>`
@@ -2077,20 +2170,18 @@ function initApp() {
   const input = document.getElementById("verbInput");
   const submit = document.getElementById("submitBtn");
   const clear = document.getElementById("clearBtn");
+  const random = document.getElementById("randomBtn");
   const resultsEl = document.getElementById("results");
   const exampleChips = document.querySelectorAll(".example-chip");
 
-  function doSearch() {
-    const value = input.value.trim();
-    if (!value) {
-      resultsEl.innerHTML = `<div class="empty-state">Type a verb above to see its curated forms.</div>`;
-      return;
-    }
-    const result = resolveVerb(value);
+  function renderIt(result, { echoInput = true } = {}) {
     if (!result) {
       resultsEl.innerHTML = `<div class="empty-state">Couldn't parse that input. Try a Tagalog verb in base form (e.g., "kain", "luto") or already-conjugated (e.g., "kumain", "magluto").</div>`;
       return;
     }
+    // A random pick fills the field so the verb stays visible and can be
+    // re-submitted, but its own header echoes the drawn root already.
+    if (echoInput) input.value = result.root;
     resultsEl.innerHTML = renderResult(result);
     resultsEl.scrollIntoView({ behavior: "smooth", block: "start" });
 
@@ -2119,10 +2210,24 @@ function initApp() {
     });
   }
 
+  function doSearch() {
+    const value = input.value.trim();
+    if (!value) {
+      resultsEl.innerHTML = `<div class="empty-state">Type a verb above to see its curated forms.</div>`;
+      return;
+    }
+    renderIt(resolveVerb(value), { echoInput: false });
+  }
+
+  function doRandom() {
+    renderIt(pickRandomVerbResult(), { echoInput: true });
+  }
+
   submit.addEventListener("click", doSearch);
   input.addEventListener("keydown", (e) => {
     if (e.key === "Enter") doSearch();
   });
+  if (random) random.addEventListener("click", doRandom);
   clear.addEventListener("click", () => {
     input.value = "";
     input.focus();
@@ -2131,6 +2236,10 @@ function initApp() {
 
   exampleChips.forEach(chip => {
     chip.addEventListener("click", () => {
+      if (chip.hasAttribute("data-random")) {
+        doRandom();
+        return;
+      }
       input.value = chip.getAttribute("data-verb");
       doSearch();
     });

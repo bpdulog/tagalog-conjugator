@@ -271,6 +271,31 @@ html, body {
   color: var(--text);
 }
 
+.btn-random {
+  background: var(--bg-tinted);
+  color: var(--primary);
+  border: 1px solid var(--border-strong);
+}
+
+.btn-random:hover {
+  background: var(--primary-soft);
+  border-color: var(--primary);
+  transform: translateY(-1px);
+}
+
+.btn-random:active {
+  transform: translateY(0);
+}
+
+.example-chip-random {
+  border-style: dashed;
+  color: var(--primary);
+}
+
+.example-chip-random:hover {
+  border-style: solid;
+}
+
 /* Examples */
 .examples {
   display: flex;
